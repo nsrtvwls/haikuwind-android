@@ -1,0 +1,5 @@
+<resources>
+	<style name="Leave">
+		<item name="android:background">@drawable/bg2</item>
+	</style>
+</resources>
