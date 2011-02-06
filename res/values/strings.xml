@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, HaikuWind!</string>
     <string name="app_name">Haiku Wind</string>
+    <string name="timeline">Timeline</string>
+    <string name="top_chart">Top Chart</string>
+    <string name="hall_of_fame">Hall of Fame</string>
+    <string name="my_own">My Own</string>
+    <string name="favorites">Favorites</string>
 </resources>

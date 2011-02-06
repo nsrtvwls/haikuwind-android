@@ -6,9 +6,19 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".tabs.HallOfFame"
+                  android:label="@string/app_name"/>
+        <activity android:name=".tabs.Favorites"
+                  android:label="@string/app_name"/>
+        <activity android:name=".tabs.MyOwn"
+                  android:label="@string/app_name"/>
+        <activity android:name=".tabs.Timeline"
+                  android:label="@string/app_name"/>
+        <activity android:name=".tabs.TopChart"
+                  android:label="@string/app_name"/>
         <activity android:name=".HaikuWind"
                   android:label="@string/app_name"
-                  android:theme="@style/Leave">
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
