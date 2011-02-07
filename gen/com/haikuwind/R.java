@@ -29,9 +29,13 @@ public final class R {
         public static final int ic_tab_top_unselected=0x7f02000f;
         public static final int icon=0x7f020010;
     }
+    public static final class id {
+        public static final int haiku_list=0x7f060000;
+    }
     public static final class layout {
-        public static final int haiku_list=0x7f030000;
-        public static final int main=0x7f030001;
+        public static final int haiku=0x7f030000;
+        public static final int haiku_list=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
