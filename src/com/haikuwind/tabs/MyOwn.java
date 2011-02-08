@@ -1,15 +1,14 @@
 package com.haikuwind.tabs;
 
-import android.app.Activity;
-import android.os.Bundle;
+import java.util.Collections;
+import java.util.List;
 
-import com.haikuwind.R;
+import com.haikuwind.feed.Haiku;
 
-public class MyOwn extends Activity {
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.haiku_list);
-    }
+public class MyOwn extends HaikuListActivity {
+
+	@Override
+	protected List<Haiku> fetchElements() {
+		return Collections.EMPTY_LIST;
+	}
 }
