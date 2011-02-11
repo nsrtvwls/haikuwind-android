@@ -1,9 +1,11 @@
 package com.haikuwind;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -16,10 +18,24 @@ import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
 public class HaikuWind extends TabActivity {
-    /** Called when the activity is first created. */
+	private String userId;
+	
+	public String getUserId() {
+		return userId;
+	}
+	
+	private void initUserId() {
+		TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		userId = tManager.getDeviceId();
+	}
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        initUserId();
+        
         setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables
@@ -74,4 +90,5 @@ public class HaikuWind extends TabActivity {
             tv.setTextSize(11.0f); // just example
         }     
     }
+    
 }
