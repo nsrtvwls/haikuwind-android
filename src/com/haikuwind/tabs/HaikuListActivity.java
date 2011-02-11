@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,8 +24,9 @@ public abstract class HaikuListActivity extends Activity {
         
         for(Haiku h: fetchElements()) {
 	        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        TextView haikuView = (TextView) inflater.inflate(R.layout.haiku, null);
-	        haikuView.setText(h.getText());
+	        ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku, null);
+	        
+	        ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
 	        
 	        haikuList.addView(haikuView);
         }

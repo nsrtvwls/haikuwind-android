@@ -36,7 +36,8 @@ public final class R {
         public static final int icon=0x7f020011;
     }
     public static final class id {
-        public static final int haiku_list=0x7f070000;
+        public static final int haiku_list=0x7f070001;
+        public static final int haiku_text=0x7f070000;
     }
     public static final class layout {
         public static final int haiku=0x7f030000;
