@@ -13,7 +13,7 @@
 	    android:layout_height="35mm"
 	    android:padding="15dp"
 	    android:background="@drawable/haiku_border"
-	    android:textColor="@color/white"
+	    android:textColor="@android:color/white"
 	    android:textStyle="bold">
 	</TextView>
 </LinearLayout>
