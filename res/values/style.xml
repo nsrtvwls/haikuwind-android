@@ -1,8 +1,5 @@
 <resources>
-	<style name="Leave">
-		<item name="android:background">@drawable/background</item>
+	<style name="dundelion" parent="android:Theme">
+		<item name="android:windowBackground">@android:color/white</item>
 	</style>
-	<style name="TabHeader">
-     	<item name="android:textSize">11dip</item>
-    </style> 
 </resources>
