@@ -1,15 +1,22 @@
 package com.haikuwind.tabs;
 
-import java.util.Arrays;
 import java.util.List;
 
+import android.os.Bundle;
+
+import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HttpRequest;
 
 public class Timeline extends HaikuListActivity {
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	protected List<Haiku> fetchElements() {
-		return Arrays.asList(new Haiku("old pond...\na frog leaps in\nwater’s sound",0),
-				new Haiku("Over the wintry\nforest, winds howl in rage\nwith no leaves to blow.",0));
+		return HttpRequest.getTimeline("1", 1);
 	}
 }
