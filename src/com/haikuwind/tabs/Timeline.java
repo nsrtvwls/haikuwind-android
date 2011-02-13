@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.os.Bundle;
 
-import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 

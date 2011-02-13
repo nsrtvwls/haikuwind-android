@@ -20,11 +20,40 @@ public class HttpRequest {
 	private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
 
 	public static List<Haiku> getTimeline(String userId, long from) {
+//		http://localhost:8080/haiku?command=refresh&user=1&from=1
 		String url = String.format("%s?command=refresh&user=%s&from=%d",
 				HW_ADDR, userId, from);
 		return parse(url);
 	}
+	
+	public static List<Haiku> getTop(String userId, int limit) {
+//		http://localhost:8080/haiku?command=top&user=1&limit=25
+		String url = String.format("%s?command=top&user=%s&limit=%d", 
+				HW_ADDR, userId, limit);
+		return parse(url);
+	}
 
+	public static List<Haiku> getHallOfFame(String userId) {
+//		http://localhost:8080/haiku?command=hall_of_fame&user=1
+		String url = String.format("%s?command=hall_of_fame&user=%s", 
+				HW_ADDR, userId);
+		return parse(url);
+	}
+	
+	public static List<Haiku> getFavorite(String userId) {
+//		http://localhost:8080/haiku?command=my_favorite&user=1
+		String url = String.format("%s?command=my_favorite&user=%s", 
+				HW_ADDR, userId);
+		return parse(url);
+	}
+	
+	public static List<Haiku> getMy(String userId) {
+//		http://localhost:8080/haiku?command=my&user=1
+		String url = String.format("%s?command=my&user=%s", 
+				HW_ADDR, userId);
+		return parse(url);
+	}
+	
 	private static List<Haiku> parse(String url) {
 		try {
 			SAXParserFactory spf = SAXParserFactory.newInstance();

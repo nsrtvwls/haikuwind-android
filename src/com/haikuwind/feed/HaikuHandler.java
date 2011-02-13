@@ -8,6 +8,7 @@ import static com.haikuwind.feed.XmlTags.TIMES_VOTED_BY_ME;
 import static com.haikuwind.feed.XmlTags.USER;
 import static com.haikuwind.feed.XmlTags.USER_RANK;
 
+import java.net.URLDecoder;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +40,14 @@ public class HaikuHandler extends DefaultHandler {
 	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		Log.d(TAG, "start: "+localName);
-		
 		if (XmlTags.ANSWER.equalsIgnoreCase(localName)) {
 			haikuList = new ArrayList<Haiku>();
 		} else if (XmlTags.HAIKU.equalsIgnoreCase(localName)) {
 			currentHaiku = new Haiku();
 			
 			try {
-				currentHaiku.setText(attributes.getValue(TEXT));
+				String text = URLDecoder.decode(attributes.getValue(TEXT));
+				currentHaiku.setText(text);
 				currentHaiku.setFavoritedByMe(Boolean.parseBoolean(attributes.getValue(FAVORITED_BY_ME)));
 				currentHaiku.setPoints(Integer.parseInt(attributes.getValue(POINTS)));
 				currentHaiku.setTime(new Date(Long.parseLong(attributes.getValue(TIME))));
@@ -61,6 +61,5 @@ public class HaikuHandler extends DefaultHandler {
 			}
 		}
 	}
-	
-	
+		
 }
