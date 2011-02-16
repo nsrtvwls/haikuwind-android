@@ -1,9 +1,11 @@
 package com.haikuwind;
 
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -16,12 +18,21 @@ import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
 public class HaikuWind extends TabActivity {
+	@SuppressWarnings("unused")
 	private static String TAG = HaikuWind.class.getName();
-	
+
+	private void registerUser() {
+		TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		String userId = tManager.getDeviceId();
+		UserIdHolder.init(userId);
+		
+	}
+
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerUser();
         setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables

@@ -9,6 +9,6 @@ public class Favorites extends HaikuListActivity {
 
 	@Override
 	protected List<Haiku> fetchElements() {
-		return HttpRequest.getFavorite("1");
+		return HttpRequest.getFavorite(getUserId());
 	}
 }

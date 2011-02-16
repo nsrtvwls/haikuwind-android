@@ -9,6 +9,6 @@ public class MyOwn extends HaikuListActivity {
 
 	@Override
 	protected List<Haiku> fetchElements() {
-		return HttpRequest.getMy("1");
+		return HttpRequest.getMy(getUserId());
 	}
 }

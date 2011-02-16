@@ -9,6 +9,6 @@ public class TopChart extends HaikuListActivity {
 
 	@Override
 	protected List<Haiku> fetchElements() {
-		return HttpRequest.getTop("1", 25);
+		return HttpRequest.getTop(getUserId(), 25);
 	}
 }

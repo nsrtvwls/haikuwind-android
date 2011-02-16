@@ -5,37 +5,27 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haikuwind.R;
+import com.haikuwind.UserIdHolder;
 import com.haikuwind.feed.Haiku;
 
 public abstract class HaikuListActivity extends Activity {
+	@SuppressWarnings("unused")
 	private final static String TAG = HaikuListActivity.class.getName();
-	private String userId;
 	
 	protected String getUserId() {
-		return userId;
+		return UserIdHolder.getUserId();
 	}
 	
-	//TODO is it possible doing it once?
-	private void initUserId() {
-		TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		userId = tManager.getDeviceId();
-		Log.d(TAG, "User ID: "+userId);
-	}
-
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        initUserId();
         
         setContentView(R.layout.haiku_list);
         

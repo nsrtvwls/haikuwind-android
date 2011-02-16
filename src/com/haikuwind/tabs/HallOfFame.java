@@ -9,6 +9,6 @@ public class HallOfFame extends HaikuListActivity {
 
 	@Override
 	protected List<Haiku> fetchElements() {
-		return HttpRequest.getHallOfFame("1");
+		return HttpRequest.getHallOfFame(getUserId());
 	}
 }
