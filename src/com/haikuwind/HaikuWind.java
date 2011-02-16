@@ -11,6 +11,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.tabs.Favorites;
 import com.haikuwind.tabs.HallOfFame;
 import com.haikuwind.tabs.MyOwn;
@@ -26,6 +27,8 @@ public class HaikuWind extends TabActivity {
 		String userId = tManager.getDeviceId();
 		UserIdHolder.init(userId);
 		
+		//TODO show dialog on error and stop loading views
+		HttpRequest.newUser(userId);
 	}
 
 	/** Called when the activity is first created. */
@@ -37,7 +40,7 @@ public class HaikuWind extends TabActivity {
 
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
-        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        TabHost.TabSpec spec;  // Reusable TabSpec for each tab
         Intent intent;  // Reusable Intent for each tab
 
         // Create an Intent to launch an Activity for the tab (to be reused)

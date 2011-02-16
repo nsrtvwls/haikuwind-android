@@ -1,12 +1,12 @@
-package com.haikuwind.feed;
+package com.haikuwind.feed.parser;
 
-import static com.haikuwind.feed.XmlTags.FAVORITED_BY_ME;
-import static com.haikuwind.feed.XmlTags.POINTS;
-import static com.haikuwind.feed.XmlTags.TEXT;
-import static com.haikuwind.feed.XmlTags.TIME;
-import static com.haikuwind.feed.XmlTags.TIMES_VOTED_BY_ME;
-import static com.haikuwind.feed.XmlTags.USER;
-import static com.haikuwind.feed.XmlTags.USER_RANK;
+import static com.haikuwind.feed.parser.XmlTags.FAVORITED_BY_ME;
+import static com.haikuwind.feed.parser.XmlTags.POINTS;
+import static com.haikuwind.feed.parser.XmlTags.TEXT;
+import static com.haikuwind.feed.parser.XmlTags.TIME;
+import static com.haikuwind.feed.parser.XmlTags.TIMES_VOTED_BY_ME;
+import static com.haikuwind.feed.parser.XmlTags.USER;
+import static com.haikuwind.feed.parser.XmlTags.USER_RANK;
 
 import java.net.URLDecoder;
 import java.sql.Date;
@@ -16,6 +16,8 @@ import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import com.haikuwind.feed.Haiku;
 
 import android.util.Log;
 
