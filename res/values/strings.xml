@@ -6,4 +6,6 @@
     <string name="hall_of_fame">Hall of Fame</string>
     <string name="my_own">My Own</string>
     <string name="favorites">Favorites</string>
+    <string name="new_haiku">Create new haiku</string>
+    <string name="user_info">User info</string>
 </resources>
