@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/new_haiku"
-		android:icon="@drawable/ic_new_haiku"
-		android:title="@string/new_haiku" />
+	<item android:id="@+id/post_haiku"
+		android:icon="@drawable/ic_post_haiku"
+		android:title="@string/post_haiku" />
 	<item android:id="@+id/user_info"
 		android:icon="@drawable/ic_user_info"
 		android:title="@string/user_info" />

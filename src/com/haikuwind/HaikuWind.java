@@ -1,14 +1,20 @@
 package com.haikuwind;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -22,96 +28,145 @@ import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
 public class HaikuWind extends TabActivity {
+	static final int DIALOG_POST_HAIKU = 0;
+	static final int DIALOG_USER_INFO = 1;
+
 	@SuppressWarnings("unused")
 	private static String TAG = HaikuWind.class.getName();
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.options_menu, menu);
-	    return true;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.options_menu, menu);
+		return true;
 	}
-	
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		View layout = null;
+		switch (id) {
+		case DIALOG_POST_HAIKU:
+			layout = inflater.inflate(R.layout.post_haiku_dialog,
+			        (ViewGroup) findViewById(R.id.post_haiku_dialog));
+			builder.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   if(DialogInterface.BUTTON_POSITIVE==id) {
+		        		   View haikuTextView = ((Dialog) dialog).findViewById(R.id.haiku_text);
+			        	   CharSequence haiku = ((TextView) haikuTextView).getText();
+			        	   HttpRequest.newHaiku(UserIdHolder.getUserId(), haiku);
+		        	   }
+		           }
+		       })
+		       .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+			break;
+		case DIALOG_USER_INFO:
+			// TODO
+			break;
+		default:
+			return super.onCreateDialog(id);
+		}
+
+		builder.setView(layout);
+		return builder.create();
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.new_haiku:
-	        return true;
-	    case R.id.user_info:
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
+		switch (item.getItemId()) {
+		case R.id.post_haiku:
+			showDialog(DIALOG_POST_HAIKU);
+			return true;
+		case R.id.user_info:
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	private void registerUser() {
-		TelephonyManager tManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String userId = tManager.getDeviceId();
 		UserIdHolder.init(userId);
-		
-		//TODO show dialog on error and stop loading views
+
+		// TODO show dialog on error and stop loading views
 		HttpRequest.newUser(userId);
 	}
 
 	/** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        registerUser();
-        setContentView(R.layout.main);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		registerUser();
+		setContentView(R.layout.main);
 
-        Resources res = getResources(); // Resource object to get Drawables
-        TabHost tabHost = getTabHost();  // The activity TabHost
-        TabHost.TabSpec spec;  // Reusable TabSpec for each tab
-        Intent intent;  // Reusable Intent for each tab
+		Resources res = getResources(); // Resource object to get Drawables
+		TabHost tabHost = getTabHost(); // The activity TabHost
+		TabHost.TabSpec spec; // Reusable TabSpec for each tab
+		Intent intent; // Reusable Intent for each tab
 
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, Timeline.class);
+		// Create an Intent to launch an Activity for the tab (to be reused)
+		intent = new Intent().setClass(this, Timeline.class);
 
-        // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("Timeline").setIndicator(res.getString(R.string.timeline),
-                          res.getDrawable(R.drawable.ic_tab_timeline))
-                      .setContent(intent);
-        tabHost.addTab(spec);
+		// Initialize a TabSpec for each tab and add it to the TabHost
+		spec = tabHost
+		        .newTabSpec("Timeline")
+		        .setIndicator(res.getString(R.string.timeline),
+		                res.getDrawable(R.drawable.ic_tab_timeline))
+		        .setContent(intent);
+		tabHost.addTab(spec);
 
-        //Top Chart
-        intent = new Intent().setClass(this, TopChart.class);
-        spec = tabHost.newTabSpec("TopChart").setIndicator(res.getString(R.string.top_chart),
-                          res.getDrawable(R.drawable.ic_tab_top))
-                      .setContent(intent);
-        tabHost.addTab(spec);
-        
-        //Hall of Fame
-        intent = new Intent().setClass(this, HallOfFame.class);
-        spec = tabHost.newTabSpec("HallOfFame").setIndicator(res.getString(R.string.hall_of_fame),
-                          res.getDrawable(R.drawable.ic_tab_halloffame))
-                      .setContent(intent);
-        tabHost.addTab(spec);
+		// Top Chart
+		intent = new Intent().setClass(this, TopChart.class);
+		spec = tabHost
+		        .newTabSpec("TopChart")
+		        .setIndicator(res.getString(R.string.top_chart),
+		                res.getDrawable(R.drawable.ic_tab_top))
+		        .setContent(intent);
+		tabHost.addTab(spec);
 
-        //My Own
-        intent = new Intent().setClass(this, MyOwn.class);
-        spec = tabHost.newTabSpec("MyOwn").setIndicator(res.getString(R.string.my_own),
-                          res.getDrawable(R.drawable.ic_tab_myown))
-                      .setContent(intent);
-        tabHost.addTab(spec);
+		// Hall of Fame
+		intent = new Intent().setClass(this, HallOfFame.class);
+		spec = tabHost
+		        .newTabSpec("HallOfFame")
+		        .setIndicator(res.getString(R.string.hall_of_fame),
+		                res.getDrawable(R.drawable.ic_tab_halloffame))
+		        .setContent(intent);
+		tabHost.addTab(spec);
 
-        //Favorites
-        intent = new Intent().setClass(this, Favorites.class);
-        spec = tabHost.newTabSpec("Favorites").setIndicator(res.getString(R.string.favorites),
-                          res.getDrawable(R.drawable.ic_tab_favorites))
-                      .setContent(intent);
-        tabHost.addTab(spec);
+		// My Own
+		intent = new Intent().setClass(this, MyOwn.class);
+		spec = tabHost
+		        .newTabSpec("MyOwn")
+		        .setIndicator(res.getString(R.string.my_own),
+		                res.getDrawable(R.drawable.ic_tab_myown))
+		        .setContent(intent);
+		tabHost.addTab(spec);
 
-        tabHost.setCurrentTab(0);
-        
-        //This part may be not supported in future APIs
-        TabWidget tw = getTabWidget();
-        for (int i=0; i<tw.getChildCount(); i++) {
-            RelativeLayout relLayout = (RelativeLayout)tw.getChildAt(i);
-            TextView tv = (TextView)relLayout.getChildAt(1);
-            tv.setTextSize(11.0f); // just example
-        }     
-    }
-    
+		// Favorites
+		intent = new Intent().setClass(this, Favorites.class);
+		spec = tabHost
+		        .newTabSpec("Favorites")
+		        .setIndicator(res.getString(R.string.favorites),
+		                res.getDrawable(R.drawable.ic_tab_favorites))
+		        .setContent(intent);
+		tabHost.addTab(spec);
+
+		tabHost.setCurrentTab(0);
+
+		// This part may be not supported in future APIs
+		TabWidget tw = getTabWidget();
+		for (int i = 0; i < tw.getChildCount(); i++) {
+			RelativeLayout relLayout = (RelativeLayout) tw.getChildAt(i);
+			TextView tv = (TextView) relLayout.getChildAt(1);
+			tv.setTextSize(11.0f); // just example
+		}
+	}
+
 }

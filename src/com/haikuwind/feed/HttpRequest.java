@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,13 @@ public class HttpRequest {
 //	    http://localhost:8080/haiku?command=new_user&id=ABCD
 		String url = String.format("%s?command=new_user&id=%s",
 				HW_ADDR, userId);
+		return parseResult(url);
+	}
+	
+	public static boolean newHaiku(String userId, CharSequence haiku) {
+//		http://localhost:8080/haiku?command=new_text&user=1&haiku=.......
+		String url = String.format("%s?command=new_text&user=%s&haiku=%s",
+				HW_ADDR, userId, URLEncoder.encode(haiku.toString()));
 		return parseResult(url);
 	}
 
