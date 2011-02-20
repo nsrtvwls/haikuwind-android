@@ -17,6 +17,12 @@ public interface XmlTags {
 	String USER_RANK = "userRank";
 	String FAVORITED_BY_ME = "favoritedByMe";
 	String TIMES_VOTED_BY_ME = "timesVotedByMe";
-	String TIME = "time"; 
+	String TIME = "time";
+	
+	//User info
+	String YOU = "you";
+	String SCORE = "score";
+	String RANK = "rank";
+	String FAVORITED = "favorited";
 
 }

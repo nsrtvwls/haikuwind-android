@@ -17,18 +17,24 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.haikuwind.feed.Haiku;
-
 import android.util.Log;
+
+import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.UserInfo;
 
 public class HaikuHandler extends DefaultHandler {
 	private static String TAG = HaikuHandler.class.getName();
 	
 	private List<Haiku> haikuList;
 	private Haiku currentHaiku;
+	private UserInfo userInfo;
 	
 	public List<Haiku> getHaikuList() {
 		return haikuList;
+	}
+	
+	public UserInfo getUseInfo() {
+		return userInfo;
 	}
 
 	@Override
@@ -59,7 +65,16 @@ public class HaikuHandler extends DefaultHandler {
 				
 				Log.d(TAG, currentHaiku.toString());
 			} catch (NumberFormatException e) {
-				Log.e(TAG, "incorrect value in XML", e);
+				Log.e(TAG, "incorrect value in haiku XML", e);
+			}
+		} else if (XmlTags.YOU.equalsIgnoreCase(localName)) {
+			userInfo = new UserInfo();
+			try {
+				userInfo.setRank(Integer.parseInt(attributes.getValue(XmlTags.RANK)));
+				userInfo.setScore(Integer.parseInt(attributes.getValue(XmlTags.SCORE)));
+				userInfo.setFavoritedTimes(Integer.parseInt(attributes.getValue(XmlTags.FAVORITED)));
+			} catch (NumberFormatException e) {
+				Log.e(TAG, "incorrect value in user info XML", e);
 			}
 		}
 	}

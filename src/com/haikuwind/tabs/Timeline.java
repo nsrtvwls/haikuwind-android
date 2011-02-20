@@ -18,4 +18,6 @@ public class Timeline extends HaikuListActivity {
 	protected List<Haiku> fetchElements() {
 		return HttpRequest.getTimeline(getUserId(), 1);
 	}
+	
+	
 }

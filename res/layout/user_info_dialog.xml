@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/user_info_dialog"
+    android:padding="10dp"
+    android:orientation="vertical"
+    style="@style/UserInfo">
+    <TextView android:text="You are a" style="@style/UserInfo"/>
+    <TextView android:id="@+id/user_rank" style="@style/UserInfo"/>
+    
+    <TextView android:text="Your voting power is" style="@style/UserInfo"/>
+    <TextView android:id="@+id/user_voting_power" style="@style/UserInfo"/>
+    
+    <TextView android:text="Your current score is" style="@style/UserInfo"/>
+    <TextView android:id="@+id/user_score" style="@style/UserInfo"/>
+
+    <TextView android:text="Your haiku were favorited" style="@style/UserInfo"/>
+    <TextView android:id="@+id/user_favorited_times" style="@style/UserInfo"/>
+</LinearLayout>

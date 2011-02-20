@@ -55,14 +55,6 @@ public class Haiku implements Cloneable {
 	}
 
 	@Override
-	protected Haiku clone() {
-		try {
-			return (Haiku) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError("This could never happen. Haiku is Cloneable");
-		}
-	}
-	@Override
 	public String toString() {
 		return "Haiku [text=" + text + ", points=" + points + ", user=" + user
 				+ ", userRank=" + userRank + ", favoritedByMe=" + favoritedByMe

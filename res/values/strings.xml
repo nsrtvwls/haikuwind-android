@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Haiku Wind</string>
+
+    <!-- Tab titles -->
     <string name="timeline">Timeline</string>
     <string name="top_chart">Top Chart</string>
     <string name="hall_of_fame">Hall of Fame</string>
     <string name="my_own">My Own</string>
     <string name="favorites">Favorites</string>
+
+    <!-- Post haiku dialog -->
     <string name="post_haiku">Create new haiku</string>
-    <string name="user_info">User info</string>
-    
     <string name="send">Send</string>
     <string name="cancel">Cancel</string>
     <string name="post_haiku_hint">Tap here to compose your anonimous haiku</string>
     
+    <!-- User info dialog -->
+    <string name="user_info">User info</string>
+    <!-- (your haiku were favorited n) times -->
+    <string name="times">times</string>
+    <string name="close">Close</string>
+    
+    <!-- User rank -->
+    <string name="apprentice">Haiku Apprentice</string>
+    <string name="journeyman">Haiku Journeyman</string>
+    <string name="master">Haiku Master</string>
+    <string name="priest">Haiku Priest</string>
+    <string name="devil">Haiku Devil</string>
+    <string name="daemon">Haiku Daemon</string>
+    <string name="god">Haiku God</string>
 </resources>

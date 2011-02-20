@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haikuwind.R;
-import com.haikuwind.UserIdHolder;
+import com.haikuwind.UserInfoHolder;
 import com.haikuwind.feed.Haiku;
 
 public abstract class HaikuListActivity extends Activity {
@@ -19,7 +19,7 @@ public abstract class HaikuListActivity extends Activity {
 	private final static String TAG = HaikuListActivity.class.getName();
 	
 	protected String getUserId() {
-		return UserIdHolder.getUserId();
+		return UserInfoHolder.getUserId();
 	}
 	
 	/** Called when the activity is first created. */

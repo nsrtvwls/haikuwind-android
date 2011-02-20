@@ -38,33 +38,58 @@ public final class R {
     public static final class id {
         public static final int haiku_list=0x7f080001;
         public static final int haiku_text=0x7f080000;
-        public static final int post_haiku=0x7f080003;
+        public static final int post_haiku=0x7f080008;
         public static final int post_haiku_dialog=0x7f080002;
-        public static final int user_info=0x7f080004;
+        public static final int user_favorited_times=0x7f080007;
+        public static final int user_info=0x7f080009;
+        public static final int user_info_dialog=0x7f080003;
+        public static final int user_rank=0x7f080004;
+        public static final int user_score=0x7f080006;
+        public static final int user_voting_power=0x7f080005;
     }
     public static final class layout {
         public static final int haiku=0x7f030000;
         public static final int haiku_list=0x7f030001;
         public static final int main=0x7f030002;
         public static final int post_haiku_dialog=0x7f030003;
+        public static final int user_info_dialog=0x7f030004;
     }
     public static final class menu {
         public static final int options_menu=0x7f070000;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int cancel=0x7f050009;
+        /**  User rank 
+         */
+        public static final int apprentice=0x7f05000d;
+        public static final int cancel=0x7f050008;
+        public static final int close=0x7f05000c;
+        public static final int daemon=0x7f050012;
+        public static final int devil=0x7f050011;
         public static final int favorites=0x7f050005;
+        public static final int god=0x7f050013;
         public static final int hall_of_fame=0x7f050003;
+        public static final int journeyman=0x7f05000e;
+        public static final int master=0x7f05000f;
         public static final int my_own=0x7f050004;
+        /**  Post haiku dialog 
+         */
         public static final int post_haiku=0x7f050006;
-        public static final int post_haiku_hint=0x7f05000a;
-        public static final int send=0x7f050008;
+        public static final int post_haiku_hint=0x7f050009;
+        public static final int priest=0x7f050010;
+        public static final int send=0x7f050007;
+        /**  Tab titles 
+         */
         public static final int timeline=0x7f050001;
+        /**  (your haiku were favorited n) times 
+         */
+        public static final int times=0x7f05000b;
         public static final int top_chart=0x7f050002;
-        public static final int user_info=0x7f050007;
+        /**  User info dialog 
+         */
+        public static final int user_info=0x7f05000a;
     }
     public static final class style {
-        public static final int dundelion=0x7f060000;
+        public static final int UserInfo=0x7f060000;
     }
 }

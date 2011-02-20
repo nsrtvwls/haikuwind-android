@@ -17,6 +17,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import com.haikuwind.UserInfoHolder;
 import com.haikuwind.feed.parser.HaikuHandler;
 import com.haikuwind.feed.parser.ResultHandler;
 
@@ -76,10 +77,19 @@ public class HttpRequest {
 		return parseHaikuList(url);
 	}
 	
+	
+	/**
+	 * Side effect is: if user info received, it updates {@link UserInfoHolder}
+	 */
 	private static List<Haiku> parseHaikuList(String url) {
 		try {
 			HaikuHandler handler = new HaikuHandler();
 			parse(url, handler);
+			
+			UserInfo user = handler.getUseInfo(); 
+			if(user!=null) {
+				UserInfoHolder.setUserInfo(user);
+			}
 			return handler.getHaikuList();
 
 		} catch (IOException e) {

@@ -1,26 +1,22 @@
 package com.haikuwind;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.menu.dialogs.DialogBuilder;
 import com.haikuwind.tabs.Favorites;
 import com.haikuwind.tabs.HallOfFame;
 import com.haikuwind.tabs.MyOwn;
@@ -28,11 +24,11 @@ import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
 public class HaikuWind extends TabActivity {
-	static final int DIALOG_POST_HAIKU = 0;
-	static final int DIALOG_USER_INFO = 1;
 
 	@SuppressWarnings("unused")
 	private static String TAG = HaikuWind.class.getName();
+	
+	private DialogBuilder dialogBuilder = new DialogBuilder(this);
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,47 +39,17 @@ public class HaikuWind extends TabActivity {
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		View layout = null;
-		switch (id) {
-		case DIALOG_POST_HAIKU:
-			layout = inflater.inflate(R.layout.post_haiku_dialog,
-			        (ViewGroup) findViewById(R.id.post_haiku_dialog));
-			builder.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		        	   if(DialogInterface.BUTTON_POSITIVE==id) {
-		        		   View haikuTextView = ((Dialog) dialog).findViewById(R.id.haiku_text);
-			        	   CharSequence haiku = ((TextView) haikuTextView).getText();
-			        	   HttpRequest.newHaiku(UserIdHolder.getUserId(), haiku);
-		        	   }
-		           }
-		       })
-		       .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		                dialog.cancel();
-		           }
-		       });
-			break;
-		case DIALOG_USER_INFO:
-			// TODO
-			break;
-		default:
-			return super.onCreateDialog(id);
-		}
-
-		builder.setView(layout);
-		return builder.create();
+		return dialogBuilder.createDialog(id);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.post_haiku:
-			showDialog(DIALOG_POST_HAIKU);
+			showDialog(DialogBuilder.POST_HAIKU);
 			return true;
 		case R.id.user_info:
+			showDialog(DialogBuilder.USER_INFO);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -93,7 +59,7 @@ public class HaikuWind extends TabActivity {
 	private void registerUser() {
 		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String userId = tManager.getDeviceId();
-		UserIdHolder.init(userId);
+		UserInfoHolder.registerUser(userId);
 
 		// TODO show dialog on error and stop loading views
 		HttpRequest.newUser(userId);
