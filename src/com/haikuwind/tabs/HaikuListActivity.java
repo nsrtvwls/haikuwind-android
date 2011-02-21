@@ -37,6 +37,7 @@ public abstract class HaikuListActivity extends Activity {
                     null);
 
             ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
+            ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer.toString(h.getPoints()));
 
             haikuList.addView(haikuView);
         }

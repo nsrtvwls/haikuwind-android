@@ -4,7 +4,6 @@
     android:variablePadding="false">
     <item
         android:drawable="@drawable/btn_thumb_up_enabled"
-        android:state_enabled="true"
         />
 </selector>
 

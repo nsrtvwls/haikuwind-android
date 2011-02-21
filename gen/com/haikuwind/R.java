@@ -41,10 +41,10 @@ public final class R {
     }
     public static final class id {
         public static final int haiku_list=0x7f080004;
+        public static final int haiku_points=0x7f080001;
         public static final int haiku_text=0x7f080003;
         public static final int post_haiku=0x7f08000b;
         public static final int post_haiku_dialog=0x7f080005;
-        public static final int score=0x7f080001;
         public static final int thumb_down=0x7f080002;
         public static final int thumb_up=0x7f080000;
         public static final int user_favorited_times=0x7f08000a;

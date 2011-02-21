@@ -18,23 +18,22 @@
             android:layout_width="fill_parent">
             
             <Button android:id="@+id/thumb_up"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_height="32px"
+                android:layout_width="32px"
                 android:background="@drawable/btn_thumb_up"
-                android:layout_weight="0"/>
+                android:text="+"/>
             <TextView
-                android:id="@+id/score"
+                android:id="@+id/haiku_points"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
                 android:gravity="center"
-                android:text="5"
-                android:layout_weight="1.0"/>
+                android:layout_weight="1"/>
             <Button android:id="@+id/thumb_down"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_height="32px"
+                android:layout_width="32px"
                 android:background="@drawable/btn_thumb_down"
-                android:layout_weight="0"/>
+                android:text="-"/>
         </LinearLayout>
         <TextView
             android:id="@+id/haiku_text"
