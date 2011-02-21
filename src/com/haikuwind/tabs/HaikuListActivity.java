@@ -36,8 +36,7 @@ public abstract class HaikuListActivity extends Activity {
             ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku,
                     null);
 
-            ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h
-                    .getText());
+            ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
 
             haikuList.addView(haikuView);
         }
