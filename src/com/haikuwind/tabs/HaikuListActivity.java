@@ -4,8 +4,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +19,12 @@ import com.haikuwind.feed.Haiku;
 public abstract class HaikuListActivity extends Activity {
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getName();
+    
+    protected final boolean voteEnabled;
+    
+    protected HaikuListActivity(boolean voteEnabled) {
+        this.voteEnabled = voteEnabled;
+    }
 
     protected String getUserId() {
         return UserInfoHolder.getUserId();
@@ -38,6 +46,11 @@ public abstract class HaikuListActivity extends Activity {
 
             ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
             ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer.toString(h.getPoints()));
+            
+            if(!voteEnabled) {
+                ((View) haikuView.findViewById(R.id.thumb_up)).setVisibility(View.INVISIBLE);
+                ((View) haikuView.findViewById(R.id.thumb_down)).setVisibility(View.INVISIBLE);
+            }
 
             haikuList.addView(haikuView);
         }

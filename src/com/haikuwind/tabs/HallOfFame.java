@@ -7,7 +7,11 @@ import com.haikuwind.feed.HttpRequest;
 
 public class HallOfFame extends HaikuListActivity {
 
-	@Override
+	public HallOfFame() {
+        super(false);
+    }
+
+    @Override
 	protected List<Haiku> fetchElements() {
 		return HttpRequest.getHallOfFame(getUserId());
 	}

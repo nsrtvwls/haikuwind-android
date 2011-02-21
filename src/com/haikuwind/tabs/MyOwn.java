@@ -7,6 +7,10 @@ import com.haikuwind.feed.HttpRequest;
 
 public class MyOwn extends HaikuListActivity {
 
+    public MyOwn() {
+        super(false);
+    }
+
     @Override
     protected List<Haiku> fetchElements() {
         return HttpRequest.getMy(getUserId());

@@ -7,6 +7,10 @@ import com.haikuwind.feed.HttpRequest;
 
 public class Favorites extends HaikuListActivity {
 
+    public Favorites() {
+        super(false);
+    }
+
     @Override
     protected List<Haiku> fetchElements() {
         return HttpRequest.getFavorite(getUserId());

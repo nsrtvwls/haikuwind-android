@@ -9,6 +9,10 @@ import com.haikuwind.feed.HttpRequest;
 
 public class Timeline extends HaikuListActivity {
 
+    public Timeline() {
+        super(true);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
