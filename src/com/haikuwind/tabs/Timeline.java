@@ -8,16 +8,15 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 
 public class Timeline extends HaikuListActivity {
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
 
-	@Override
-	protected List<Haiku> fetchElements() {
-		return HttpRequest.getTimeline(getUserId(), 1);
-	}
-	
-	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected List<Haiku> fetchElements() {
+        return HttpRequest.getTimeline(getUserId(), 1);
+    }
+
 }

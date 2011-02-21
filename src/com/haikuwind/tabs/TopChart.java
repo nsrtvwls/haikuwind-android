@@ -7,8 +7,8 @@ import com.haikuwind.feed.HttpRequest;
 
 public class TopChart extends HaikuListActivity {
 
-	@Override
-	protected List<Haiku> fetchElements() {
-		return HttpRequest.getTop(getUserId(), 25);
-	}
+    @Override
+    protected List<Haiku> fetchElements() {
+        return HttpRequest.getTop(getUserId(), 25);
+    }
 }

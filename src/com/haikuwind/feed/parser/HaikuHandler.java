@@ -23,60 +23,68 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.UserInfo;
 
 public class HaikuHandler extends DefaultHandler {
-	private static String TAG = HaikuHandler.class.getName();
-	
-	private List<Haiku> haikuList;
-	private Haiku currentHaiku;
-	private UserInfo userInfo;
-	
-	public List<Haiku> getHaikuList() {
-		return haikuList;
-	}
-	
-	public UserInfo getUseInfo() {
-		return userInfo;
-	}
+    private static String TAG = HaikuHandler.class.getName();
 
-	@Override
-	public void endElement(String uri, String localName, String qName)
-			throws SAXException {
-		if (XmlTags.HAIKU.equalsIgnoreCase(localName)) {
-			haikuList.add(currentHaiku);
-		}
-	}
+    private List<Haiku> haikuList;
+    private Haiku currentHaiku;
+    private UserInfo userInfo;
 
-	@Override
-	public void startElement(String uri, String localName, String qName,
-			Attributes attributes) throws SAXException {
-		if (XmlTags.ANSWER.equalsIgnoreCase(localName)) {
-			haikuList = new ArrayList<Haiku>();
-		} else if (XmlTags.HAIKU.equalsIgnoreCase(localName)) {
-			currentHaiku = new Haiku();
-			
-			try {
-				String text = URLDecoder.decode(attributes.getValue(TEXT));
-				currentHaiku.setText(text);
-				currentHaiku.setFavoritedByMe(Boolean.parseBoolean(attributes.getValue(FAVORITED_BY_ME)));
-				currentHaiku.setPoints(Integer.parseInt(attributes.getValue(POINTS)));
-				currentHaiku.setTime(new Date(Long.parseLong(attributes.getValue(TIME))));
-				currentHaiku.setTimesVotedByMe(Integer.parseInt(attributes.getValue(TIMES_VOTED_BY_ME)));
-				currentHaiku.setUser(attributes.getValue(USER));
-				currentHaiku.setUserRank(Integer.parseInt(attributes.getValue(USER_RANK)));
-				
-				Log.d(TAG, currentHaiku.toString());
-			} catch (NumberFormatException e) {
-				Log.e(TAG, "incorrect value in haiku XML", e);
-			}
-		} else if (XmlTags.YOU.equalsIgnoreCase(localName)) {
-			userInfo = new UserInfo();
-			try {
-				userInfo.setRank(Integer.parseInt(attributes.getValue(XmlTags.RANK)));
-				userInfo.setScore(Integer.parseInt(attributes.getValue(XmlTags.SCORE)));
-				userInfo.setFavoritedTimes(Integer.parseInt(attributes.getValue(XmlTags.FAVORITED)));
-			} catch (NumberFormatException e) {
-				Log.e(TAG, "incorrect value in user info XML", e);
-			}
-		}
-	}
-		
+    public List<Haiku> getHaikuList() {
+        return haikuList;
+    }
+
+    public UserInfo getUseInfo() {
+        return userInfo;
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (XmlTags.HAIKU.equalsIgnoreCase(localName)) {
+            haikuList.add(currentHaiku);
+        }
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName,
+            Attributes attributes) throws SAXException {
+        if (XmlTags.ANSWER.equalsIgnoreCase(localName)) {
+            haikuList = new ArrayList<Haiku>();
+        } else if (XmlTags.HAIKU.equalsIgnoreCase(localName)) {
+            currentHaiku = new Haiku();
+
+            try {
+                String text = URLDecoder.decode(attributes.getValue(TEXT));
+                currentHaiku.setText(text);
+                currentHaiku.setFavoritedByMe(Boolean.parseBoolean(attributes
+                        .getValue(FAVORITED_BY_ME)));
+                currentHaiku.setPoints(Integer.parseInt(attributes
+                        .getValue(POINTS)));
+                currentHaiku.setTime(new Date(Long.parseLong(attributes
+                        .getValue(TIME))));
+                currentHaiku.setTimesVotedByMe(Integer.parseInt(attributes
+                        .getValue(TIMES_VOTED_BY_ME)));
+                currentHaiku.setUser(attributes.getValue(USER));
+                currentHaiku.setUserRank(Integer.parseInt(attributes
+                        .getValue(USER_RANK)));
+
+                Log.d(TAG, currentHaiku.toString());
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "incorrect value in haiku XML", e);
+            }
+        } else if (XmlTags.YOU.equalsIgnoreCase(localName)) {
+            userInfo = new UserInfo();
+            try {
+                userInfo.setRank(Integer.parseInt(attributes
+                        .getValue(XmlTags.RANK)));
+                userInfo.setScore(Integer.parseInt(attributes
+                        .getValue(XmlTags.SCORE)));
+                userInfo.setFavoritedTimes(Integer.parseInt(attributes
+                        .getValue(XmlTags.FAVORITED)));
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "incorrect value in user info XML", e);
+            }
+        }
+    }
+
 }

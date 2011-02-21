@@ -7,8 +7,8 @@ import com.haikuwind.feed.HttpRequest;
 
 public class Favorites extends HaikuListActivity {
 
-	@Override
-	protected List<Haiku> fetchElements() {
-		return HttpRequest.getFavorite(getUserId());
-	}
+    @Override
+    protected List<Haiku> fetchElements() {
+        return HttpRequest.getFavorite(getUserId());
+    }
 }
