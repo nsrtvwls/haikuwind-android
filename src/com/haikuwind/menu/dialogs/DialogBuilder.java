@@ -1,10 +1,14 @@
 package com.haikuwind.menu.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +22,22 @@ import com.haikuwind.feed.UserInfo;
 public class DialogBuilder {
     public static final int POST_HAIKU = 0;
     public static final int USER_INFO = 1;
+    public static final int SUGGEST_NETWORK_SETTINGS = 2;
+    public static final int ERROR_TRY_AGAIN = 3;
+    
     private static final String TAG = DialogBuilder.class.getName();
 
-    private Context context;
+    private Activity activity;
 
-    public DialogBuilder(Context context) {
-        this.context = context;
+    public DialogBuilder(Activity context) {
+        this.activity = context;
     }
 
     public Dialog createDialog(int id) {
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View layout = null;
         switch (id) {
         case POST_HAIKU:
@@ -39,17 +46,28 @@ public class DialogBuilder {
         case USER_INFO:
             layout = buildUserInfoDialog(inflater, builder);
             break;
+        case SUGGEST_NETWORK_SETTINGS:
+            return suggestNetworkSettingsDialog(builder);
+        case ERROR_TRY_AGAIN:
+            return buildErrorTryAgainDialog(builder);
         default:
             // TODO
             Log.e(TAG, "incorrect dialog id: " + id);
-            layout = new View(context);
+            layout = new View(activity);
         }
 
         builder.setView(layout);
         return builder.create();
     }
 
-    private View buildPostHaikuDialog(LayoutInflater inflater,
+    private Dialog buildErrorTryAgainDialog(Builder builder) {
+        builder.setMessage("Oops. Error occured")
+            .setCancelable(true)
+            .setNegativeButton(R.string.cancel, new CancelListener());
+        return builder.create();
+    }
+
+    public View buildPostHaikuDialog(LayoutInflater inflater,
             AlertDialog.Builder builder) {
         View layout = inflater.inflate(R.layout.post_haiku_dialog, null);
 
@@ -67,12 +85,7 @@ public class DialogBuilder {
                     }
                 });
 
-        builder.setNegativeButton(R.string.cancel,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        builder.setNegativeButton(R.string.cancel, new CancelListener());
         return layout;
     }
 
@@ -88,17 +101,43 @@ public class DialogBuilder {
         value = Integer.toString(user.getScore());
         ((TextView) layout.findViewById(R.id.user_score)).setText(value);
         value = Integer.toString(user.getFavoritedTimes()) + " "
-                + context.getString(R.string.times);
+                + activity.getString(R.string.times);
         ((TextView) layout.findViewById(R.id.user_favorited_times))
                 .setText(value);
 
-        builder.setNegativeButton(R.string.close,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+        builder.setNegativeButton(R.string.close, new CancelListener());
         return layout;
     }
+    
+    private Dialog suggestNetworkSettingsDialog(AlertDialog.Builder builder) {
+         builder.setTitle(R.string.connection_failed)
+                .setMessage(R.string.suggest_network_settings)
+                .setPositiveButton(R.string.accept,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                // THIS IS WHAT YOU ARE DOING, Jul
+                                activity.startActivity(new Intent(
+                                        Settings.ACTION_WIRELESS_SETTINGS));
+                            }
+                        })
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                activity.finish();
+                            }
+                        });
+        return builder.create();
+    }
 
+    public static class CancelListener implements OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog,
+                int which) {
+            dialog.cancel();
+        }
+    }
 }

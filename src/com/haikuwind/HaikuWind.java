@@ -24,6 +24,15 @@ import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
 public class HaikuWind extends TabActivity {
+    private static HaikuWind instance;
+    
+    {
+        instance = this;
+    }
+    
+    public static HaikuWind getInstance() {
+        return instance;
+    }
 
     @SuppressWarnings("unused")
     private static String TAG = HaikuWind.class.getName();
@@ -69,7 +78,7 @@ public class HaikuWind extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registerUser();
+
         setContentView(R.layout.main);
 
         Resources res = getResources(); // Resource object to get Drawables
@@ -134,5 +143,15 @@ public class HaikuWind extends TabActivity {
             tv.setTextSize(11.0f); // just example
         }
     }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        registerUser();
+    }
+    
+    
+
 
 }

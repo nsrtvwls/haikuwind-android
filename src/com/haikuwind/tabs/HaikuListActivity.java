@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +35,14 @@ public abstract class HaikuListActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.haiku_list);
-
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
         LinearLayout haikuList = (LinearLayout) findViewById(R.id.haiku_list);
 
+        //TODO: request server only if data is obsolete
         for (Haiku h : fetchElements()) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku,

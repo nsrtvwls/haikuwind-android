@@ -38,6 +38,7 @@ public final class R {
         public static final int ic_tab_top_unselected=0x7f020015;
         public static final int ic_user_info=0x7f020016;
         public static final int icon=0x7f020017;
+        public static final int splashscreen=0x7f020018;
     }
     public static final class id {
         public static final int haiku_list=0x7f080004;
@@ -59,18 +60,23 @@ public final class R {
         public static final int haiku_list=0x7f030001;
         public static final int main=0x7f030002;
         public static final int post_haiku_dialog=0x7f030003;
-        public static final int user_info_dialog=0x7f030004;
+        public static final int splashscreen=0x7f030004;
+        public static final int user_info_dialog=0x7f030005;
     }
     public static final class menu {
         public static final int options_menu=0x7f070000;
     }
     public static final class string {
+        public static final int accept=0x7f050016;
         public static final int app_name=0x7f050000;
         /**  User rank 
          */
         public static final int apprentice=0x7f05000d;
         public static final int cancel=0x7f050008;
         public static final int close=0x7f05000c;
+        /**  Connection error dialogs 
+         */
+        public static final int connection_failed=0x7f050014;
         public static final int daemon=0x7f050012;
         public static final int devil=0x7f050011;
         public static final int favorites=0x7f050005;
@@ -85,6 +91,7 @@ public final class R {
         public static final int post_haiku_hint=0x7f050009;
         public static final int priest=0x7f050010;
         public static final int send=0x7f050007;
+        public static final int suggest_network_settings=0x7f050015;
         /**  Tab titles 
          */
         public static final int timeline=0x7f050001;

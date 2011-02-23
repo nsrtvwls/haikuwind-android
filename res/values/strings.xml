@@ -29,4 +29,9 @@
     <string name="devil">Haiku Devil</string>
     <string name="daemon">Haiku Daemon</string>
     <string name="god">Haiku God</string>
+    
+    <!-- Connection error dialogs -->
+    <string name="connection_failed">Connection failed</string>
+    <string name="suggest_network_settings">This application requires network access. Please, enable mobile network or Wi-Fi.</string>
+    <string name="accept">Accept</string>
 </resources>

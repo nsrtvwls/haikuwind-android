@@ -17,11 +17,20 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+
+import com.haikuwind.HaikuWind;
+import com.haikuwind.R;
 import com.haikuwind.UserInfoHolder;
 import com.haikuwind.feed.parser.HaikuHandler;
 import com.haikuwind.feed.parser.ResultHandler;
-
-import android.util.Log;
+import com.haikuwind.menu.dialogs.DialogBuilder;
 
 public class HttpRequest {
     private static String TAG = HttpRequest.class.getName();
@@ -90,10 +99,6 @@ public class HttpRequest {
             }
             return handler.getHaikuList();
 
-        } catch (IOException e) {
-            // TODO show error message
-            Log.e(TAG, "Connection error", e);
-            return Collections.EMPTY_LIST;
         } catch (Exception e) {
             Log.e(TAG, "Connection error", e);
             return Collections.EMPTY_LIST;
@@ -106,19 +111,24 @@ public class HttpRequest {
             parse(url, handler);
             return handler.getResult();
 
-        } catch (IOException e) {
-            // TODO show error message
-            Log.e(TAG, "Connection error", e);
-            return false;
         } catch (Exception e) {
             Log.e(TAG, "Connection error", e);
             return false;
         }
     }
 
+    /**
+     * Central point to process http request.
+     */
     private static void parse(String url, ContentHandler handler)
             throws ParserConfigurationException, SAXException,
-            MalformedURLException, IOException {
+            IOException {
+        //If not connected currently, open a dialog with redirect to network settings
+        //Since it is an asynchronous call, stop current processing
+        if(!checkConnection()) {
+            return;
+        }
+
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
         XMLReader xr = sp.getXMLReader();
@@ -126,11 +136,30 @@ public class HttpRequest {
         xr.setContentHandler(handler);
 
         Log.d(TAG, url);
-        InputStream xmlStream = new URL(url).openStream();
+        
+        InputStream xmlStream = null;
         try {
+            xmlStream = new URL(url).openStream();;
             xr.parse(new InputSource(xmlStream));
+        } catch(IOException e) {
+            HaikuWind.getInstance().showDialog(DialogBuilder.ERROR_TRY_AGAIN);
         } finally {
-            xmlStream.close();
+            if(xmlStream!=null) {
+                xmlStream.close();
+            }
         }
     }
+    
+    private static boolean checkConnection() {
+        NetworkInfo info = ((ConnectivityManager) HaikuWind.getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE))
+                .getActiveNetworkInfo();
+        if(info==null || !info.isConnected()) {
+            HaikuWind.getInstance().showDialog(DialogBuilder.SUGGEST_NETWORK_SETTINGS);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

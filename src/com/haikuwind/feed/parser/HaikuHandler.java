@@ -11,6 +11,7 @@ import static com.haikuwind.feed.parser.XmlTags.USER_RANK;
 import java.net.URLDecoder;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -25,7 +26,7 @@ import com.haikuwind.feed.UserInfo;
 public class HaikuHandler extends DefaultHandler {
     private static String TAG = HaikuHandler.class.getName();
 
-    private List<Haiku> haikuList;
+    private List<Haiku> haikuList = Collections.emptyList();
     private Haiku currentHaiku;
     private UserInfo userInfo;
 
