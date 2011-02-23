@@ -80,6 +80,7 @@ public class DialogBuilder {
         View layout = inflater.inflate(R.layout.user_info_dialog, null);
 
         UserInfo user = UserInfoHolder.getUserInfo();
+        
         ((TextView) layout.findViewById(R.id.user_rank)).setText(user.getRank()
                 .getRankStringId());
         String value = Integer.toString(user.getRank().getPower());
