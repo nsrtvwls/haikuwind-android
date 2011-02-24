@@ -93,8 +93,9 @@ public class HaikuWind extends TabActivity implements StateListener {
 
         setContentView(R.layout.main);
 
-        StateMachine.clearListeners();
         StateMachine.processEvent(Event.APP_LAUNCH);
+        
+        //app_launch event clears all listeners
         StateMachine.addStateListener(this);
     }
     

@@ -13,8 +13,10 @@ public class StateMachine {
     
     static {
         for(State s: State.values()) {
-            addTransition(s, Event.APP_LAUNCH, State.REGISTER);
+            addTransition(s, Event.APP_LAUNCH, State.APP_LAUNCH);
         }
+        
+        addTransition(State.APP_LAUNCH, Event.STATE_MACHINE_READY, State.REGISTER);
         addTransition(State.REGISTER, Event.REGISTERED, State.INIT_LAYOUT);
         addTransition(State.INIT_LAYOUT, Event.LAYOUT_READY, State.STARTED);
     }
@@ -40,16 +42,17 @@ public class StateMachine {
         if(transition==null || !transition.containsKey(event)) {
             throw new IllegalStateException("Unknown transition from state "+currentState+" on event "+event);
         }
-        
+
         currentState = transition.get(event);
         
+        if(State.APP_LAUNCH==currentState) {
+            listeners.clear();
+            processEvent(Event.STATE_MACHINE_READY);
+        }
+
         for(StateListener l: listeners) {
             l.processState(currentState);
         }
     }
 
-    public static void clearListeners() {
-        listeners.clear();
-    }
-    
 }
