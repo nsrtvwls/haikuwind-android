@@ -3,8 +3,12 @@ package com.haikuwind;
 import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
@@ -15,24 +19,21 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.feed.UserInfo;
 import com.haikuwind.menu.dialogs.DialogBuilder;
+import com.haikuwind.state.Event;
+import com.haikuwind.state.State;
+import com.haikuwind.state.StateListener;
+import com.haikuwind.state.StateMachine;
 import com.haikuwind.tabs.Favorites;
 import com.haikuwind.tabs.HallOfFame;
 import com.haikuwind.tabs.MyOwn;
 import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
-public class HaikuWind extends TabActivity {
-    private static HaikuWind instance;
-    
-    {
-        instance = this;
-    }
-    
-    public static HaikuWind getInstance() {
-        return instance;
-    }
+public class HaikuWind extends TabActivity implements StateListener {
 
     @SuppressWarnings("unused")
     private static String TAG = HaikuWind.class.getName();
@@ -43,12 +44,13 @@ public class HaikuWind extends TabActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
-        return true;
+        //TODO: remove when user info is requested separately
+        return UserInfo.getCurrent()!=null;
     }
-
+    
     @Override
     protected Dialog onCreateDialog(int id) {
-        return dialogBuilder.createDialog(id);
+        return dialogBuilder.buildDialog(id).create();
     }
 
     @Override
@@ -68,10 +70,20 @@ public class HaikuWind extends TabActivity {
     private void registerUser() {
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String userId = tManager.getDeviceId();
-        UserInfoHolder.registerUser(userId);
 
-        // TODO show dialog on error and stop loading views
-        HttpRequest.newUser(userId);
+        try {
+            HttpRequest.newUser(userId);
+            StateMachine.processEvent(Event.REGISTERED);
+        } catch(FeedException e) {
+            dialogBuilder.buildDialog(DialogBuilder.ERROR_TRY_AGAIN)
+                    .setPositiveButton(R.string.try_again, new OnClickListener() {
+                        
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            registerUser();
+                        }
+                    }).show();
+        }
     }
 
     /** Called when the activity is first created. */
@@ -81,11 +93,19 @@ public class HaikuWind extends TabActivity {
 
         setContentView(R.layout.main);
 
+        StateMachine.clearListeners();
+        StateMachine.processEvent(Event.APP_LAUNCH);
+        StateMachine.addStateListener(this);
+    }
+    
+    private void initTabs() {
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Reusable TabSpec for each tab
         Intent intent; // Reusable Intent for each tab
 
+        tabHost.clearAllTabs();
+        
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, Timeline.class);
 
@@ -134,7 +154,7 @@ public class HaikuWind extends TabActivity {
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(0);
-
+        
         // This part may be not supported in future APIs
         TabWidget tw = getTabWidget();
         for (int i = 0; i < tw.getChildCount(); i++) {
@@ -146,12 +166,34 @@ public class HaikuWind extends TabActivity {
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
-        registerUser();
+        
+        processState(StateMachine.getCurrentState());
     }
     
-    
+    @Override
+    public void processState(State state) {
+        switch(StateMachine.getCurrentState()) {
+        case REGISTER:
+            NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
+                    .getActiveNetworkInfo();
+            if(info==null || !info.isConnected()) {
+                showDialog(DialogBuilder.SUGGEST_NETWORK_SETTINGS);
+            } else {
+                registerUser();
+            }
+            break;
+            
+        case INIT_LAYOUT:
+            initTabs();
+            StateMachine.processEvent(Event.LAYOUT_READY);
+            break;
+            
+        case STARTED:
+            break;
+        }
+        
+    }
 
 
 }

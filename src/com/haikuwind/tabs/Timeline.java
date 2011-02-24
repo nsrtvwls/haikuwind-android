@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.os.Bundle;
 
+import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 
@@ -19,8 +20,8 @@ public class Timeline extends HaikuListActivity {
     }
 
     @Override
-    protected List<Haiku> fetchElements() {
-        return HttpRequest.getTimeline(getUserId(), 1);
+    protected List<Haiku> fetchElements() throws FeedException {
+        return HttpRequest.getTimeline(1);
     }
 
 }

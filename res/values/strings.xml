@@ -34,4 +34,8 @@
     <string name="connection_failed">Connection failed</string>
     <string name="suggest_network_settings">This application requires network access. Please, enable mobile network or Wi-Fi.</string>
     <string name="accept">Accept</string>
+    
+    <!-- Error, try again dialog -->
+    <string name="oops">Oops. Error occured</string>
+    <string name="try_again">Try again</string>
 </resources>

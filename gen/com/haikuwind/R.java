@@ -38,7 +38,6 @@ public final class R {
         public static final int ic_tab_top_unselected=0x7f020015;
         public static final int ic_user_info=0x7f020016;
         public static final int icon=0x7f020017;
-        public static final int splashscreen=0x7f020018;
     }
     public static final class id {
         public static final int haiku_list=0x7f080004;
@@ -60,8 +59,7 @@ public final class R {
         public static final int haiku_list=0x7f030001;
         public static final int main=0x7f030002;
         public static final int post_haiku_dialog=0x7f030003;
-        public static final int splashscreen=0x7f030004;
-        public static final int user_info_dialog=0x7f030005;
+        public static final int user_info_dialog=0x7f030004;
     }
     public static final class menu {
         public static final int options_menu=0x7f070000;
@@ -85,6 +83,9 @@ public final class R {
         public static final int journeyman=0x7f05000e;
         public static final int master=0x7f05000f;
         public static final int my_own=0x7f050004;
+        /**  Error, try again dialog 
+         */
+        public static final int oops=0x7f050017;
         /**  Post haiku dialog 
          */
         public static final int post_haiku=0x7f050006;
@@ -99,6 +100,7 @@ public final class R {
          */
         public static final int times=0x7f05000b;
         public static final int top_chart=0x7f050002;
+        public static final int try_again=0x7f050018;
         /**  User info dialog 
          */
         public static final int user_info=0x7f05000a;

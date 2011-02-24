@@ -6,6 +6,16 @@ import java.util.Map;
 import com.haikuwind.R;
 
 public class UserInfo {
+    private static UserInfo current;
+    
+    public static UserInfo getCurrent() {
+        return current;
+    }
+    
+    public static void setCurrent(UserInfo userInfo) {
+        current = userInfo;
+    }
+    
     public enum Rank {
         APPRENTICE(1, R.string.apprentice), JOURNEYMAN(2, R.string.journeyman), MASTER(
                 3, R.string.master), PRIEST(4, R.string.priest), DEVIL(5,
