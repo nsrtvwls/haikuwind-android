@@ -2,6 +2,8 @@ package com.haikuwind.feed;
 
 import java.util.Date;
 
+import com.haikuwind.feed.UserInfo.Rank;
+
 public class Haiku implements Cloneable {
     private String text;
     private int points;
@@ -44,8 +46,8 @@ public class Haiku implements Cloneable {
         this.user = user;
     }
 
-    public int getUserRank() {
-        return userRank;
+    public Rank getUserRank() {
+        return Rank.getFromNum(userRank);
     }
 
     public void setUserRank(int userRank) {

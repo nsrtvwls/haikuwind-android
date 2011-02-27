@@ -4,6 +4,13 @@
     android:padding="10dp"
     android:orientation="vertical"
     style="@style/UserInfo">
+            <ImageView 
+                android:id="@+id/user_image"
+                android:layout_width="fill_parent"
+                android:layout_height="54px"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
     <TextView android:text="You are a" style="@style/UserInfo"/>
     <TextView android:id="@+id/user_rank" style="@style/UserInfo"/>
     

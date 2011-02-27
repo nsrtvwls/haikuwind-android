@@ -49,7 +49,7 @@
             android:orientation="horizontal"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent">
-            <ToggleButton android:id="@+id/haiku_favorite"
+            <Button android:id="@+id/haiku_favorite"
                 android:layout_height="32px"
                 android:layout_width="32px"
                 android:background="@drawable/toggle_favorite"
@@ -58,8 +58,7 @@
             <ImageView 
                 android:id="@+id/haiku_author_image"
                 android:layout_width="fill_parent"
-                android:layout_height="54px"
-                android:src="@drawable/rank_1"
+                android:layout_height="34px"
                 android:gravity="center"
                 android:layout_weight="1"
                 />

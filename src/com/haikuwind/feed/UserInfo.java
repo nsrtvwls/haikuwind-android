@@ -17,20 +17,35 @@ public class UserInfo {
     }
     
     public enum Rank {
-        APPRENTICE(1, R.string.apprentice), JOURNEYMAN(2, R.string.journeyman), MASTER(
-                3, R.string.master), PRIEST(4, R.string.priest), DEVIL(5,
-                R.string.devil), DAEMON(6, R.string.daemon), GOD(7,
-                R.string.god);
+        APPRENTICE(1, R.string.apprentice, R.drawable.rank_1, R.drawable.rank_1_small),
+        JOURNEYMAN(2, R.string.journeyman, R.drawable.rank_2, R.drawable.rank_2_small),
+        MASTER(3, R.string.master, R.drawable.rank_3, R.drawable.rank_3_small),
+        PRIEST(4, R.string.priest, R.drawable.rank_4, R.drawable.rank_4_small),
+        DEVIL(5, R.string.devil, R.drawable.rank_5, R.drawable.rank_5_small),
+        DAEMON(6, R.string.daemon, R.drawable.rank_6, R.drawable.rank_6_small),
+        GOD(7, R.string.god, R.drawable.rank_7, R.drawable.rank_7_small);
 
         /**
          * numeric value of the rank, as it will be received from a server.
          */
         private int power;
         private int rankStringId;
+        private int imageId;
+        private int smallImageId;
 
-        private Rank(int power, int stringId) {
+        private Rank(int power, int stringId, int imageId, int smallImageId) {
             this.power = power;
             this.rankStringId = stringId;
+            this.imageId = imageId;
+            this.smallImageId = smallImageId;
+        }
+
+        public int getImageId() {
+            return imageId;
+        }
+
+        public int getSmallImageId() {
+            return smallImageId;
         }
 
         public int getPower() {

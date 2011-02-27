@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.haikuwind.R;
@@ -125,6 +126,8 @@ public class DialogBuilder {
                 + activity.getString(R.string.times);
         ((TextView) layout.findViewById(R.id.user_favorited_times))
                 .setText(value);
+        
+        ((ImageView) layout.findViewById(R.id.user_image)).setImageResource(user.getRank().getImageId());
 
         builder.setNegativeButton(R.string.close, new CancelListener());
         return layout;

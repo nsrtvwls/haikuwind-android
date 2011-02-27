@@ -13,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
@@ -109,17 +109,23 @@ abstract class HaikuListActivity extends Activity {
         favoriteToggle.setOnClickListener(new Marker(h));
         updateToggleFavorite(favoriteToggle, h);
         
+        int userImg = h.getUserRank().getSmallImageId(); 
+        ((ImageView) haikuView.findViewById(R.id.haiku_author_image)).setImageResource(userImg);
+        
         return haikuView;
     }
 
     abstract protected List<Haiku> fetchElements() throws FeedException;
     
     private void updateToggleFavorite(View toggle, Haiku h) {
-        ((ToggleButton) toggle).setChecked(h.isFavoritedByMe());
+        if(h.isFavoritedByMe()) {
+            toggle.setBackgroundResource(R.drawable.toggle_favorite_checked);
+        } else {
+            toggle.setBackgroundResource(R.drawable.toggle_favorite_unchecked);
+        }
     }
     
     private class Marker implements OnClickListener {
-        
         private Haiku haiku;
 
         public Marker(Haiku haiku) {
@@ -128,14 +134,14 @@ abstract class HaikuListActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            ToggleButton toggle = (ToggleButton) v;
-            if(toggle.isChecked()) {
+            if(!haiku.isFavoritedByMe()) {
                 try {
                     HttpRequest.favorite(haiku.getId());
                     haiku.setFavoritedByMe(true);
                 } catch (FeedException e) {
                     Log.e(TAG, "error while marking favorite", e);
-                    updateToggleFavorite(toggle, haiku);
+                } finally {
+                    updateToggleFavorite(v, haiku);
                 }
             }
             
