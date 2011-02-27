@@ -10,6 +10,7 @@ public interface XmlTags {
     String ERROR = "error";
 
     // Haiku element and its attributes
+    String ID = "id";
     String HAIKU = "haiku";
     String TEXT = "text";
     String POINTS = "points";

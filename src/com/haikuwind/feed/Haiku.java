@@ -10,6 +10,15 @@ public class Haiku implements Cloneable {
     private boolean favoritedByMe;
     private int timesVotedByMe;
     private Date time;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getText() {
         return text;
@@ -71,7 +80,9 @@ public class Haiku implements Cloneable {
     public String toString() {
         return "Haiku [text=" + text + ", points=" + points + ", user=" + user
                 + ", userRank=" + userRank + ", favoritedByMe=" + favoritedByMe
-                + ", timesVotedByMe=" + timesVotedByMe + ", time=" + time + "]";
+                + ", timesVotedByMe=" + timesVotedByMe + ", time=" + time
+                + ", id=" + id + "]";
     }
+
 
 }

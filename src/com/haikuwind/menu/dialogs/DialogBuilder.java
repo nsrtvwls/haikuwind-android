@@ -23,8 +23,9 @@ public class DialogBuilder {
     public static final int POST_HAIKU = 0;
     public static final int USER_INFO = 1;
     public static final int SUGGEST_NETWORK_SETTINGS = 2;
-    public static final int ERROR_TRY_AGAIN = 3;
+    public static final int ERROR = 3;
     public static final int ERROR_TRY_AGAIN_POST_HAIKU = 4;
+    public static final int ERROR_TRY_AGAIN_REFRESH = 5;
     
     private static final String TAG = DialogBuilder.class.getName();
 
@@ -52,7 +53,7 @@ public class DialogBuilder {
         case SUGGEST_NETWORK_SETTINGS:
             return suggestNetworkSettingsDialog(builder);
             
-        case ERROR_TRY_AGAIN:
+        case ERROR:
             return buildErrorTryAgainDialog(builder);
             
         case ERROR_TRY_AGAIN_POST_HAIKU:

@@ -38,6 +38,13 @@ public final class R {
         public static final int ic_tab_top_unselected=0x7f020015;
         public static final int ic_user_info=0x7f020016;
         public static final int icon=0x7f020017;
+        public static final int rank_1=0x7f020018;
+        public static final int rank_2=0x7f020019;
+        public static final int rank_3=0x7f02001a;
+        public static final int rank_4=0x7f02001b;
+        public static final int rank_5=0x7f02001c;
+        public static final int rank_6=0x7f02001d;
+        public static final int rank_7=0x7f02001e;
     }
     public static final class id {
         public static final int haiku_list=0x7f080004;

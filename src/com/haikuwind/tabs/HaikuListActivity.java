@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +19,20 @@ import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.menu.dialogs.DialogBuilder;
 
-public abstract class HaikuListActivity extends Activity {
+abstract class HaikuListActivity extends Activity {
     @SuppressWarnings("unused")
-    private final static String TAG = HaikuListActivity.class.getName();
+    private final static String TAG = HaikuListActivity.class.getSimpleName();
     
     protected final boolean voteEnabled;
+
+    public HaikuListActivity(boolean voteEnabled) {
+        this.voteEnabled = voteEnabled;
+    }
+
     protected boolean dataObsolete = true;
     
     private DialogBuilder dialogBuilder = new DialogBuilder(this);
     
-    protected HaikuListActivity(boolean voteEnabled) {
-        this.voteEnabled = voteEnabled;
-    }
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,8 @@ public abstract class HaikuListActivity extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         AlertDialog.Builder builder = dialogBuilder.buildDialog(id);
-        if(DialogBuilder.ERROR_TRY_AGAIN==id) {
-            builder.setPositiveButton("Try again", new OnClickListener() {
+        if(DialogBuilder.ERROR_TRY_AGAIN_REFRESH==id) {
+            builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -74,23 +74,13 @@ public abstract class HaikuListActivity extends Activity {
         try {
             haikuResponse = fetchElements();
         } catch(FeedException e) {
-            showDialog(DialogBuilder.ERROR_TRY_AGAIN);
+            showDialog(DialogBuilder.ERROR);
             return;
         }
 
         haikuListView.removeAllViews();
         for (Haiku h : haikuResponse) {
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku,
-                    null);
-
-            ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
-            ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer.toString(h.getPoints()));
-            
-            if(!voteEnabled) {
-                ((View) haikuView.findViewById(R.id.thumb_up)).setVisibility(View.INVISIBLE);
-                ((View) haikuView.findViewById(R.id.thumb_down)).setVisibility(View.INVISIBLE);
-            }
+            ViewGroup haikuView = createSingleHaikuWidget(h);
 
             haikuListView.addView(haikuView);
             
@@ -99,5 +89,20 @@ public abstract class HaikuListActivity extends Activity {
         dataObsolete = false;
     }
 
+    protected ViewGroup createSingleHaikuWidget(Haiku h) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku, null);
+
+        ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
+        ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer.toString(h.getPoints()));
+        
+        if(!voteEnabled) {
+            ((View) haikuView.findViewById(R.id.thumb_up)).setVisibility(View.INVISIBLE);
+            ((View) haikuView.findViewById(R.id.thumb_down)).setVisibility(View.INVISIBLE);
+        }
+        return haikuView;
+    }
+
     abstract protected List<Haiku> fetchElements() throws FeedException;
+    
 }

@@ -6,11 +6,7 @@ import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 
-public class TopChart extends HaikuListActivity {
-
-    public TopChart() {
-        super(false);
-    }
+public class TopChart extends VotableHaikuList {
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {

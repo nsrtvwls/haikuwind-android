@@ -73,6 +73,13 @@ public class HttpRequest {
         String url = String.format("%s?command=my&user=%s", HW_ADDR, userId);
         return parseHaikuList(url);
     }
+    
+    public static void vote(String textId, boolean isGood) throws FeedException {
+//  http://localhost:8080/haiku?command=vote&user=1&text=1&vote=yes / or 'no'
+        String url = String.format("%s?command=vote&user=%s&text=%s&vote=%s", 
+                HW_ADDR, userId, textId, isGood? "yes" : "no");
+        parseResult(url);
+    }
 
     /**
      * Side effect is: if user info received, it updates {@link UserInfoHolder}

@@ -75,7 +75,7 @@ public class HaikuWind extends TabActivity implements StateListener {
             HttpRequest.newUser(userId);
             StateMachine.processEvent(Event.REGISTERED);
         } catch(FeedException e) {
-            dialogBuilder.buildDialog(DialogBuilder.ERROR_TRY_AGAIN)
+            dialogBuilder.buildDialog(DialogBuilder.ERROR)
                     .setPositiveButton(R.string.try_again, new OnClickListener() {
                         
                         @Override

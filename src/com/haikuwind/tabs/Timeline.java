@@ -2,22 +2,13 @@ package com.haikuwind.tabs;
 
 import java.util.List;
 
-import android.os.Bundle;
-
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 
-public class Timeline extends HaikuListActivity {
-
-    public Timeline() {
-        super(true);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class Timeline extends VotableHaikuList {
+    @SuppressWarnings("unused")
+    private final static String TAG = Timeline.class.getSimpleName();
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {

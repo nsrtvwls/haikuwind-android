@@ -1,6 +1,7 @@
 package com.haikuwind.feed.parser;
 
 import static com.haikuwind.feed.parser.XmlTags.FAVORITED_BY_ME;
+import static com.haikuwind.feed.parser.XmlTags.ID;
 import static com.haikuwind.feed.parser.XmlTags.POINTS;
 import static com.haikuwind.feed.parser.XmlTags.TEXT;
 import static com.haikuwind.feed.parser.XmlTags.TIME;
@@ -57,6 +58,7 @@ public class HaikuHandler extends DefaultHandler {
             try {
                 String text = URLDecoder.decode(attributes.getValue(TEXT));
                 currentHaiku.setText(text);
+                currentHaiku.setId(attributes.getValue(ID));
                 currentHaiku.setFavoritedByMe(Boolean.parseBoolean(attributes
                         .getValue(FAVORITED_BY_ME)));
                 currentHaiku.setPoints(Integer.parseInt(attributes
