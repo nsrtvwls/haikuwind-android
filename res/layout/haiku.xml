@@ -35,12 +35,38 @@
                 android:background="@drawable/btn_thumb_down"
                 android:text="-"/>
         </LinearLayout>
+        
         <TextView
             android:id="@+id/haiku_text"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:textColor="@android:color/white"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+            <ToggleButton android:id="@+id/haiku_favorite"
+                android:layout_height="32px"
+                android:layout_width="32px"
+                android:background="@drawable/toggle_favorite"
+                android:textOn="on"
+                android:textOff="off"/>
+            <ImageView 
+                android:id="@+id/haiku_author_image"
+                android:layout_width="fill_parent"
+                android:layout_height="54px"
+                android:src="@drawable/rank_1"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
+            <View
+                android:layout_height="fill_parent"
+                android:layout_width="32px"/>
+            
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

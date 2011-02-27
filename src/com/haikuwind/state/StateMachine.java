@@ -1,13 +1,15 @@
 package com.haikuwind.state;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO don't need to be static. It is used only for HaikuWind class
 public class StateMachine {
     private static State currentState = State.REGISTER;
-    private static List<StateListener> listeners = new ArrayList<StateListener>();
+    private static List<WeakReference<StateListener>> listeners = new ArrayList<WeakReference<StateListener>>();
     
     private static Map<State, Map<Event, State>> states = new HashMap<State, Map<Event,State>>();
     
@@ -34,7 +36,7 @@ public class StateMachine {
     }
     
     public static void addStateListener(StateListener l) {
-        listeners.add(l);
+        listeners.add(new WeakReference<StateListener>(l));
     }
     
     public static void processEvent(Event event) {
@@ -50,8 +52,8 @@ public class StateMachine {
             processEvent(Event.STATE_MACHINE_READY);
         }
 
-        for(StateListener l: listeners) {
-            l.processState(currentState);
+        for(WeakReference<StateListener> l: listeners) {
+            l.get().processState(currentState);
         }
     }
 

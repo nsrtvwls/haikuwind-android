@@ -19,6 +19,7 @@ import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
 
+//TODO: Integrate in corresponding activity class. Possible memory leaks
 public class DialogBuilder {
     public static final int POST_HAIKU = 0;
     public static final int USER_INFO = 1;

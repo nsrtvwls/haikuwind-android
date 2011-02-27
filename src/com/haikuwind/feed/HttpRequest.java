@@ -80,6 +80,12 @@ public class HttpRequest {
                 HW_ADDR, userId, textId, isGood? "yes" : "no");
         parseResult(url);
     }
+    
+    public static void favorite(String textId) throws FeedException {
+//    http://localhost:8080/haiku?command=favorite&user=1&text=1
+        String url = String.format("%s?command=favorite&user=%s&text=%s", HW_ADDR, userId, textId);
+        parseResult(url);
+    }
 
     /**
      * Side effect is: if user info received, it updates {@link UserInfoHolder}

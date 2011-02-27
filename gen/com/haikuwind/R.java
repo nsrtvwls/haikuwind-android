@@ -45,21 +45,26 @@ public final class R {
         public static final int rank_5=0x7f02001c;
         public static final int rank_6=0x7f02001d;
         public static final int rank_7=0x7f02001e;
+        public static final int toggle_favorite=0x7f02001f;
+        public static final int toggle_favorite_checked=0x7f020020;
+        public static final int toggle_favorite_unchecked=0x7f020021;
     }
     public static final class id {
-        public static final int haiku_list=0x7f080004;
+        public static final int haiku_author_image=0x7f080005;
+        public static final int haiku_favorite=0x7f080004;
+        public static final int haiku_list=0x7f080006;
         public static final int haiku_points=0x7f080001;
         public static final int haiku_text=0x7f080003;
-        public static final int post_haiku=0x7f08000b;
-        public static final int post_haiku_dialog=0x7f080005;
+        public static final int post_haiku=0x7f08000d;
+        public static final int post_haiku_dialog=0x7f080007;
         public static final int thumb_down=0x7f080002;
         public static final int thumb_up=0x7f080000;
-        public static final int user_favorited_times=0x7f08000a;
-        public static final int user_info=0x7f08000c;
-        public static final int user_info_dialog=0x7f080006;
-        public static final int user_rank=0x7f080007;
-        public static final int user_score=0x7f080009;
-        public static final int user_voting_power=0x7f080008;
+        public static final int user_favorited_times=0x7f08000c;
+        public static final int user_info=0x7f08000e;
+        public static final int user_info_dialog=0x7f080008;
+        public static final int user_rank=0x7f080009;
+        public static final int user_score=0x7f08000b;
+        public static final int user_voting_power=0x7f08000a;
     }
     public static final class layout {
         public static final int haiku=0x7f030000;

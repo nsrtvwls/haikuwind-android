@@ -8,15 +8,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.menu.dialogs.DialogBuilder;
 
 abstract class HaikuListActivity extends Activity {
@@ -100,9 +104,42 @@ abstract class HaikuListActivity extends Activity {
             ((View) haikuView.findViewById(R.id.thumb_up)).setVisibility(View.INVISIBLE);
             ((View) haikuView.findViewById(R.id.thumb_down)).setVisibility(View.INVISIBLE);
         }
+        
+        View favoriteToggle = haikuView.findViewById(R.id.haiku_favorite);
+        favoriteToggle.setOnClickListener(new Marker(h));
+        updateToggleFavorite(favoriteToggle, h);
+        
         return haikuView;
     }
 
     abstract protected List<Haiku> fetchElements() throws FeedException;
     
+    private void updateToggleFavorite(View toggle, Haiku h) {
+        ((ToggleButton) toggle).setChecked(h.isFavoritedByMe());
+    }
+    
+    private class Marker implements OnClickListener {
+        
+        private Haiku haiku;
+
+        public Marker(Haiku haiku) {
+            this.haiku = haiku;
+        }
+
+        @Override
+        public void onClick(View v) {
+            ToggleButton toggle = (ToggleButton) v;
+            if(toggle.isChecked()) {
+                try {
+                    HttpRequest.favorite(haiku.getId());
+                    haiku.setFavoritedByMe(true);
+                } catch (FeedException e) {
+                    Log.e(TAG, "error while marking favorite", e);
+                    updateToggleFavorite(toggle, haiku);
+                }
+            }
+            
+        }
+        
+    }
 }
