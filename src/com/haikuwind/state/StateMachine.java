@@ -61,9 +61,7 @@ public class StateMachine {
         for (Iterator<WeakReference<StateListener>> listenerRef = listeners.iterator();
                 listenerRef.hasNext();) {
             StateListener listener = listenerRef.next().get();
-            if(listener == null) {
-                listenerRef.remove();
-            } else { 
+            if(listener != null) {
                 listener.processState(currentState);
             }
         }
