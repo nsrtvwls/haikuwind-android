@@ -1,5 +1,6 @@
 package com.haikuwind.tabs;
 
+import static com.haikuwind.tabs.HaikuListActivity.ERROR_CANCEL;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
-import com.haikuwind.menu.dialogs.DialogBuilder;
 
 abstract class VotableHaikuList extends HaikuListActivity {
     private final static String TAG = VotableHaikuList.class.getSimpleName();
@@ -85,12 +85,13 @@ abstract class VotableHaikuList extends HaikuListActivity {
                 Log.e(TAG, "error in vote", e);
                 
                 //we show dialog with only "cancel" button.
-                showDialog(DialogBuilder.ERROR);
+                showDialog(ERROR_CANCEL);
             } finally {
                 updateVoteButtons(haiku, buttons);
             }
             
             if(haiku.getPoints() <= MIN_POINTS) {
+                //TODO hide
             }
         }
     }

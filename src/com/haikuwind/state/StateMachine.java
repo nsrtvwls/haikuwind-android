@@ -3,6 +3,7 @@ package com.haikuwind.state;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,14 @@ public class StateMachine {
             processEvent(Event.STATE_MACHINE_READY);
         }
 
-        for(WeakReference<StateListener> l: listeners) {
-            l.get().processState(currentState);
+        for (Iterator<WeakReference<StateListener>> listenerRef = listeners.iterator();
+                listenerRef.hasNext();) {
+            StateListener listener = listenerRef.next().get();
+            if(listener == null) {
+                listenerRef.remove();
+            } else { 
+                listener.processState(currentState);
+            }
         }
     }
 

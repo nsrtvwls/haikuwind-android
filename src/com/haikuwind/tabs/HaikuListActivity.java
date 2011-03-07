@@ -21,11 +21,14 @@ import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.menu.dialogs.DialogBuilder;
+import com.haikuwind.menu.dialogs.CancelListener;
 
 abstract class HaikuListActivity extends Activity {
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getSimpleName();
+
+    private static final int ERROR_TRY_AGAIN_REFRESH = 0;
+    protected static final int ERROR_CANCEL = 1;
     
     protected final boolean voteEnabled;
 
@@ -34,8 +37,6 @@ abstract class HaikuListActivity extends Activity {
     }
 
     protected boolean dataObsolete = true;
-    
-    private DialogBuilder dialogBuilder = new DialogBuilder(this);
     
     /** Called when the activity is first created. */
     @Override
@@ -58,8 +59,13 @@ abstract class HaikuListActivity extends Activity {
     
     @Override
     protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = dialogBuilder.buildDialog(id);
-        if(DialogBuilder.ERROR_TRY_AGAIN_REFRESH==id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true)
+                .setNegativeButton(R.string.cancel, new CancelListener())
+                .setMessage(R.string.oops);
+        
+        switch(id) {
+        case ERROR_TRY_AGAIN_REFRESH:
             builder.setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                 
                 @Override
@@ -67,6 +73,13 @@ abstract class HaikuListActivity extends Activity {
                     refreshData();
                 }
             });
+            break;
+        
+        case ERROR_CANCEL:
+            break;
+        
+        default:
+            return super.onCreateDialog(id);
         }
         return builder.create();
     }
@@ -78,7 +91,7 @@ abstract class HaikuListActivity extends Activity {
         try {
             haikuResponse = fetchElements();
         } catch(FeedException e) {
-            showDialog(DialogBuilder.ERROR);
+            showDialog(ERROR_TRY_AGAIN_REFRESH);
             return;
         }
 
@@ -140,6 +153,7 @@ abstract class HaikuListActivity extends Activity {
                     haiku.setFavoritedByMe(true);
                 } catch (FeedException e) {
                     Log.e(TAG, "error while marking favorite", e);
+                    showDialog(ERROR_CANCEL);
                 } finally {
                     updateToggleFavorite(v, haiku);
                 }
