@@ -198,17 +198,27 @@ public class HaikuWind extends TabActivity implements StateListener {
         }
     }
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
 
-        StateMachine.processEvent(Event.APP_LAUNCH);
+    }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        StateMachine.processEvent(Event.APP_START);
         
-        //app_launch event clears all listeners
         StateMachine.addStateListener(this);
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        
+        StateMachine.processEvent(Event.APP_STOP);
     }
     
     private void initTabs() {
