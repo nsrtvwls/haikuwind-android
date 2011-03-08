@@ -24,11 +24,11 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.haikuwind.dialogs.CancelListener;
+import com.haikuwind.dialogs.FinishListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
-import com.haikuwind.menu.dialogs.CancelListener;
-import com.haikuwind.menu.dialogs.FinishListener;
 import com.haikuwind.state.Event;
 import com.haikuwind.state.State;
 import com.haikuwind.state.StateListener;
@@ -218,6 +218,7 @@ public class HaikuWind extends TabActivity implements StateListener {
     protected void onStop() {
         super.onStop();
         
+        StateMachine.removeStateListener(this);
         StateMachine.processEvent(Event.APP_STOP);
     }
     

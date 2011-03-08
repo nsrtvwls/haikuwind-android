@@ -1,4 +1,4 @@
-package com.haikuwind.menu.dialogs;
+package com.haikuwind.dialogs;
 
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;

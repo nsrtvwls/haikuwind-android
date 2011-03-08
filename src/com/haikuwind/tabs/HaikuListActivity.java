@@ -18,10 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haikuwind.R;
+import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.menu.dialogs.CancelListener;
 
 abstract class HaikuListActivity extends Activity {
     @SuppressWarnings("unused")
