@@ -16,19 +16,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.haikuwind.R;
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.notification.Update;
+import com.haikuwind.notification.UpdateListener;
+import com.haikuwind.notification.UpdateNotifier;
 
-abstract class HaikuListActivity extends Activity {
-    @SuppressWarnings("unused")
+abstract class HaikuListActivity extends Activity  implements UpdateListener {
     private final static String TAG = HaikuListActivity.class.getSimpleName();
 
     private static final int ERROR_TRY_AGAIN_REFRESH = 0;
-    protected static final int ERROR_CANCEL = 1;
     
     protected final boolean voteEnabled;
 
@@ -37,6 +39,7 @@ abstract class HaikuListActivity extends Activity {
     }
 
     protected boolean dataObsolete = true;
+    private boolean isForeground = false;
     
     /** Called when the activity is first created. */
     @Override
@@ -50,11 +53,23 @@ abstract class HaikuListActivity extends Activity {
     protected void onResume() {
         super.onResume();
         //if update isn't needed or application hasn't been initialized correctly yet, then skip
-        if(!dataObsolete) {
-            return;
+        if(dataObsolete) {
+            refreshData();
         }
-
-        refreshData();
+        
+        isForeground = true;
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        isForeground = false;
+    }
+    
+    
+    protected boolean isForeground() {
+        return isForeground;
     }
     
     @Override
@@ -75,23 +90,21 @@ abstract class HaikuListActivity extends Activity {
             });
             break;
         
-        case ERROR_CANCEL:
-            break;
-        
         default:
             return super.onCreateDialog(id);
         }
         return builder.create();
     }
     
-    private void refreshData() {
+    protected void refreshData() {
         LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
         
         List<Haiku> haikuResponse;
         try {
             haikuResponse = fetchElements();
         } catch(FeedException e) {
-            showDialog(ERROR_TRY_AGAIN_REFRESH);
+            //TODO how to show the same dialog that is open now?
+            onCreateDialog(ERROR_TRY_AGAIN_REFRESH).show();
             return;
         }
 
@@ -106,6 +119,14 @@ abstract class HaikuListActivity extends Activity {
         dataObsolete = false;
     }
 
+    @Override
+    public void processUpdate(Update update, Haiku haiku) {
+        dataObsolete = true;
+        if(isForeground()) {
+            refreshData();
+        }
+    }
+    
     protected ViewGroup createSingleHaikuWidget(Haiku h) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup haikuView = (ViewGroup) inflater.inflate(R.layout.haiku, null);
@@ -151,9 +172,11 @@ abstract class HaikuListActivity extends Activity {
                 try {
                     HttpRequest.favorite(haiku.getId());
                     haiku.setFavoritedByMe(true);
+                    
+                    UpdateNotifier.fireUpdate(Update.ADD_FAVORITE, haiku);
                 } catch (FeedException e) {
                     Log.e(TAG, "error while marking favorite", e);
-                    showDialog(ERROR_CANCEL);
+                    Toast.makeText(getApplicationContext(), R.string.toast_error_try_again, Toast.LENGTH_SHORT);
                 } finally {
                     updateToggleFavorite(v, haiku);
                 }

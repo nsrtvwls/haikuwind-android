@@ -5,6 +5,10 @@ import java.util.Date;
 import com.haikuwind.feed.UserInfo.Rank;
 
 public class Haiku implements Cloneable {
+    public final static int MIN_POINTS = -5;
+    public final static int HALL_OF_FAME_POINTS = 25;
+
+
     private String text;
     private int points;
     private String user;
@@ -13,6 +17,14 @@ public class Haiku implements Cloneable {
     private int timesVotedByMe;
     private Date time;
     private String id;
+    
+    public Haiku() {
+        
+    }
+    
+    public Haiku(String text) {
+        this.text = text;
+    }
 
     public String getId() {
         return id;

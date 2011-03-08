@@ -119,6 +119,9 @@ public final class R {
         /**  (your haiku were favorited n) times 
          */
         public static final int times=0x7f05000b;
+        /**  Toast message for vote/favorite error 
+         */
+        public static final int toast_error_try_again=0x7f050019;
         public static final int top_chart=0x7f050002;
         public static final int try_again=0x7f050018;
         /**  User info dialog 

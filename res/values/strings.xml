@@ -38,4 +38,7 @@
     <!-- Error, try again dialog -->
     <string name="oops">Oops. Error occured</string>
     <string name="try_again">Try again</string>
+    
+    <!-- Toast message for vote/favorite error -->
+    <string name="toast_error_try_again">Error occured. Please try again</string>
 </resources>

@@ -36,19 +36,19 @@ public class StateMachine {
         states.get(from).put(event, to);
     }
     
-    public static State getCurrentState() {
+    synchronized public static State getCurrentState() {
         return currentState;
     }
     
-    public static void addStateListener(StateListener l) {
+    synchronized public static void addStateListener(StateListener l) {
         listeners.add(l);
     }
     
-    public static void removeStateListener(StateListener l) {
+    synchronized public static void removeStateListener(StateListener l) {
         listeners.remove(l);
     }
     
-    public static void processEvent(Event event) {
+    synchronized public static void processEvent(Event event) {
         Map<Event, State> transition = states.get(currentState);
         if(transition==null || !transition.containsKey(event)) {
             throw new IllegalStateException("Unknown transition from state "+currentState+" on event "+event);

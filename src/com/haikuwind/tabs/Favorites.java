@@ -5,11 +5,25 @@ import java.util.List;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.notification.Update;
+import com.haikuwind.notification.UpdateNotifier;
 
 public class Favorites extends HaikuListActivity {
 
     public Favorites() {
         super(false);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        UpdateNotifier.addUpdateListener(this, Update.ADD_FAVORITE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        UpdateNotifier.removeUpdateListener(this);
     }
 
     @Override

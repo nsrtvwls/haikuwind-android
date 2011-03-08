@@ -19,7 +19,7 @@ import com.haikuwind.feed.parser.HaikuHandler;
 import com.haikuwind.feed.parser.ResultHandler;
 
 public class HttpRequest {
-    private final static String TAG = HttpRequest.class.getName();
+    private final static String TAG = HttpRequest.class.getSimpleName();
     private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
     
     //initialized during first newUser() call
@@ -128,9 +128,10 @@ public class HttpRequest {
             xr.setContentHandler(handler);
     
             Log.d(TAG, url);
-            xmlStream = new URL(url).openStream();;
+            xmlStream = new URL(url).openStream();
             xr.parse(new InputSource(xmlStream));
         } catch(Exception e) {
+            Log.e(TAG, "Error occured while treating the request", e);
             throw new FeedException(e);
         } finally {
             try {

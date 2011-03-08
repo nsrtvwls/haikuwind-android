@@ -1,6 +1,7 @@
 package com.haikuwind.notification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,9 +17,9 @@ public class UpdateNotifier implements StateListener {
         StateMachine.addStateListener(new UpdateNotifier());
     }
     
-    private static Map<Update, List<UpdateListener>> listeners;
+    private static Map<Update, List<UpdateListener>> listeners = new HashMap<Update, List<UpdateListener>>();
     
-    public static void addUpdateListener(UpdateListener listener, Update... updates) {
+    synchronized public static void addUpdateListener(UpdateListener listener, Update... updates) {
         for(Update update: updates) {
             if(listeners.get(update)==null) {
                 listeners.put(update, new ArrayList<UpdateListener>());
@@ -28,13 +29,13 @@ public class UpdateNotifier implements StateListener {
         }
     }
     
-    public static void removeUpdateListener(UpdateListener listener) {
+    synchronized public static void removeUpdateListener(UpdateListener listener) {
         for(List<UpdateListener> list: listeners.values()) {
             list.remove(listener);
         }
     }
     
-    public static void fireUpdate(Update update, Haiku haiku) {
+    synchronized public static void fireUpdate(Update update, Haiku haiku) {
         List<UpdateListener> toUpdate = listeners.get(update);
         if(toUpdate==null) {
             return;
@@ -50,7 +51,7 @@ public class UpdateNotifier implements StateListener {
     }
     
     @Override
-    public void processState(State state) {
+    synchronized public void processState(State state) {
         if(State.APP_STOPPED!=state) {
             return;
         }

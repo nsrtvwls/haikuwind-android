@@ -1,21 +1,21 @@
 package com.haikuwind.tabs;
 
-import static com.haikuwind.tabs.HaikuListActivity.ERROR_CANCEL;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
+import com.haikuwind.notification.Update;
+import com.haikuwind.notification.UpdateNotifier;
 
 abstract class VotableHaikuList extends HaikuListActivity {
     private final static String TAG = VotableHaikuList.class.getSimpleName();
-    
-    private final int MIN_POINTS = -5;
     
     protected VotableHaikuList() {
         super(true);
@@ -81,16 +81,16 @@ abstract class VotableHaikuList extends HaikuListActivity {
                 TextView points = (TextView) ((View) v.getParent()).findViewById(R.id.haiku_points);
                 points.setText(Integer.toString(haiku.getPoints()));
                 
-            } catch (FeedException e) {
-                Log.e(TAG, "error in vote", e);
+                UpdateNotifier.fireUpdate(Update.VOTE, haiku);
                 
-                //we show dialog with only "cancel" button.
-                showDialog(ERROR_CANCEL);
+            } catch (FeedException e) {
+                Log.e(TAG, "error in vote", e);                
+                Toast.makeText(getApplicationContext(), R.string.toast_error_try_again, Toast.LENGTH_SHORT);
             } finally {
                 updateVoteButtons(haiku, buttons);
             }
             
-            if(haiku.getPoints() <= MIN_POINTS) {
+            if(haiku.getPoints() <= Haiku.MIN_POINTS) {
                 //TODO hide
             }
         }
