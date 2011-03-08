@@ -52,6 +52,8 @@ public class HaikuWind extends TabActivity implements StateListener {
     
     @SuppressWarnings("unused")
     private static String TAG = HaikuWind.class.getSimpleName();
+    
+    private StateMachine stateMachine = new StateMachine();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,7 +200,7 @@ public class HaikuWind extends TabActivity implements StateListener {
 
         try {
             HttpRequest.newUser(userId);
-            StateMachine.processEvent(Event.REGISTERED);
+            stateMachine.processEvent(Event.REGISTERED);
         } catch(FeedException e) {
             //TODO how to show the same dialog that is open now?
             onCreateDialog(ERROR_TRY_AGAIN_REGISTER).show();
@@ -216,17 +218,17 @@ public class HaikuWind extends TabActivity implements StateListener {
     @Override
     protected void onStart() {
         super.onStart();
-        StateMachine.processEvent(Event.APP_START);
+        stateMachine.processEvent(Event.APP_START);
         
-        StateMachine.addStateListener(this);
+        stateMachine.addStateListener(this);
     }
     
     @Override
     protected void onStop() {
         super.onStop();
         
-        StateMachine.removeStateListener(this);
-        StateMachine.processEvent(Event.APP_STOP);
+        stateMachine.removeStateListener(this);
+        stateMachine.processEvent(Event.APP_STOP);
     }
     
     private void initTabs() {
@@ -293,18 +295,19 @@ public class HaikuWind extends TabActivity implements StateListener {
             TextView tv = (TextView) relLayout.getChildAt(1);
             tv.setTextSize(11.0f); // just example
         }
+        stateMachine.processEvent(Event.LAYOUT_READY);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
-        processState(StateMachine.getCurrentState());
+        processState(stateMachine.getCurrentState());
     }
     
     @Override
     public void processState(State state) {
-        switch(StateMachine.getCurrentState()) {
+        switch(stateMachine.getCurrentState()) {
         case REGISTER:
             NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
                     .getActiveNetworkInfo();
@@ -317,7 +320,6 @@ public class HaikuWind extends TabActivity implements StateListener {
             
         case INIT_LAYOUT:
             initTabs();
-            StateMachine.processEvent(Event.LAYOUT_READY);
             break;
             
         case STARTED:

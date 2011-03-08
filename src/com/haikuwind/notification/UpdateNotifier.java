@@ -6,16 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.state.State;
-import com.haikuwind.state.StateListener;
-import com.haikuwind.state.StateMachine;
 
-public class UpdateNotifier implements StateListener {
-    
-    static {
-        // to make sure all activities are unregistered on application stop
-        StateMachine.addStateListener(new UpdateNotifier());
-    }
+public class UpdateNotifier {
     
     private static Map<Update, List<UpdateListener>> listeners = new HashMap<Update, List<UpdateListener>>();
     
@@ -50,17 +42,4 @@ public class UpdateNotifier implements StateListener {
         
     }
     
-    @Override
-    synchronized public void processState(State state) {
-        if(State.APP_STOPPED!=state) {
-            return;
-        }
-        
-        for(List<UpdateListener> list: listeners.values()) {
-            if(!list.isEmpty()) {
-                throw new IllegalStateException("Found unremoved UpdateListener on app stop");
-            }
-        }
-    }
-
 }
