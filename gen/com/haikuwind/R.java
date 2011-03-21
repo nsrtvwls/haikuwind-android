@@ -8,10 +8,15 @@
 package com.haikuwind;
 
 public final class R {
+    public static final class anim {
+        public static final int disappear=0x7f040000;
+        public static final int fly_in=0x7f040001;
+        public static final int spin=0x7f040002;
+    }
     public static final class attr {
     }
     public static final class color {
-        public static final int grey=0x7f040000;
+        public static final int grey=0x7f050000;
     }
     public static final class drawable {
         public static final int background=0x7f020000;
@@ -57,22 +62,22 @@ public final class R {
         public static final int toggle_favorite_unchecked=0x7f020028;
     }
     public static final class id {
-        public static final int haiku_author_image=0x7f080005;
-        public static final int haiku_favorite=0x7f080004;
-        public static final int haiku_list=0x7f080006;
-        public static final int haiku_points=0x7f080001;
-        public static final int haiku_text=0x7f080003;
-        public static final int post_haiku=0x7f08000e;
-        public static final int post_haiku_dialog=0x7f080007;
-        public static final int thumb_down=0x7f080002;
-        public static final int thumb_up=0x7f080000;
-        public static final int user_favorited_times=0x7f08000d;
-        public static final int user_image=0x7f080009;
-        public static final int user_info=0x7f08000f;
-        public static final int user_info_dialog=0x7f080008;
-        public static final int user_rank=0x7f08000a;
-        public static final int user_score=0x7f08000c;
-        public static final int user_voting_power=0x7f08000b;
+        public static final int haiku_author_image=0x7f090005;
+        public static final int haiku_favorite=0x7f090004;
+        public static final int haiku_list=0x7f090006;
+        public static final int haiku_points=0x7f090001;
+        public static final int haiku_text=0x7f090003;
+        public static final int post_haiku=0x7f09000e;
+        public static final int post_haiku_dialog=0x7f090007;
+        public static final int thumb_down=0x7f090002;
+        public static final int thumb_up=0x7f090000;
+        public static final int user_favorited_times=0x7f09000d;
+        public static final int user_image=0x7f090009;
+        public static final int user_info=0x7f09000f;
+        public static final int user_info_dialog=0x7f090008;
+        public static final int user_rank=0x7f09000a;
+        public static final int user_score=0x7f09000c;
+        public static final int user_voting_power=0x7f09000b;
     }
     public static final class layout {
         public static final int haiku=0x7f030000;
@@ -82,53 +87,53 @@ public final class R {
         public static final int user_info_dialog=0x7f030004;
     }
     public static final class menu {
-        public static final int options_menu=0x7f070000;
+        public static final int options_menu=0x7f080000;
     }
     public static final class string {
-        public static final int accept=0x7f050016;
-        public static final int app_name=0x7f050000;
+        public static final int accept=0x7f060016;
+        public static final int app_name=0x7f060000;
         /**  User rank 
          */
-        public static final int apprentice=0x7f05000d;
-        public static final int cancel=0x7f050008;
-        public static final int close=0x7f05000c;
+        public static final int apprentice=0x7f06000d;
+        public static final int cancel=0x7f060008;
+        public static final int close=0x7f06000c;
         /**  Connection error dialogs 
          */
-        public static final int connection_failed=0x7f050014;
-        public static final int daemon=0x7f050012;
-        public static final int devil=0x7f050011;
-        public static final int favorites=0x7f050005;
-        public static final int god=0x7f050013;
-        public static final int hall_of_fame=0x7f050003;
-        public static final int journeyman=0x7f05000e;
-        public static final int master=0x7f05000f;
-        public static final int my_own=0x7f050004;
+        public static final int connection_failed=0x7f060014;
+        public static final int daemon=0x7f060012;
+        public static final int devil=0x7f060011;
+        public static final int favorites=0x7f060005;
+        public static final int god=0x7f060013;
+        public static final int hall_of_fame=0x7f060003;
+        public static final int journeyman=0x7f06000e;
+        public static final int master=0x7f06000f;
+        public static final int my_own=0x7f060004;
         /**  Error, try again dialog 
          */
-        public static final int oops=0x7f050017;
+        public static final int oops=0x7f060017;
         /**  Post haiku dialog 
          */
-        public static final int post_haiku=0x7f050006;
-        public static final int post_haiku_hint=0x7f050009;
-        public static final int priest=0x7f050010;
-        public static final int send=0x7f050007;
-        public static final int suggest_network_settings=0x7f050015;
+        public static final int post_haiku=0x7f060006;
+        public static final int post_haiku_hint=0x7f060009;
+        public static final int priest=0x7f060010;
+        public static final int send=0x7f060007;
+        public static final int suggest_network_settings=0x7f060015;
         /**  Tab titles 
          */
-        public static final int timeline=0x7f050001;
+        public static final int timeline=0x7f060001;
         /**  (your haiku were favorited n) times 
          */
-        public static final int times=0x7f05000b;
+        public static final int times=0x7f06000b;
         /**  Toast message for vote/favorite error 
          */
-        public static final int toast_error_try_again=0x7f050019;
-        public static final int top_chart=0x7f050002;
-        public static final int try_again=0x7f050018;
+        public static final int toast_error_try_again=0x7f060019;
+        public static final int top_chart=0x7f060002;
+        public static final int try_again=0x7f060018;
         /**  User info dialog 
          */
-        public static final int user_info=0x7f05000a;
+        public static final int user_info=0x7f06000a;
     }
     public static final class style {
-        public static final int UserInfo=0x7f060000;
+        public static final int UserInfo=0x7f070000;
     }
 }

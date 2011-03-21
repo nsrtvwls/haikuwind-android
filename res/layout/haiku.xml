@@ -18,10 +18,9 @@
             android:layout_width="fill_parent">
             
             <Button android:id="@+id/thumb_up"
-                android:layout_height="32px"
-                android:layout_width="32px"
-                android:background="@drawable/btn_thumb_up"
-                android:text="+"/>
+                android:layout_height="35px"
+                android:layout_width="35px"
+                android:background="@drawable/btn_thumb_up"/>
             <TextView
                 android:id="@+id/haiku_points"
                 android:layout_width="fill_parent"
@@ -30,10 +29,9 @@
                 android:gravity="center"
                 android:layout_weight="1"/>
             <Button android:id="@+id/thumb_down"
-                android:layout_height="32px"
-                android:layout_width="32px"
-                android:background="@drawable/btn_thumb_down"
-                android:text="-"/>
+                android:layout_height="35px"
+                android:layout_width="35px"
+                android:background="@drawable/btn_thumb_down"/>
         </LinearLayout>
         
         <TextView
@@ -50,8 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent">
             <Button android:id="@+id/haiku_favorite"
-                android:layout_height="32px"
-                android:layout_width="32px"
+                android:layout_height="31px"
+                android:layout_width="35px"
                 android:background="@drawable/toggle_favorite"
                 android:textOn="on"
                 android:textOff="off"/>
@@ -64,7 +62,7 @@
                 />
             <View
                 android:layout_height="fill_parent"
-                android:layout_width="32px"/>
+                android:layout_width="35px"/>
             
         </LinearLayout>
     </LinearLayout>

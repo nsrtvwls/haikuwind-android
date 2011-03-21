@@ -3,6 +3,9 @@ package com.haikuwind.tabs;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +47,7 @@ abstract class VotableHaikuList extends HaikuListActivity {
     private void updateVoteButtons(Haiku h, View... buttons) {
         boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
         for(View btn: buttons) {
-            btn.setEnabled(enabled);
+            btn.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -66,13 +69,19 @@ abstract class VotableHaikuList extends HaikuListActivity {
         @Override
         public void onClick(View v) {
             for(View btn: buttons) {
-                btn.setEnabled(false);
+                btn.setVisibility(View.INVISIBLE);
             }
+            
+            final View haikuView = (View) v.getParent().getParent();
             
             boolean isGood = v.getId()==R.id.thumb_up;
             
             try {
                 HttpRequest.vote(haiku.getId(), isGood);
+                
+                Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.spin);
+                haikuView.setAnimation(anim);
+                anim.start();
                 
                 //TODO: ask catpad, maybe count only vote abs value?
                 haiku.setTimesVotedByMe(haiku.getTimesVotedByMe()+1);
@@ -80,7 +89,7 @@ abstract class VotableHaikuList extends HaikuListActivity {
                 
                 TextView points = (TextView) ((View) v.getParent()).findViewById(R.id.haiku_points);
                 points.setText(Integer.toString(haiku.getPoints()));
-                
+
                 UpdateNotifier.fireUpdate(Update.VOTE, haiku);
                 
             } catch (FeedException e) {
@@ -91,8 +100,32 @@ abstract class VotableHaikuList extends HaikuListActivity {
             }
             
             if(haiku.getPoints() <= Haiku.MIN_POINTS) {
-                //TODO hide
+                hideHaiku(haikuView);
             }
+        }
+
+        private void hideHaiku(final View haikuView) {
+            Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disappear);
+            haikuView.setAnimation(anim);
+            anim.start();
+            
+            anim.setAnimationListener(new AnimationListener() {
+                
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    
+                }
+                
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    
+                }
+                
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    haikuView.setVisibility(View.GONE);
+                }
+            });
         }
     }
 

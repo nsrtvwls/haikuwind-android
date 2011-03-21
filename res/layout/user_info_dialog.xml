@@ -7,7 +7,7 @@
             <ImageView 
                 android:id="@+id/user_image"
                 android:layout_width="fill_parent"
-                android:layout_height="54px"
+                android:layout_height="188px"
                 android:gravity="center"
                 android:layout_weight="1"
                 />

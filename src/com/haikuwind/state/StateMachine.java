@@ -23,6 +23,11 @@ public class StateMachine {
         }
 
         addTransition(State.APP_STOPPED, Event.APP_START, State.REGISTER);
+        //everything else remains the same on start
+        addTransition(State.REGISTER, Event.APP_START, State.REGISTER);
+        addTransition(State.INIT_LAYOUT, Event.APP_START, State.INIT_LAYOUT);
+        addTransition(State.STARTED, Event.APP_START, State.STARTED);
+        
         addTransition(State.REGISTER, Event.REGISTERED, State.INIT_LAYOUT);
         addTransition(State.INIT_LAYOUT, Event.LAYOUT_READY, State.STARTED);
     }

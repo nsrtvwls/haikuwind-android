@@ -228,7 +228,13 @@ public class HaikuWind extends TabActivity implements StateListener {
         super.onStop();
         
         stateMachine.removeStateListener(this);
-        stateMachine.processEvent(Event.APP_STOP);
+        
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      stateMachine.processEvent(Event.APP_STOP);
     }
     
     private void initTabs() {
@@ -236,8 +242,6 @@ public class HaikuWind extends TabActivity implements StateListener {
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Reusable TabSpec for each tab
         Intent intent; // Reusable Intent for each tab
-
-        tabHost.clearAllTabs();
         
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, Timeline.class);
@@ -322,7 +326,7 @@ public class HaikuWind extends TabActivity implements StateListener {
             initTabs();
             break;
             
-        case STARTED:
+        default:
             break;
         }
         

@@ -3,6 +3,7 @@ package com.haikuwind.feed;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -128,7 +129,10 @@ public class HttpRequest {
             xr.setContentHandler(handler);
     
             Log.d(TAG, url);
-            xmlStream = new URL(url).openStream();
+            URLConnection connection = new URL(url).openConnection();
+            connection.setConnectTimeout(2000);
+            connection.setReadTimeout(2000);
+            xmlStream = connection.getInputStream();
             xr.parse(new InputSource(xmlStream));
         } catch(Exception e) {
             Log.e(TAG, "Error occured while treating the request", e);
