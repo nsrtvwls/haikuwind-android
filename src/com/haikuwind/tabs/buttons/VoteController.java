@@ -1,8 +1,8 @@
-package com.haikuwind.tabs;
+package com.haikuwind.tabs.buttons;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -10,58 +10,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haikuwind.R;
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 
-abstract class VotableHaikuList extends HaikuListActivity {
-    private final static String TAG = VotableHaikuList.class.getSimpleName();
-    
-    protected VotableHaikuList() {
-        super(true);
-    }
-
-    @Override
-    protected ViewGroup createSingleHaikuWidget(Haiku h) {
-        ViewGroup haikuView = super.createSingleHaikuWidget(h);
+public class VoteController implements View.OnClickListener {
+        private static final String TAG = VoteController.class.getSimpleName();
         
-        View thumbUp = ((View) haikuView.findViewById(R.id.thumb_up));
-        View thumbDown = ((View) haikuView.findViewById(R.id.thumb_down));
-        
-        Voter voter = new Voter(h, thumbUp, thumbDown);
-        thumbUp.setOnClickListener(voter);
-        thumbDown.setOnClickListener(voter);
-        
-        updateVoteButtons(h, thumbUp, thumbDown);
-        
-        return haikuView;
-    }
-
-
-    /**
-     * set buttons enabled if current user has enough power
-     */
-    private void updateVoteButtons(Haiku h, View... buttons) {
-        boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
-        for(View btn: buttons) {
-            btn.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-        }
-    }
-
-    /**
-     * TODO: it's not optimized to create new listener for each button
-     * The class is inner to get use of Activity.showDialog(DialogBuilder.ERROR)
-     * @author oakjumper
-     *
-     */
-    private class Voter implements View.OnClickListener {
         private final Haiku haiku;
         private final View[] buttons;
+        private final Context context;
         
-        public Voter(Haiku haiku, View... buttons) {
+        private VoteController(Context context, Haiku haiku, View... buttons) {
+            this.context = context;
             this.haiku = haiku;
             this.buttons = buttons;
         }
@@ -79,7 +42,7 @@ abstract class VotableHaikuList extends HaikuListActivity {
             try {
                 HttpRequest.vote(haiku.getId(), isGood);
                 
-                Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.spin);
+                Animation anim = AnimationUtils.loadAnimation(context, R.anim.spin);
                 haikuView.setAnimation(anim);
                 anim.start();
                 
@@ -92,9 +55,9 @@ abstract class VotableHaikuList extends HaikuListActivity {
 
                 UpdateNotifier.fireUpdate(Update.VOTE, haiku);
                 
-            } catch (FeedException e) {
+            } catch (Exception e) {
                 Log.e(TAG, "error in vote", e);                
-                Toast.makeText(getApplicationContext(), R.string.toast_error_try_again, Toast.LENGTH_SHORT);
+                Toast.makeText(context, R.string.toast_error_try_again, Toast.LENGTH_SHORT);
             } finally {
                 updateVoteButtons(haiku, buttons);
             }
@@ -105,7 +68,7 @@ abstract class VotableHaikuList extends HaikuListActivity {
         }
 
         private void hideHaiku(final View haikuView) {
-            Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.disappear);
+            Animation anim = AnimationUtils.loadAnimation(context, R.anim.disappear);
             haikuView.setAnimation(anim);
             anim.start();
             
@@ -127,6 +90,26 @@ abstract class VotableHaikuList extends HaikuListActivity {
                 }
             });
         }
-    }
+        
+        /**
+         * set buttons enabled if current user has enough power
+         */
+        private static void updateVoteButtons(Haiku h, View... buttons) {
+            boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
+            for(View btn: buttons) {
+                btn.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+        
+        public static void bind(Context context, View haikuView, Haiku haiku) {
+            View thumbUp = ((View) haikuView.findViewById(R.id.thumb_up));
+            View thumbDown = ((View) haikuView.findViewById(R.id.thumb_down));
+            
+            VoteController voter = new VoteController(context, haiku, thumbUp, thumbDown);
+            thumbUp.setOnClickListener(voter);
+            thumbDown.setOnClickListener(voter);
+            
+            updateVoteButtons(haiku, thumbUp, thumbDown);
+        }
 
 }

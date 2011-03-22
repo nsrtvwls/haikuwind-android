@@ -7,12 +7,10 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.tabs.buttons.HasFavoriteBtn;
+import com.haikuwind.tabs.buttons.HasVoteBtn;
 
-public class Favorites extends HaikuListActivity {
-
-    public Favorites() {
-        super(false);
-    }
+public class Favorites extends HaikuListActivity implements HasVoteBtn, HasFavoriteBtn {
 
     @Override
     protected void onStart() {

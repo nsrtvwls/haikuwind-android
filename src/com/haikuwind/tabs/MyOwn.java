@@ -7,12 +7,9 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.tabs.buttons.HasVoteBtn;
 
-public class MyOwn extends HaikuListActivity {
-
-    public MyOwn() {
-        super(false);
-    }
+public class MyOwn extends HaikuListActivity implements HasVoteBtn {
 
     @Override
     protected void onStart() {

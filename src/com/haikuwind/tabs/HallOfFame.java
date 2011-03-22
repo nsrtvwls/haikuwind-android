@@ -7,11 +7,10 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.tabs.buttons.HasFavoriteBtn;
+import com.haikuwind.tabs.buttons.HasVoteBtn;
 
-public class HallOfFame extends HaikuListActivity {
-    public HallOfFame() {
-        super(false);
-    }
+public class HallOfFame extends HaikuListActivity implements HasVoteBtn, HasFavoriteBtn {
 
     @Override
     protected void onStart() {

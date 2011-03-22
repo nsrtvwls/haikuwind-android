@@ -9,8 +9,10 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.tabs.buttons.HasFavoriteBtn;
+import com.haikuwind.tabs.buttons.HasVoteBtn;
 
-public class Timeline extends VotableHaikuList {
+public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavoriteBtn {
     @SuppressWarnings("unused")
     private final static String TAG = Timeline.class.getSimpleName();
     

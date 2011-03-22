@@ -41,4 +41,8 @@
     
     <!-- Toast message for vote/favorite error -->
     <string name="toast_error_try_again">Error occured. Please try again</string>
+    
+    <!-- Post on twitter -->
+    <string name="msg_title">From Haiku Wind</string>
+    <string name="post_using">Post using...</string>
 </resources>
