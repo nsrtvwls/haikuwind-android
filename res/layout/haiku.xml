@@ -12,6 +12,10 @@
         android:background="@drawable/haiku_border"
         android:layout_height="35mm"
         android:layout_width="fill_parent">
+        
+        <TextView android:id="@+id/haiku_id"
+            android:visibility="gone"/>
+            
         <LinearLayout
             android:orientation="horizontal"
             android:layout_height="wrap_content"

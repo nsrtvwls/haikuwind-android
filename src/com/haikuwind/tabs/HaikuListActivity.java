@@ -1,6 +1,8 @@
 package com.haikuwind.tabs;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,9 +22,11 @@ import com.haikuwind.R;
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.NewerFirstComparator;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateListener;
 import com.haikuwind.tabs.buttons.FavoriteController;
+import com.haikuwind.tabs.buttons.HaikuController;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
 import com.haikuwind.tabs.buttons.HasShareBtn;
 import com.haikuwind.tabs.buttons.HasVoteBtn;
@@ -37,6 +41,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     protected boolean dataObsolete = true;
     private boolean isForeground = false;
+    
+    protected Map<String, Haiku> haikuMap;
+    
+    private HaikuController shareController = new ShareController(haikuMap, this);
+    private HaikuController voteController = new VoteController(haikuMap, this);
+    private HaikuController favoriteController = new FavoriteController(haikuMap, this);
 
     /** Called when the activity is first created. */
     @Override
@@ -104,18 +114,33 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return builder.create();
     }
 
-    protected void refreshData() {
-        LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
-
+    private void refreshData() {
         List<Haiku> haikuResponse;
         try {
             haikuResponse = fetchElements();
+            storeNewHaiku(haikuResponse);
+            
+            //newer first
+            Collections.sort(haikuResponse, new NewerFirstComparator());
         } catch (FeedException e) {
             // TODO how to show the same dialog that is open now?
             onCreateDialog(ERROR_TRY_AGAIN_REFRESH).show();
             return;
         }
 
+        renderNewHaiku(haikuResponse);
+        dataObsolete = false;
+    }
+    
+    protected void storeNewHaiku(List<Haiku> haikuResponse) {
+        haikuMap.clear();
+        for(Haiku h: haikuResponse) {
+            haikuMap.put(h.getId(), h);
+        }
+    }
+
+    protected void renderNewHaiku(List<Haiku> haikuResponse) {
+        LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
         haikuListView.removeAllViews();
         for (Haiku h : haikuResponse) {
             ViewGroup haikuView = createSingleHaikuWidget(h);
@@ -123,10 +148,8 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
             haikuListView.addView(haikuView);
 
         }
-
-        dataObsolete = false;
     }
-
+    
     @Override
     public void processUpdate(Update update, Haiku haiku) {
         dataObsolete = true;
@@ -140,19 +163,20 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         ViewGroup haikuView = (ViewGroup) inflater
                 .inflate(R.layout.haiku, null);
 
+        ((TextView) haikuView.findViewById(R.id.haiku_id)).setText(h.getId());
         ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h
                 .getText());
         ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer
                 .toString(h.getPoints()));
 
         if (this instanceof HasVoteBtn) {
-            VoteController.bind(getApplicationContext(), haikuView, h);
+            voteController.bind(haikuView);
         }
         if(this instanceof HasFavoriteBtn) {
-            FavoriteController.bind(haikuView, h, getApplicationContext());
+            favoriteController.bind(haikuView);
         }
         if(this instanceof HasShareBtn) {
-            ShareController.bind(haikuView, h, this);
+            shareController.bind(haikuView);
         }
 
         int userImg = h.getUserRank().getSmallImageId();

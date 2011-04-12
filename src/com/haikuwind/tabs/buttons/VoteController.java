@@ -1,5 +1,7 @@
 package com.haikuwind.tabs.buttons;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -16,29 +18,25 @@ import com.haikuwind.feed.UserInfo;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 
-public class VoteController implements View.OnClickListener {
+public class VoteController extends HaikuController {
         private static final String TAG = VoteController.class.getSimpleName();
         
-        private final Haiku haiku;
-        private final View[] buttons;
         private final Context context;
         
-        private VoteController(Context context, Haiku haiku, View... buttons) {
+        public VoteController(Map<String, Haiku> haikuMap, Context context) {
+            super(haikuMap);
             this.context = context;
-            this.haiku = haiku;
-            this.buttons = buttons;
         }
 
         @Override
         public void onClick(View v) {
-            for(View btn: buttons) {
-                btn.setVisibility(View.INVISIBLE);
-            }
+            setThumbsVisibility((View) v.getParent(), View.INVISIBLE);
             
             final View haikuView = (View) v.getParent().getParent();
             
             boolean isGood = v.getId()==R.id.thumb_up;
             
+            Haiku haiku = getHaiku(v);
             try {
                 HttpRequest.vote(haiku.getId(), isGood);
                 
@@ -59,7 +57,7 @@ public class VoteController implements View.OnClickListener {
                 Log.e(TAG, "error in vote", e);                
                 Toast.makeText(context, R.string.toast_error_try_again, Toast.LENGTH_SHORT);
             } finally {
-                updateVoteButtons(haiku, buttons);
+                updateVoteButtons(haikuView);
             }
             
             if(haiku.getPoints() <= Haiku.MIN_POINTS) {
@@ -94,22 +92,31 @@ public class VoteController implements View.OnClickListener {
         /**
          * set buttons enabled if current user has enough power
          */
-        private static void updateVoteButtons(Haiku h, View... buttons) {
+        private void updateVoteButtons(View haikuView) {
+            Haiku h = getHaiku(haikuView);
             boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
-            for(View btn: buttons) {
-                btn.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-            }
+            setThumbsVisibility(haikuView, enabled ? View.VISIBLE : View.INVISIBLE);
+        }
+
+        private void setThumbsVisibility(View parent, int visibility) {
+            getThumbUp(parent).setVisibility(visibility);
+            getThumbDown(parent).setVisibility(visibility);
         }
         
-        public static void bind(Context context, View haikuView, Haiku haiku) {
-            View thumbUp = ((View) haikuView.findViewById(R.id.thumb_up));
-            View thumbDown = ((View) haikuView.findViewById(R.id.thumb_down));
+        @Override
+        public void bind(View haikuView) {
+            getThumbUp(haikuView).setOnClickListener(this);
+            getThumbDown(haikuView).setOnClickListener(this);
             
-            VoteController voter = new VoteController(context, haiku, thumbUp, thumbDown);
-            thumbUp.setOnClickListener(voter);
-            thumbDown.setOnClickListener(voter);
-            
-            updateVoteButtons(haiku, thumbUp, thumbDown);
+            updateVoteButtons(haikuView);
+        }
+        
+        private View getThumbUp(View parent) {
+            return parent.findViewById(R.id.thumb_up);
+        }
+        
+        private View getThumbDown(View parent) {
+            return parent.findViewById(R.id.thumb_down);
         }
 
 }

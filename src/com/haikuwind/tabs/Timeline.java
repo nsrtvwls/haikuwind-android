@@ -3,7 +3,10 @@ package com.haikuwind.tabs;
 import java.util.List;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
@@ -39,9 +42,31 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
         List<Haiku> result = HttpRequest.getTimeline(lastHaikuDate);
-        lastHaikuDate = result.get(result.size()-1).getTime().getTime();
+        if(!result.isEmpty()) {
+            lastHaikuDate = result.get(0).getTime().getTime();
+        }
         return result;
     }
 
+    @Override
+    protected void renderNewHaiku(List<Haiku> haikuResponse) {
+        //do not remove old
+        LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
+        
+        for (int i=0; i<haikuResponse.size(); ++i) {
+            ViewGroup haikuView = createSingleHaikuWidget(haikuResponse.get(i));
+            haikuListView.addView(haikuView, i);
 
+        }
+    }
+
+    @Override
+    protected void storeNewHaiku(List<Haiku> haikuResponse) {
+        //do not clear old
+        for(Haiku h: haikuResponse) {
+            haikuMap.put(h.getId(), h);
+        }
+    }
+
+    
 }

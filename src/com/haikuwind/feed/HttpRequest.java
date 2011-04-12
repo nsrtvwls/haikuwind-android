@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -67,11 +66,7 @@ public class HttpRequest {
         // http://localhost:8080/haiku?command=my_favorite&user=1
         String url = String.format("%s?command=my_favorite&user=%s", HW_ADDR,
                 userId);
-        
-        // server returns older first
-        List<Haiku> result = parseHaikuList(url);
-        Collections.reverse(result);
-        return result;
+        return parseHaikuList(url);
     }
 
     public static List<Haiku> getMy() throws FeedException {
