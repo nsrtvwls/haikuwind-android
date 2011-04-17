@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/haiku"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="20dp"
@@ -14,6 +15,8 @@
         android:layout_width="fill_parent">
         
         <TextView android:id="@+id/haiku_id"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:visibility="gone"/>
             
         <LinearLayout

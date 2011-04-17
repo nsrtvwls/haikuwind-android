@@ -25,8 +25,7 @@ public class FavoriteController extends HaikuController {
 
     @Override
     public void onClick(View v) {
-        View haikuView = (View) v.getParent();
-        Haiku haiku = getHaiku(haikuView);
+        Haiku haiku = getHaiku(v);
         
         if (!haiku.isFavoritedByMe()) {
             try {
@@ -39,7 +38,7 @@ public class FavoriteController extends HaikuController {
                 Toast.makeText(context,
                         R.string.toast_error_try_again, Toast.LENGTH_SHORT);
             } finally {
-                updateToggleFavorite(haikuView);
+                updateToggleFavorite(v);
             }
         }
 

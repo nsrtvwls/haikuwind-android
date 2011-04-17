@@ -1,6 +1,7 @@
 package com.haikuwind.tabs;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     protected boolean dataObsolete = true;
     private boolean isForeground = false;
     
-    protected Map<String, Haiku> haikuMap;
+    protected Map<String, Haiku> haikuMap = new HashMap<String, Haiku>();
     
     private HaikuController shareController = new ShareController(haikuMap, this);
     private HaikuController voteController = new VoteController(haikuMap, this);
@@ -123,7 +124,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
             //newer first
             Collections.sort(haikuResponse, new NewerFirstComparator());
         } catch (FeedException e) {
-            // TODO how to show the same dialog that is open now?
+            // TODO how to show the same dialog as currently opened?
             onCreateDialog(ERROR_TRY_AGAIN_REFRESH).show();
             return;
         }

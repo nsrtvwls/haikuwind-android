@@ -30,9 +30,8 @@ public class VoteController extends HaikuController {
 
         @Override
         public void onClick(View v) {
-            setThumbsVisibility((View) v.getParent(), View.INVISIBLE);
-            
-            final View haikuView = (View) v.getParent().getParent();
+            View haikuView = getParentHaikuView(v);
+            setThumbsVisibility(haikuView, View.INVISIBLE);
             
             boolean isGood = v.getId()==R.id.thumb_up;
             
