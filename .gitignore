@@ -2,3 +2,5 @@
 *.dex
 bin/
 *.log
+.project
+.classpath
