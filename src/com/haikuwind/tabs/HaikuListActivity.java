@@ -105,6 +105,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             refreshData();
+                            dialog.dismiss();
                         }
                     });
             break;

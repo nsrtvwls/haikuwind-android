@@ -83,6 +83,7 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int which) {
                                     registerUser();
+                                    dialog.dismiss();
                                 }
                             });
             break;
@@ -97,6 +98,7 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int which) {
                                     showDialog(POST_HAIKU);
+                                    dialog.dismiss();
                                 }
                             });
             break;
@@ -112,6 +114,7 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int id) {
                                     doPostHaiku(dialog);
+                                    dialog.dismiss();
                                 }
                             });
 
@@ -155,6 +158,7 @@ public class HaikuWind extends TabActivity implements StateListener {
                                         int which) {
                                     startActivity(new Intent(
                                             Settings.ACTION_WIRELESS_SETTINGS));
+                                    dialog.dismiss();
                                 }
                             });
             break;
