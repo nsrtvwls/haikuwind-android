@@ -36,7 +36,7 @@
     <string name="accept">Accept</string>
     
     <!-- Error, try again dialog -->
-    <string name="oops">Oops. Error occured</string>
+    <string name="oops">Connection error</string>
     <string name="try_again">Try again</string>
     
     <!-- Toast message for vote/favorite error -->
