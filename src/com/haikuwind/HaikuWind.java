@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -195,13 +196,16 @@ public class HaikuWind extends TabActivity implements StateListener {
     }
 
     private void registerUser() {
+        Log.d(TAG, "registering user");
         TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         String userId = tManager.getDeviceId();
 
         try {
             HttpRequest.newUser(userId);
             stateMachine.processEvent(Event.REGISTERED);
+            Log.d(TAG, "user registered");
         } catch(FeedException e) {
+            Log.d(TAG, "unable to register user", e);
             //TODO how to show the same dialog that is open now?
             onCreateDialog(ERROR_TRY_AGAIN_REGISTER).show();
         }
@@ -238,6 +242,8 @@ public class HaikuWind extends TabActivity implements StateListener {
     }
     
     private void initTabs() {
+        Log.d(TAG, "initialize tabs");
+        
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost(); // The activity TabHost
         TabHost.TabSpec spec; // Reusable TabSpec for each tab
@@ -300,6 +306,7 @@ public class HaikuWind extends TabActivity implements StateListener {
             tv.setTextSize(11.0f); // just example
         }
         stateMachine.processEvent(Event.LAYOUT_READY);
+        Log.d(TAG, "Tabs initialized");
     }
 
     @Override
@@ -311,6 +318,9 @@ public class HaikuWind extends TabActivity implements StateListener {
     
     @Override
     public void processState(State state) {
+        State currentState = stateMachine.getCurrentState();
+        Log.d(TAG, "processing state"+currentState);
+        
         switch(stateMachine.getCurrentState()) {
         case REGISTER:
             NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
