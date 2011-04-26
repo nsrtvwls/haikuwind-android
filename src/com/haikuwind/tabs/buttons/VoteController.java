@@ -5,6 +5,7 @@ import java.util.Map;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haikuwind.R;
+import com.haikuwind.animation.Rotate3dAnimation;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
@@ -39,7 +41,12 @@ public class VoteController extends HaikuController {
             try {
                 HttpRequest.vote(haiku.getId(), isGood);
                 
-                Animation anim = AnimationUtils.loadAnimation(context, R.anim.spin);
+                Animation anim = new Rotate3dAnimation(0, 360,
+                        haikuView.getWidth()/2, haikuView.getHeight()/2, 0,
+                        false);
+                anim.setDuration(500);
+                anim.setFillAfter(false);
+                anim.setInterpolator(new AccelerateDecelerateInterpolator());
                 haikuView.setAnimation(anim);
                 anim.start();
                 
@@ -53,7 +60,7 @@ public class VoteController extends HaikuController {
                 UpdateNotifier.fireUpdate(Update.VOTE, haiku);
                 
             } catch (Exception e) {
-                Log.e(TAG, "error in vote", e);                
+                Log.e(TAG, "error in vote", e);
                 Toast.makeText(context, R.string.toast_error_try_again, Toast.LENGTH_SHORT);
             } finally {
                 updateVoteButtons(haikuView);
