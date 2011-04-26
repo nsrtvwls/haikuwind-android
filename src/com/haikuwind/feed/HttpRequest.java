@@ -18,11 +18,13 @@ import android.util.Log;
 
 import com.haikuwind.feed.parser.HaikuHandler;
 import com.haikuwind.feed.parser.ResultHandler;
+import com.haikuwind.feed.parser.XmlCorrectorStream;
 
 public class HttpRequest {
     private final static String TAG = HttpRequest.class.getSimpleName();
-    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
-    
+//    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
+    private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
+
     //initialized during first newUser() call
     private static String userId;
 
@@ -130,9 +132,9 @@ public class HttpRequest {
     
             Log.d(TAG, url);
             URLConnection connection = new URL(url).openConnection();
-            connection.setConnectTimeout(2000);
-            connection.setReadTimeout(2000);
-            xmlStream = connection.getInputStream();
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
+            xmlStream = new XmlCorrectorStream(connection.getInputStream());
             xr.parse(new InputSource(xmlStream));
         } catch(Exception e) {
             Log.e(TAG, "Error occured while treating the request", e);
