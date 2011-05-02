@@ -36,6 +36,15 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:layout_weight="1"/>
+            <ImageView 
+                android:id="@+id/haiku_star"
+                android:src="@drawable/star"
+                android:layout_width="fill_parent"
+                android:layout_height="20px"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:visibility="gone"
+                />
             <Button android:id="@+id/thumb_down"
                 android:layout_height="35px"
                 android:layout_width="35px"

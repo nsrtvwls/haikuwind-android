@@ -52,19 +52,7 @@ public class XmlCorrectorStream extends InputStream {
         buffer = buffer.replaceFirst("\\<haiku=", "<haiku id=");
         buffer = buffer.replaceFirst("(\\<haiku .*\")\\>", "$1/>");
         
-        Log.d("XmlCorrectorStream", buffer);
         currentPos = 0;
     }
     
-//    public static void main(String[] args) throws IOException {
-//        String s = "<haiku text=\"%22come+fly+with+me%22+asked%0Ame+a+sparrow.+%22I+can%27t%22+said%0AI.+%22that%27s+what+you+think%22...\" id=\"2238105\" points=\"0\" user=\"60e06ae74feeb0d23547c2eec893b59f2cf2b151\" userRank=\"7\" favoritedByMe=\"false\" timesVotedByMe=\"0\" time=\"1303783979745\">";
-//        String s = "<haiku=\"1303783979745\"/>";
-//        System.out.println(s);
-//            
-//        XmlCorrectorStream corrector = new XmlCorrectorStream(new ByteArrayInputStream(s.getBytes()));
-//        for(int i=0; i<53; ++i) {
-//            corrector.refill();
-//            System.out.print(corrector.buffer);
-//        }
-//    }
 }

@@ -36,7 +36,7 @@ public class FavoriteController extends HaikuController {
             } catch (Exception e) {
                 Log.e(TAG, "error while marking favorite", e);
                 Toast.makeText(context,
-                        R.string.toast_error_try_again, Toast.LENGTH_SHORT);
+                        R.string.toast_error_try_again, Toast.LENGTH_SHORT).show();
             } finally {
                 updateToggleFavorite(v);
             }

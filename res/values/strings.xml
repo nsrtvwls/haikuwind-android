@@ -9,6 +9,9 @@
     <string name="my_own">My Own</string>
     <string name="favorites">Favorites</string>
 
+    <!-- Progress bar -->
+    <string name="loading">Loading...</string>
+
     <!-- Post haiku dialog -->
     <string name="post_haiku">Create new haiku</string>
     <string name="send">Send</string>
@@ -40,9 +43,10 @@
     <string name="try_again">Try again</string>
     
     <!-- Toast message for vote/favorite error -->
-    <string name="toast_error_try_again">Error occured. Please try again</string>
+    <string name="toast_error_try_again">Error occured. Please try again.</string>
     
     <!-- Post on twitter -->
     <string name="msg_title">From Haiku Wind</string>
     <string name="post_using">Post using...</string>
+    
 </resources>

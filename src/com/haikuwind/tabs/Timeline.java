@@ -61,7 +61,7 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     }
 
     @Override
-    protected void storeNewHaiku(List<Haiku> haikuResponse) {
+    protected void updateStored(List<Haiku> haikuResponse) {
         //do not clear old
         for(Haiku h: haikuResponse) {
             haikuMap.put(h.getId(), h);

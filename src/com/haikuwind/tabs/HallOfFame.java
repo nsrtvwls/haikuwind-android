@@ -8,7 +8,6 @@ import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
-import com.haikuwind.tabs.buttons.HasVoteBtn;
 
 public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
 
@@ -31,6 +30,7 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
     
     @Override
     public void processUpdate(Update update, Haiku haiku) {
+        //if haiku was voted and got in hall of fame, mark the hall of fame to update.
         if(haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
             super.processUpdate(update, haiku);
         }

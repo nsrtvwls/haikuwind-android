@@ -71,7 +71,7 @@ public class HaikuHandler extends DefaultHandler {
                 currentHaiku.setUserRank(Integer.parseInt(attributes
                         .getValue(USER_RANK)));
 
-                Log.d(TAG, currentHaiku.toString());
+//                Log.d(TAG, currentHaiku.toString());
             } catch (NumberFormatException e) {
                 Log.e(TAG, "incorrect value in haiku XML", e);
             }

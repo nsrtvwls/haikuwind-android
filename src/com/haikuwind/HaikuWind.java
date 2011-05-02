@@ -2,6 +2,7 @@ package com.haikuwind;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,9 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -27,6 +31,7 @@ import android.widget.TextView;
 
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.dialogs.FinishListener;
+import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
@@ -55,6 +60,8 @@ public class HaikuWind extends TabActivity implements StateListener {
     private static String TAG = HaikuWind.class.getSimpleName();
     
     private StateMachine stateMachine = new StateMachine();
+    private ProgressDialog progressDialog;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,7 +90,6 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int which) {
                                     registerUser();
-                                    dialog.dismiss();
                                 }
                             });
             break;
@@ -98,7 +104,6 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int which) {
                                     showDialog(POST_HAIKU);
-                                    dialog.dismiss();
                                 }
                             });
             break;
@@ -114,7 +119,6 @@ public class HaikuWind extends TabActivity implements StateListener {
                                 public void onClick(DialogInterface dialog,
                                         int id) {
                                     doPostHaiku(dialog);
-                                    dialog.dismiss();
                                 }
                             });
 
@@ -158,11 +162,10 @@ public class HaikuWind extends TabActivity implements StateListener {
                                         int which) {
                                     startActivity(new Intent(
                                             Settings.ACTION_WIRELESS_SETTINGS));
-                                    dialog.dismiss();
                                 }
                             });
             break;
-
+            
         default:
             return super.onCreateDialog(id);
         }
@@ -200,19 +203,9 @@ public class HaikuWind extends TabActivity implements StateListener {
     }
 
     private void registerUser() {
-        Log.d(TAG, "registering user");
-        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String userId = tManager.getDeviceId();
-
-        try {
-            HttpRequest.newUser(userId);
-            stateMachine.processEvent(Event.REGISTERED);
-            Log.d(TAG, "user registered");
-        } catch(FeedException e) {
-            Log.d(TAG, "unable to register user", e);
-            //TODO how to show the same dialog that is open now?
-            onCreateDialog(ERROR_TRY_AGAIN_REGISTER).show();
-        }
+        ProgressDialog pd = ProgressDialog.show(this, "", 
+                getString(R.string.loading));
+        new RegisterTask(pd).start();
     }
 
     @Override
@@ -220,7 +213,6 @@ public class HaikuWind extends TabActivity implements StateListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-
     }
     
     @Override
@@ -309,21 +301,22 @@ public class HaikuWind extends TabActivity implements StateListener {
             TextView tv = (TextView) relLayout.getChildAt(1);
             tv.setTextSize(11.0f); // just example
         }
-        stateMachine.processEvent(Event.LAYOUT_READY);
         Log.d(TAG, "Tabs initialized");
+        stateMachine.processEvent(Event.LAYOUT_READY);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
+        Log.d(TAG, "onResume");
         processState(stateMachine.getCurrentState());
     }
     
     @Override
     public void processState(State state) {
         State currentState = stateMachine.getCurrentState();
-        Log.d(TAG, "processing state"+currentState);
+        Log.d(TAG, "processing state "+currentState);
         
         switch(stateMachine.getCurrentState()) {
         case REGISTER:
@@ -346,5 +339,33 @@ public class HaikuWind extends TabActivity implements StateListener {
         
     }
 
+    private class RegisterTask extends ProgressTask {
+        public RegisterTask(ProgressDialog progressDialog) {
+            super(progressDialog);
+        }
 
+
+        @Override
+        protected void handleError() {
+            Log.d(TAG, "unable to register user");
+            // TODO how to show the same dialog that is open now?
+            onCreateDialog(ERROR_TRY_AGAIN_REGISTER).show();
+        }
+
+        @Override
+        protected void handleSuccess() {
+            Log.d(TAG, "user registered");
+            stateMachine.processEvent(Event.REGISTERED);
+        }
+
+        @Override
+        protected void execute() throws Exception {
+            Log.d(TAG, "registering user");
+            TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String userId = tManager.getDeviceId();
+
+            HttpRequest.newUser(userId);
+
+        }
+    }
 }

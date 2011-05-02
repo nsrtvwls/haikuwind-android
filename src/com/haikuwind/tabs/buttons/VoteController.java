@@ -2,6 +2,7 @@ package com.haikuwind.tabs.buttons;
 
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -61,7 +62,7 @@ public class VoteController extends HaikuController {
                 
             } catch (Exception e) {
                 Log.e(TAG, "error in vote", e);
-                Toast.makeText(context, R.string.toast_error_try_again, Toast.LENGTH_SHORT);
+                Toast.makeText(context, R.string.toast_error_try_again, Toast.LENGTH_SHORT).show();
             } finally {
                 updateVoteButtons(haikuView);
             }
@@ -97,10 +98,13 @@ public class VoteController extends HaikuController {
         
         /**
          * set buttons enabled if current user has enough power
+         * and haiku is available for voting (not gone or in hall of fame)
          */
         private void updateVoteButtons(View haikuView) {
             Haiku h = getHaiku(haikuView);
             boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
+            enabled &= h.getPoints() < Haiku.HALL_OF_FAME_POINTS;
+            enabled &= h.getPoints() > Haiku.MIN_POINTS;
             setThumbsVisibility(haikuView, enabled ? View.VISIBLE : View.INVISIBLE);
         }
 

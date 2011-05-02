@@ -8,10 +8,12 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.haikuwind.R;
 import com.haikuwind.dialogs.CancelListener;
+import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.NewerFirstComparator;
@@ -70,6 +73,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     }
 
+    private void refreshData() {
+        ProgressDialog pd = ProgressDialog.show(this, "", 
+                getString(R.string.loading));
+        new RefreshTask(pd).start();
+    }
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -116,25 +125,8 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return builder.create();
     }
 
-    private void refreshData() {
-        List<Haiku> haikuResponse;
-        try {
-            haikuResponse = fetchElements();
-            storeNewHaiku(haikuResponse);
-            
-            //newer first
-            Collections.sort(haikuResponse, new NewerFirstComparator());
-        } catch (FeedException e) {
-            // TODO how to show the same dialog as currently opened?
-            onCreateDialog(ERROR_TRY_AGAIN_REFRESH).show();
-            return;
-        }
-
-        renderNewHaiku(haikuResponse);
-        dataObsolete = false;
-    }
     
-    protected void storeNewHaiku(List<Haiku> haikuResponse) {
+    protected void updateStored(List<Haiku> haikuResponse) {
         haikuMap.clear();
         for(Haiku h: haikuResponse) {
             haikuMap.put(h.getId(), h);
@@ -168,8 +160,15 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         ((TextView) haikuView.findViewById(R.id.haiku_id)).setText(h.getId());
         ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h
                 .getText());
-        ((TextView) haikuView.findViewById(R.id.haiku_points)).setText(Integer
-                .toString(h.getPoints()));
+        
+        int points = h.getPoints();
+        TextView pointsView = ((TextView) haikuView.findViewById(R.id.haiku_points));
+        if(points < Haiku.HALL_OF_FAME_POINTS) {
+            pointsView.setText(Integer.toString(points));
+        } else {
+            pointsView.setVisibility(View.GONE);
+            haikuView.findViewById(R.id.haiku_star).setVisibility(View.VISIBLE);
+        }
 
         if (this instanceof HasVoteBtn) {
             voteController.bind(haikuView);
@@ -189,5 +188,33 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
 
     abstract protected List<Haiku> fetchElements() throws FeedException;
+    
+    private class RefreshTask extends ProgressTask {
+        public RefreshTask(ProgressDialog progressDialog) {
+            super(progressDialog);
+        }
+
+        private List<Haiku> haikuResponse;
+
+        @Override
+        protected void handleError() {
+            onCreateDialog(ERROR_TRY_AGAIN_REFRESH).show();
+        }
+
+        @Override
+        protected void handleSuccess() {
+            renderNewHaiku(haikuResponse);
+            dataObsolete = false;
+        }
+
+        @Override
+        protected void execute() throws Exception {
+            haikuResponse = fetchElements();
+            updateStored(haikuResponse);
+            
+            //newer first
+            Collections.sort(haikuResponse, new NewerFirstComparator());
+        }
+    }
 
 }
