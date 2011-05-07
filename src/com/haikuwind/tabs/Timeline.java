@@ -1,5 +1,7 @@
 package com.haikuwind.tabs;
 
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.feed.NewerFirstComparator;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
@@ -39,8 +42,33 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
         UpdateNotifier.removeUpdateListener(this);
     }
     
+    
+    /**
+     * overrided because there's no need to clear old haikus.
+     */
+    @Override
+    protected List<Haiku> updateData() throws FeedException {
+        List<Haiku> haikuResponse = fetchElements();
+        //do not clear old
+        for(Haiku h: haikuResponse) {
+            haikuMap.put(h.getId(), h);
+        }
+        
+        //newer first
+        Collections.sort(haikuResponse, new NewerFirstComparator());
+        lastUpdate = Calendar.getInstance();
+        
+        return haikuResponse;
+    }
+
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
+        //periodically perform full update to have actual points and status
+        if(isDataObsolete()) {
+            haikuMap.clear();
+            lastHaikuDate = 0;
+        }
+        
         List<Haiku> result = HttpRequest.getTimeline(lastHaikuDate);
         if(!result.isEmpty()) {
             lastHaikuDate = result.get(0).getTime().getTime();
@@ -57,14 +85,6 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
             ViewGroup haikuView = createSingleHaikuWidget(haikuResponse.get(i));
             haikuListView.addView(haikuView, i);
 
-        }
-    }
-
-    @Override
-    protected void updateStored(List<Haiku> haikuResponse) {
-        //do not clear old
-        for(Haiku h: haikuResponse) {
-            haikuMap.put(h.getId(), h);
         }
     }
 

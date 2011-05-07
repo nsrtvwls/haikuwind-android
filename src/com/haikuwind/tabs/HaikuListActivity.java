@@ -1,5 +1,6 @@
 package com.haikuwind.tabs;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,15 +39,18 @@ import com.haikuwind.tabs.buttons.ShareController;
 import com.haikuwind.tabs.buttons.VoteController;
 
 abstract class HaikuListActivity extends Activity implements UpdateListener, HasShareBtn {
+    private static final int VALIDITY_PERIOD = 60; //data expires after one hour
+
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getSimpleName();
 
     private static final int ERROR_TRY_AGAIN_REFRESH = 0;
 
-    protected boolean dataObsolete = true;
+    protected boolean dataDirty = true;
     private boolean isForeground = false;
     
     protected Map<String, Haiku> haikuMap = new HashMap<String, Haiku>();
+    protected Calendar lastUpdate;
     
     private HaikuController shareController = new ShareController(haikuMap, this);
     private HaikuController voteController = new VoteController(haikuMap, this);
@@ -63,9 +67,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     @Override
     protected void onResume() {
         super.onResume();
-        // if update isn't needed or application hasn't been initialized
-        // correctly yet, then skip
-        if (dataObsolete) {
+        if (dataDirty || isDataObsolete()) {
             refreshData();
         }
 
@@ -73,6 +75,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     }
 
+    protected boolean isDataObsolete() {
+        Calendar firstValidTime = Calendar.getInstance();
+        firstValidTime.add(Calendar.MINUTE, -VALIDITY_PERIOD);
+        return (firstValidTime.after(lastUpdate));
+    }
+    
     private void refreshData() {
         ProgressDialog pd = ProgressDialog.show(this, "", 
                 getString(R.string.loading));
@@ -126,13 +134,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
 
     
-    protected void updateStored(List<Haiku> haikuResponse) {
-        haikuMap.clear();
-        for(Haiku h: haikuResponse) {
-            haikuMap.put(h.getId(), h);
-        }
-    }
-
     protected void renderNewHaiku(List<Haiku> haikuResponse) {
         LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
         haikuListView.removeAllViews();
@@ -146,7 +147,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     
     @Override
     public void processUpdate(Update update, Haiku haiku) {
-        dataObsolete = true;
+        dataDirty = true;
         if (isForeground()) {
             refreshData();
         }
@@ -187,8 +188,23 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return haikuView;
     }
 
+    protected List<Haiku> updateData() throws FeedException {
+        List<Haiku> haikuResponse = fetchElements();
+        haikuMap.clear();
+        for(Haiku h: haikuResponse) {
+            haikuMap.put(h.getId(), h);
+        }
+        
+        //newer first
+        Collections.sort(haikuResponse, new NewerFirstComparator());
+        lastUpdate = Calendar.getInstance();
+        
+        return haikuResponse;
+    }
+
     abstract protected List<Haiku> fetchElements() throws FeedException;
     
+
     private class RefreshTask extends ProgressTask {
         public RefreshTask(ProgressDialog progressDialog) {
             super(progressDialog);
@@ -204,16 +220,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         @Override
         protected void handleSuccess() {
             renderNewHaiku(haikuResponse);
-            dataObsolete = false;
+            dataDirty = false;
         }
 
         @Override
         protected void execute() throws Exception {
-            haikuResponse = fetchElements();
-            updateStored(haikuResponse);
-            
-            //newer first
-            Collections.sort(haikuResponse, new NewerFirstComparator());
+            haikuResponse = updateData();
         }
     }
 
