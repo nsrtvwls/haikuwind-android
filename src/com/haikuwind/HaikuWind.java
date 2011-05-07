@@ -60,7 +60,6 @@ public class HaikuWind extends TabActivity implements StateListener {
     private static String TAG = HaikuWind.class.getSimpleName();
     
     private StateMachine stateMachine = new StateMachine();
-    private ProgressDialog progressDialog;
 
 
     @Override
@@ -301,6 +300,11 @@ public class HaikuWind extends TabActivity implements StateListener {
             TextView tv = (TextView) relLayout.getChildAt(1);
             tv.setTextSize(11.0f); // just example
         }
+        
+        //TODO implement with transition?
+        tabHost.setVisibility(View.VISIBLE);
+        findViewById(R.id.splashscreen).setVisibility(View.INVISIBLE);
+        
         Log.d(TAG, "Tabs initialized");
         stateMachine.processEvent(Event.LAYOUT_READY);
     }

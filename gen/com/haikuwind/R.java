@@ -73,17 +73,18 @@ public final class R {
         public static final int haiku_share=0x7f090009;
         public static final int haiku_star=0x7f090004;
         public static final int haiku_text=0x7f090006;
-        public static final int post_haiku=0x7f090012;
-        public static final int post_haiku_dialog=0x7f09000b;
+        public static final int post_haiku=0x7f090013;
+        public static final int post_haiku_dialog=0x7f09000c;
+        public static final int splashscreen=0x7f09000b;
         public static final int thumb_down=0x7f090005;
         public static final int thumb_up=0x7f090002;
-        public static final int user_favorited_times=0x7f090011;
-        public static final int user_image=0x7f09000d;
-        public static final int user_info=0x7f090013;
-        public static final int user_info_dialog=0x7f09000c;
-        public static final int user_rank=0x7f09000e;
-        public static final int user_score=0x7f090010;
-        public static final int user_voting_power=0x7f09000f;
+        public static final int user_favorited_times=0x7f090012;
+        public static final int user_image=0x7f09000e;
+        public static final int user_info=0x7f090014;
+        public static final int user_info_dialog=0x7f09000d;
+        public static final int user_rank=0x7f09000f;
+        public static final int user_score=0x7f090011;
+        public static final int user_voting_power=0x7f090010;
     }
     public static final class layout {
         public static final int haiku=0x7f030000;
