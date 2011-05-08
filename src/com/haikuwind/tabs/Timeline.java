@@ -79,7 +79,7 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @Override
     protected void renderNewHaiku(List<Haiku> haikuResponse) {
         //do not remove old
-        LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
+        ViewGroup haikuListView = (ViewGroup) findViewById(R.id.haiku_list);
         
         for (int i=0; i<haikuResponse.size(); ++i) {
             ViewGroup haikuView = createSingleHaikuWidget(haikuResponse.get(i));

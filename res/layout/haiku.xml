@@ -1,88 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/haiku"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:background="@drawable/haiku_border"
-        android:layout_height="35mm"
-        android:layout_width="fill_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="35mm"
+        android:background="@drawable/haiku_border"
+        android:padding="5dp">
+    
         <TextView android:id="@+id/haiku_id"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:visibility="gone"/>
-            
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent">
-            
-            <Button android:id="@+id/thumb_up"
-                android:layout_height="35px"
-                android:layout_width="35px"
-                android:background="@drawable/btn_thumb_up"
-                android:visibility="invisible"/>
-            <TextView
-                android:id="@+id/haiku_points"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textColor="@android:color/white"
-                android:gravity="center"
-                android:layout_weight="1"/>
-            <ImageView 
-                android:id="@+id/haiku_star"
-                android:src="@drawable/star"
-                android:layout_width="fill_parent"
-                android:layout_height="20px"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:visibility="gone"
-                />
-            <Button android:id="@+id/thumb_down"
-                android:layout_height="35px"
-                android:layout_width="35px"
-                android:background="@drawable/btn_thumb_down"
-                android:visibility="invisible"/>
-        </LinearLayout>
         
+        <!-- top line -->
+        <TextView
+            android:id="@+id/haiku_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+        <ImageView 
+            android:id="@+id/haiku_star"
+            android:src="@drawable/star"
+            android:layout_width="fill_parent"
+            android:layout_height="20px"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+        <Button android:id="@+id/thumb_up"
+            android:layout_height="35px"
+            android:layout_width="35px"
+            android:background="@drawable/btn_thumb_up"
+            android:visibility="invisible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignBaseline="@id/haiku_points"/>
+        <Button android:id="@+id/thumb_down"
+            android:layout_height="35px"
+            android:layout_width="35px"
+            android:background="@drawable/btn_thumb_down"
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignBaseline="@id/haiku_points"/>
+    
+        <!-- center -->
         <TextView
             android:id="@+id/haiku_text"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:minHeight="25mm"
+            android:layout_weight="1"
             android:padding="15dp"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:layout_below="@id/haiku_points"
+            android:layout_alignWithParentIfMissing="true"
+            />
+    
+        <!-- bottom line -->
+        <ImageView 
+            android:id="@+id/haiku_author_image"
+            android:layout_width="25px"
+            android:layout_height="34px"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/haiku_text"/>
+        <Button android:id="@+id/haiku_favorite"
+            android:layout_height="35px"
+            android:layout_width="35px"
+            android:background="@drawable/toggle_favorite"
+            android:visibility="invisible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/haiku_text"
+            android:layout_alignBaseline="@id/haiku_author_image"/>
+        <Button android:id="@+id/haiku_share"
+            android:layout_height="35px"
+            android:layout_width="35px"
+            android:background="@drawable/btn_share"
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/haiku_text"
+            android:layout_alignBaseline="@id/haiku_author_image"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent">
-            <Button android:id="@+id/haiku_favorite"
-                android:layout_height="35px"
-                android:layout_width="35px"
-                android:background="@drawable/toggle_favorite"
-                android:visibility="invisible"/>
-            <ImageView 
-                android:id="@+id/haiku_author_image"
-                android:layout_width="fill_parent"
-                android:layout_height="34px"
-                android:gravity="center"
-                android:layout_weight="1"
-                />
-            <Button android:id="@+id/haiku_share"
-                android:layout_height="35px"
-                android:layout_width="35px"
-                android:background="@drawable/btn_share"
-                android:visibility="invisible"/>
-            
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

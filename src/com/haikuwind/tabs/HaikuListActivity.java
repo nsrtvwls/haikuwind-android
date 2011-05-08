@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.haikuwind.R;
@@ -56,12 +57,15 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     private HaikuController voteController = new VoteController(haikuMap, this);
     private HaikuController favoriteController = new FavoriteController(haikuMap, this);
 
+    private ProgressDialog progressDialog;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.haiku_list);
+        progressDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -82,9 +86,9 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
     
     private void refreshData() {
-        ProgressDialog pd = ProgressDialog.show(this, "", 
-                getString(R.string.loading));
-        new RefreshTask(pd).start();
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+        new RefreshTask(progressDialog).start();
     }
 
     @Override
@@ -101,7 +105,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         super.onPause();
 
         isForeground = false;
-    }
+        if(progressDialog !=null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+   }
 
     protected boolean isForeground() {
         return isForeground;
@@ -122,7 +129,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             refreshData();
-                            dialog.dismiss();
                         }
                     });
             break;
@@ -169,6 +175,9 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         } else {
             pointsView.setVisibility(View.GONE);
             haikuView.findViewById(R.id.haiku_star).setVisibility(View.VISIBLE);
+            
+            ((RelativeLayout.LayoutParams) haikuView.findViewById(R.id.haiku_text).getLayoutParams()).
+                    addRule(RelativeLayout.BELOW, R.id.haiku_star);
         }
 
         if (this instanceof HasVoteBtn) {

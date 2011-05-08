@@ -1,6 +1,8 @@
 package com.haikuwind.dialogs;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,11 +20,13 @@ public abstract class ProgressTask extends Thread {
             } else {
                 handleError();
             }
-            progressDialog.dismiss();
+            if(progressDialog!=null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
     };
     
-    private ProgressDialog progressDialog;
+    private final ProgressDialog progressDialog;
 
     public ProgressTask(ProgressDialog progressDialog) {
         this.progressDialog = progressDialog;

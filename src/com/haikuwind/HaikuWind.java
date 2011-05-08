@@ -2,21 +2,13 @@ package com.haikuwind;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,38 +22,27 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.haikuwind.dialogs.CancelListener;
-import com.haikuwind.dialogs.FinishListener;
-import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
-import com.haikuwind.state.Event;
-import com.haikuwind.state.State;
-import com.haikuwind.state.StateListener;
-import com.haikuwind.state.StateMachine;
 import com.haikuwind.tabs.Favorites;
 import com.haikuwind.tabs.HallOfFame;
 import com.haikuwind.tabs.MyOwn;
 import com.haikuwind.tabs.Timeline;
 import com.haikuwind.tabs.TopChart;
 
-public class HaikuWind extends TabActivity implements StateListener {
+public class HaikuWind extends TabActivity {
 
-    private static final int ERROR_TRY_AGAIN_REGISTER = 0;
     private static final int ERROR_TRY_AGAIN_POST_HAIKU = 1;
     private static final int POST_HAIKU = 2;
     private static final int USER_INFO = 3;
-    private static final int SUGGEST_NETWORK_SETTINGS = 4;
     
     @SuppressWarnings("unused")
     private static String TAG = HaikuWind.class.getSimpleName();
     
-    private StateMachine stateMachine = new StateMachine();
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -77,22 +58,6 @@ public class HaikuWind extends TabActivity implements StateListener {
         View layout;
 
         switch (id) {
-        case (ERROR_TRY_AGAIN_REGISTER):
-            builder.setMessage(R.string.oops)
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.cancel,
-                            new FinishListener(this))
-                    .setPositiveButton(R.string.try_again,
-                            new OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                        int which) {
-                                    registerUser();
-                                }
-                            });
-            break;
-
         case ERROR_TRY_AGAIN_POST_HAIKU:
             builder.setMessage(R.string.oops)
                     .setNegativeButton(R.string.cancel, new CancelListener())
@@ -148,23 +113,6 @@ public class HaikuWind extends TabActivity implements StateListener {
                     .setView(layout);
             break;
 
-        case SUGGEST_NETWORK_SETTINGS:
-            builder.setTitle(R.string.connection_failed)
-                    .setMessage(R.string.suggest_network_settings)
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.cancel,
-                            new FinishListener(this))
-                    .setPositiveButton(R.string.accept,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                        int which) {
-                                    startActivity(new Intent(
-                                            Settings.ACTION_WIRELESS_SETTINGS));
-                                }
-                            });
-            break;
-            
         default:
             return super.onCreateDialog(id);
         }
@@ -201,39 +149,12 @@ public class HaikuWind extends TabActivity implements StateListener {
         }
     }
 
-    private void registerUser() {
-        ProgressDialog pd = ProgressDialog.show(this, "", 
-                getString(R.string.loading));
-        new RegisterTask(pd).start();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-    }
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
-        stateMachine.processEvent(Event.APP_START);
-        
-        stateMachine.addStateListener(this);
-    }
-    
-    @Override
-    protected void onStop() {
-        super.onStop();
-        
-        stateMachine.removeStateListener(this);
-        
-    }
-    
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-      stateMachine.processEvent(Event.APP_STOP);
+        initTabs();
     }
     
     private void initTabs() {
@@ -301,75 +222,7 @@ public class HaikuWind extends TabActivity implements StateListener {
             tv.setTextSize(11.0f); // just example
         }
         
-        //TODO implement with transition?
-        tabHost.setVisibility(View.VISIBLE);
-        findViewById(R.id.splashscreen).setVisibility(View.INVISIBLE);
-        
         Log.d(TAG, "Tabs initialized");
-        stateMachine.processEvent(Event.LAYOUT_READY);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        Log.d(TAG, "onResume");
-        processState(stateMachine.getCurrentState());
-    }
-    
-    @Override
-    public void processState(State state) {
-        State currentState = stateMachine.getCurrentState();
-        Log.d(TAG, "processing state "+currentState);
-        
-        switch(stateMachine.getCurrentState()) {
-        case REGISTER:
-            NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
-                    .getActiveNetworkInfo();
-            if(info==null || !info.isConnected()) {
-                showDialog(SUGGEST_NETWORK_SETTINGS);
-            } else {
-                registerUser();
-            }
-            break;
-            
-        case INIT_LAYOUT:
-            initTabs();
-            break;
-            
-        default:
-            break;
-        }
-        
-    }
-
-    private class RegisterTask extends ProgressTask {
-        public RegisterTask(ProgressDialog progressDialog) {
-            super(progressDialog);
-        }
-
-
-        @Override
-        protected void handleError() {
-            Log.d(TAG, "unable to register user");
-            // TODO how to show the same dialog that is open now?
-            onCreateDialog(ERROR_TRY_AGAIN_REGISTER).show();
-        }
-
-        @Override
-        protected void handleSuccess() {
-            Log.d(TAG, "user registered");
-            stateMachine.processEvent(Event.REGISTERED);
-        }
-
-        @Override
-        protected void execute() throws Exception {
-            Log.d(TAG, "registering user");
-            TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            String userId = tManager.getDeviceId();
-
-            HttpRequest.newUser(userId);
-
-        }
-    }
 }
