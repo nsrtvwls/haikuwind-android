@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
@@ -34,5 +36,10 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
         if(haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
             super.processUpdate(update, haiku);
         }
+    }
+
+    @Override
+    protected HaikuListData getHaikuListData() {
+        return HaikuWindData.getInstance().getHallOfFameData();
     }
 }

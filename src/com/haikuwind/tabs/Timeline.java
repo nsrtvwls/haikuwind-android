@@ -1,18 +1,14 @@
 package com.haikuwind.tabs;
 
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.haikuwind.R;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.feed.NewerFirstComparator;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
@@ -24,6 +20,11 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     
     private long lastHaikuDate;
     
+    
+    public Timeline() {
+        super(true);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         lastHaikuDate = 0;
@@ -42,51 +43,19 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
         UpdateNotifier.removeUpdateListener(this);
     }
     
-    
-    /**
-     * overrided because there's no need to clear old haikus.
-     */
-    @Override
-    protected List<Haiku> updateData() throws FeedException {
-        List<Haiku> haikuResponse = fetchElements();
-        //do not clear old
-        for(Haiku h: haikuResponse) {
-            haikuMap.put(h.getId(), h);
-        }
-        
-        //newer first
-        Collections.sort(haikuResponse, new NewerFirstComparator());
-        lastUpdate = Calendar.getInstance();
-        
-        return haikuResponse;
-    }
-
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        //periodically perform full update to have actual points and status
-        if(isDataObsolete()) {
-            haikuMap.clear();
-            lastHaikuDate = 0;
+        List<Haiku> response = HttpRequest.getTimeline(lastHaikuDate);
+        
+        if(response.size()>0) {
+            lastHaikuDate = response.get(0).getTime().getTime();
         }
         
-        List<Haiku> result = HttpRequest.getTimeline(lastHaikuDate);
-        if(!result.isEmpty()) {
-            lastHaikuDate = result.get(0).getTime().getTime();
-        }
-        return result;
+        return response;
     }
 
     @Override
-    protected void renderNewHaiku(List<Haiku> haikuResponse) {
-        //do not remove old
-        ViewGroup haikuListView = (ViewGroup) findViewById(R.id.haiku_list);
-        
-        for (int i=0; i<haikuResponse.size(); ++i) {
-            ViewGroup haikuView = createSingleHaikuWidget(haikuResponse.get(i));
-            haikuListView.addView(haikuView, i);
-
-        }
+    protected HaikuListData getHaikuListData() {
+        return HaikuWindData.getInstance().getTimelineData();
     }
-
-    
 }

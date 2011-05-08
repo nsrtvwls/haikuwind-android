@@ -1,7 +1,5 @@
 package com.haikuwind.tabs.buttons;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +7,7 @@ import android.widget.Toast;
 
 import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
@@ -18,8 +17,8 @@ public class FavoriteController extends HaikuController {
     
     private Context context;
 
-    public FavoriteController(Map<String, Haiku> haikuMap, Context context) {
-        super(haikuMap);
+    public FavoriteController(HaikuListData haikuListData, Context context) {
+        super(haikuListData);
         this.context = context;
     }
 

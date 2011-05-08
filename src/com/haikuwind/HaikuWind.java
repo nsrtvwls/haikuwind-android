@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
 import com.haikuwind.notification.Update;
@@ -48,7 +49,7 @@ public class HaikuWind extends TabActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         //TODO: remove when user info is requested separately
-        return UserInfo.getCurrent()!=null;
+        return HaikuWindData.getInstance().getUserInfo()!=null;
     }
     
     @Override
@@ -92,7 +93,7 @@ public class HaikuWind extends TabActivity {
         case USER_INFO:
             layout = inflater.inflate(R.layout.user_info_dialog, null);
 
-            UserInfo user = UserInfo.getCurrent();
+            UserInfo user = HaikuWindData.getInstance().getUserInfo();
 
             ((TextView) layout.findViewById(R.id.user_rank)).setText(user
                     .getRank().getRankStringId());

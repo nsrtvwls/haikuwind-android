@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.haikuwind.dialogs.FinishListener;
 import com.haikuwind.dialogs.ProgressTask;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
 
 public class RegisterActivity extends Activity {
@@ -45,7 +46,7 @@ public class RegisterActivity extends Activity {
                 .getActiveNetworkInfo();
         if (info == null || !info.isConnected()) {
             showDialog(SUGGEST_NETWORK_SETTINGS);
-        } else {
+        } else if(!HaikuWindData.getInstance().isRegistered()) {
             registerUser();
         }
     }
@@ -136,6 +137,7 @@ public class RegisterActivity extends Activity {
         @Override
         protected void handleSuccess() {
             Log.d(TAG, "user registered");
+            HaikuWindData.getInstance().setRegistered(true);
             nextScreen();
         }
 

@@ -1,25 +1,24 @@
 package com.haikuwind.tabs.buttons;
 
-import java.util.Map;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
 
 public abstract class HaikuController implements OnClickListener {
-    private Map<String, Haiku> haikuMap;
+    private HaikuListData haikuListData;
 
-    public HaikuController(Map<String, Haiku> haikuMap) {
-        this.haikuMap = haikuMap;
+    public HaikuController(HaikuListData haikuListData) {
+        this.haikuListData = haikuListData;
     }
 
     protected Haiku getHaiku(View v) {
         v = getParentHaikuView(v);
         String haikuId = ((TextView) v.findViewById(R.id.haiku_id)).getText().toString();
-        return haikuMap.get(haikuId);
+        return haikuListData.getHaikuMap().get(haikuId);
     }
     
     /**

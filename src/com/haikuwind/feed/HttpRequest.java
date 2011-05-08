@@ -101,7 +101,7 @@ public class HttpRequest {
         //TODO ask user info directly
         UserInfo user = handler.getUseInfo();
         if (user != null) {
-            UserInfo.setCurrent(user);
+            HaikuWindData.getInstance().setUserInfo(user);
         }
         return handler.getHaikuList();
 

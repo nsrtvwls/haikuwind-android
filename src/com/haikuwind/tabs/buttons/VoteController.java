@@ -1,8 +1,5 @@
 package com.haikuwind.tabs.buttons;
 
-import java.util.Map;
-
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +13,9 @@ import android.widget.Toast;
 import com.haikuwind.R;
 import com.haikuwind.animation.Rotate3dAnimation;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.feed.UserInfo;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
 
@@ -26,8 +24,8 @@ public class VoteController extends HaikuController {
         
         private final Context context;
         
-        public VoteController(Map<String, Haiku> haikuMap, Context context) {
-            super(haikuMap);
+        public VoteController(HaikuListData haikuListData, Context context) {
+            super(haikuListData);
             this.context = context;
         }
 
@@ -102,9 +100,13 @@ public class VoteController extends HaikuController {
          */
         private void updateVoteButtons(View haikuView) {
             Haiku h = getHaiku(haikuView);
-            boolean enabled = h.getTimesVotedByMe()<UserInfo.getCurrent().getRank().getPower();
+            
+            int power = HaikuWindData.getInstance().getUserInfo().getRank().getPower();
+            
+            boolean enabled = h.getTimesVotedByMe() < power;
             enabled &= h.getPoints() < Haiku.HALL_OF_FAME_POINTS;
             enabled &= h.getPoints() > Haiku.MIN_POINTS;
+            
             setThumbsVisibility(haikuView, enabled ? View.VISIBLE : View.INVISIBLE);
         }
 

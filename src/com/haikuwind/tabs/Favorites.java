@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
@@ -27,5 +29,10 @@ public class Favorites extends HaikuListActivity implements HasVoteBtn, HasFavor
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
         return HttpRequest.getFavorite();
+    }
+
+    @Override
+    protected HaikuListData getHaikuListData() {
+        return HaikuWindData.getInstance().getFavoritesData();
     }
 }

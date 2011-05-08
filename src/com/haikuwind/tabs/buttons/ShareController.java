@@ -1,13 +1,11 @@
 package com.haikuwind.tabs.buttons;
 
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
 import com.haikuwind.R;
-import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuListData;
 
 public class ShareController extends HaikuController {
     @SuppressWarnings("unused")
@@ -15,8 +13,8 @@ public class ShareController extends HaikuController {
 
     private Activity app;
 
-    public ShareController(Map<String, Haiku> haikuMap, Activity app) {
-        super(haikuMap);
+    public ShareController(HaikuListData haikuListData, Activity app) {
+        super(haikuListData);
         this.app = app;
     }
 

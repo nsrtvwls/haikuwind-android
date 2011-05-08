@@ -1,10 +1,8 @@
 package com.haikuwind.tabs;
 
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +26,7 @@ import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.feed.NewerFirstComparator;
+import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateListener;
 import com.haikuwind.tabs.buttons.FavoriteController;
@@ -40,24 +38,43 @@ import com.haikuwind.tabs.buttons.ShareController;
 import com.haikuwind.tabs.buttons.VoteController;
 
 abstract class HaikuListActivity extends Activity implements UpdateListener, HasShareBtn {
-    private static final int VALIDITY_PERIOD = 60; //data expires after one hour
 
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getSimpleName();
 
     private static final int ERROR_TRY_AGAIN_REFRESH = 0;
 
-    protected boolean dataDirty = true;
+    /**
+     * if the tab requests from server only new data.
+     * in this case we don't need to render all haikus from scratch.
+     */
+    private final boolean updateable; 
+    
     private boolean isForeground = false;
     
-    protected Map<String, Haiku> haikuMap = new HashMap<String, Haiku>();
-    protected Calendar lastUpdate;
+    private final HaikuListData data = getHaikuListData();
     
-    private HaikuController shareController = new ShareController(haikuMap, this);
-    private HaikuController voteController = new VoteController(haikuMap, this);
-    private HaikuController favoriteController = new FavoriteController(haikuMap, this);
+    private final HaikuController shareController = new ShareController(data, this);
+    private final HaikuController voteController = new VoteController(data, this);
+    private final HaikuController favoriteController = new FavoriteController(data, this);
 
     private ProgressDialog progressDialog;
+    
+    /**
+     * date of the newest haiku.
+     * since data is shared between two views (portrait/landscape),
+     * we store last displayed haiku time to identify if data update was performed in other orientation 
+     * and we need to update current view.
+     */
+    private Date lastDisplayedDate;
+
+    public HaikuListActivity() {
+        this.updateable = false;
+    }
+    
+    public HaikuListActivity(boolean updateable) {
+        this.updateable = updateable;
+    }
 
     /** Called when the activity is first created. */
     @Override
@@ -68,10 +85,16 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         progressDialog = new ProgressDialog(this);
     }
 
+    protected abstract HaikuListData getHaikuListData();
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (dataDirty || isDataObsolete()) {
+        if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
+            renderNewHaiku(data.getHaikuList(), true);
+        }
+        
+        if (data.isDataDirty() || data.isDataObsolete()) {
             refreshData();
         }
 
@@ -79,12 +102,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     }
 
-    protected boolean isDataObsolete() {
-        Calendar firstValidTime = Calendar.getInstance();
-        firstValidTime.add(Calendar.MINUTE, -VALIDITY_PERIOD);
-        return (firstValidTime.after(lastUpdate));
-    }
-    
     private void refreshData() {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
@@ -140,20 +157,28 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
 
     
-    protected void renderNewHaiku(List<Haiku> haikuResponse) {
+    private void renderNewHaiku(List<Haiku> haikuList, boolean erase) {
         LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
-        haikuListView.removeAllViews();
-        for (Haiku h : haikuResponse) {
+        
+        if(erase) {
+            haikuListView.removeAllViews();
+        }
+        
+        for (Haiku h : haikuList) {
             ViewGroup haikuView = createSingleHaikuWidget(h);
-
             haikuListView.addView(haikuView);
-
+        }
+        
+        data.setDataDirty(false);
+        
+        if(haikuList.size()>0) {
+            lastDisplayedDate = haikuList.get(0).getTime();
         }
     }
     
     @Override
     public void processUpdate(Update update, Haiku haiku) {
-        dataDirty = true;
+        data.setDataDirty(true);
         if (isForeground()) {
             refreshData();
         }
@@ -197,16 +222,9 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return haikuView;
     }
 
-    protected List<Haiku> updateData() throws FeedException {
+    private List<Haiku> updateData() throws FeedException {
         List<Haiku> haikuResponse = fetchElements();
-        haikuMap.clear();
-        for(Haiku h: haikuResponse) {
-            haikuMap.put(h.getId(), h);
-        }
-        
-        //newer first
-        Collections.sort(haikuResponse, new NewerFirstComparator());
-        lastUpdate = Calendar.getInstance();
+        data.updateHaikuList(haikuResponse, !updateable);
         
         return haikuResponse;
     }
@@ -215,11 +233,11 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     
 
     private class RefreshTask extends ProgressTask {
+        List<Haiku> lastUpdateResult;
+        
         public RefreshTask(ProgressDialog progressDialog) {
             super(progressDialog);
         }
-
-        private List<Haiku> haikuResponse;
 
         @Override
         protected void handleError() {
@@ -228,13 +246,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
         @Override
         protected void handleSuccess() {
-            renderNewHaiku(haikuResponse);
-            dataDirty = false;
+            renderNewHaiku(lastUpdateResult, !updateable);
         }
 
         @Override
         protected void execute() throws Exception {
-            haikuResponse = updateData();
+            lastUpdateResult = updateData();
         }
     }
 
