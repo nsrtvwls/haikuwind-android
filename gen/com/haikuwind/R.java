@@ -59,10 +59,12 @@ public final class R {
         public static final int rank_6_small=0x7f020025;
         public static final int rank_7=0x7f020026;
         public static final int rank_7_small=0x7f020027;
-        public static final int star=0x7f020028;
-        public static final int toggle_favorite=0x7f020029;
-        public static final int toggle_favorite_checked=0x7f02002a;
-        public static final int toggle_favorite_unchecked=0x7f02002b;
+        public static final int splashscreen=0x7f020028;
+        public static final int splashscreen_landscape=0x7f020029;
+        public static final int star=0x7f02002a;
+        public static final int toggle_favorite=0x7f02002b;
+        public static final int toggle_favorite_checked=0x7f02002c;
+        public static final int toggle_favorite_unchecked=0x7f02002d;
     }
     public static final class id {
         public static final int haiku=0x7f090000;

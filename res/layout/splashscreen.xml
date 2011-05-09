@@ -1,5 +1,5 @@
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<View xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/splashscreen" 
-    android:src="@drawable/background"
+    android:background="@drawable/splashscreen"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" />

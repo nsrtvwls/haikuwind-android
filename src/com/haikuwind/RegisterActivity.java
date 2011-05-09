@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 
 import com.haikuwind.dialogs.FinishListener;
 import com.haikuwind.dialogs.ProgressTask;
@@ -138,6 +139,7 @@ public class RegisterActivity extends Activity {
 
         @Override
         protected void handleSuccess() {
+            View v = findViewById(R.id.splashscreen);
             Log.d(TAG, "user registered");
             HaikuWindData.getInstance().setRegistered(true);
             nextScreen();
