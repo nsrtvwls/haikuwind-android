@@ -10,7 +10,8 @@ package com.haikuwind;
 public final class R {
     public static final class anim {
         public static final int disappear=0x7f040000;
-        public static final int fly_in=0x7f040001;
+        public static final int fly_away=0x7f040001;
+        public static final int fly_in=0x7f040002;
     }
     public static final class attr {
     }

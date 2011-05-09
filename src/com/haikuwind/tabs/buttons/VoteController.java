@@ -18,6 +18,7 @@ import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.tabs.MyOwn;
 
 public class VoteController extends HaikuController {
         private static final String TAG = VoteController.class.getSimpleName();
@@ -65,7 +66,7 @@ public class VoteController extends HaikuController {
                 updateVoteButtons(haikuView);
             }
             
-            if(haiku.getPoints() <= Haiku.MIN_POINTS) {
+            if(haiku.getPoints() <= Haiku.MIN_POINTS && !(context instanceof MyOwn)) {
                 hideHaiku(haikuView);
             }
         }

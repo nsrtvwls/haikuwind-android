@@ -48,6 +48,8 @@ public class RegisterActivity extends Activity {
             showDialog(SUGGEST_NETWORK_SETTINGS);
         } else if(!HaikuWindData.getInstance().isRegistered()) {
             registerUser();
+        } else {
+            nextScreen();
         }
     }
     

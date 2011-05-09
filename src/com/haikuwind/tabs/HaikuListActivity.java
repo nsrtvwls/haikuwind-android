@@ -1,6 +1,5 @@
 package com.haikuwind.tabs;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -100,21 +99,16 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
         isForeground = true;
 
+        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fly_in);
+        findViewById(R.id.haiku_list).setAnimation(anim);
+        anim.start();
     }
 
     private void refreshData() {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
         new RefreshTask(progressDialog).start();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.fly_in);
-        findViewById(R.id.haiku_list).setAnimation(anim);
-        anim.start();
     }
 
     @Override
@@ -125,6 +119,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         if(progressDialog !=null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+
+        //TODO doesn't appear
+//        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.fly_in);
+//        findViewById(R.id.haiku_list).setAnimation(anim);
+//        anim.start();
    }
 
     protected boolean isForeground() {
@@ -164,12 +164,15 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
             haikuListView.removeAllViews();
         }
         
+        int i=0;
         for (Haiku h : haikuList) {
             ViewGroup haikuView = createSingleHaikuWidget(h);
-            haikuListView.addView(haikuView);
+            if(!erase) {
+                haikuListView.addView(haikuView, i++);
+            } else {
+                haikuListView.addView(haikuView);
+            }
         }
-        
-        data.setDataDirty(false);
         
         if(haikuList.size()>0) {
             lastDisplayedDate = haikuList.get(0).getTime();
@@ -247,6 +250,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         @Override
         protected void handleSuccess() {
             renderNewHaiku(lastUpdateResult, !updateable);
+            data.setDataDirty(false);
         }
 
         @Override
