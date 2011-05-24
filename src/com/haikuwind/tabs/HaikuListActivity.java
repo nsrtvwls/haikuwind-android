@@ -11,6 +11,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,6 +28,7 @@ import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
+import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateListener;
 import com.haikuwind.tabs.buttons.FavoriteController;
@@ -58,6 +61,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     private final HaikuController favoriteController = new FavoriteController(data, this);
 
     private ProgressDialog progressDialog;
+    private ProgressTask progressTask;
     
     /**
      * date of the newest haiku.
@@ -81,6 +85,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.haiku_list);
+        
         progressDialog = new ProgressDialog(this);
     }
 
@@ -108,7 +113,9 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     private void refreshData() {
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
-        new RefreshTask(progressDialog).start();
+
+        progressTask = new RefreshTask(progressDialog);
+        progressTask.start();
     }
 
     @Override
@@ -118,6 +125,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         isForeground = false;
         if(progressDialog !=null && progressDialog.isShowing()) {
             progressDialog.dismiss();
+        }
+        
+        if(progressTask!=null && progressTask.isAlive()) {
+            progressTask.interrupt();
         }
 
         //TODO doesn't appear
@@ -225,13 +236,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return haikuView;
     }
 
-    private List<Haiku> updateData() throws FeedException {
-        List<Haiku> haikuResponse = fetchElements();
-        data.updateHaikuList(haikuResponse, !updateable);
-        
-        return haikuResponse;
-    }
-
     abstract protected List<Haiku> fetchElements() throws FeedException;
     
 
@@ -249,13 +253,16 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
         @Override
         protected void handleSuccess() {
-            renderNewHaiku(lastUpdateResult, !updateable);
-            data.setDataDirty(false);
+            synchronized (data) {
+                data.updateHaikuList(lastUpdateResult, !updateable);
+                renderNewHaiku(lastUpdateResult, !updateable);
+                data.setDataDirty(false);
+            }
         }
 
         @Override
         protected void execute() throws Exception {
-            lastUpdateResult = updateData();
+            lastUpdateResult = fetchElements();
         }
     }
 

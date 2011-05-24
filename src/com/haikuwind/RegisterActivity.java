@@ -41,7 +41,6 @@ public class RegisterActivity extends Activity {
     
     @Override
     protected void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
         NetworkInfo info = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getActiveNetworkInfo();

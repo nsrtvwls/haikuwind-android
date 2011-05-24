@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/user_info_dialog"
-    android:padding="10dp"
-    android:orientation="vertical"
-    style="@style/UserInfo">
-            <ImageView 
-                android:id="@+id/user_image"
-                android:layout_width="fill_parent"
-                android:layout_height="188px"
-                android:gravity="center"
-                android:layout_weight="1"
-                />
-    <TextView android:text="You are a" style="@style/UserInfo"/>
-    <TextView android:id="@+id/user_rank" style="@style/UserInfo"/>
-    
-    <TextView android:text="Your voting power is" style="@style/UserInfo"/>
-    <TextView android:id="@+id/user_voting_power" style="@style/UserInfo"/>
-    
-    <TextView android:text="Your current score is" style="@style/UserInfo"/>
-    <TextView android:id="@+id/user_score" style="@style/UserInfo"/>
-
-    <TextView android:text="Your haiku were favorited" style="@style/UserInfo"/>
-    <TextView android:id="@+id/user_favorited_times" style="@style/UserInfo"/>
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+	<LinearLayout
+	    android:id="@+id/user_info_dialog"
+        android:gravity="center"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="10dp"
+	    android:orientation="vertical"
+	    style="@style/UserInfo">
+	    
+        <ImageView 
+            android:id="@+id/user_image"
+            android:layout_width="fill_parent"
+            android:layout_height="188px"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+            
+	    <TextView android:text="You are a" style="@style/UserInfo"/>
+	    <TextView android:id="@+id/user_rank" style="@style/UserInfo"/>
+	    
+	    <TextView android:text="Your voting power is" style="@style/UserInfo"/>
+	    <TextView android:id="@+id/user_voting_power" style="@style/UserInfo"/>
+	    
+	    <TextView android:text="Your current score is" style="@style/UserInfo"/>
+	    <TextView android:id="@+id/user_score" style="@style/UserInfo"/>
+	
+	    <TextView android:text="Your haiku were favorited" style="@style/UserInfo"/>
+	    <TextView android:id="@+id/user_favorited_times" style="@style/UserInfo"/>
+	</LinearLayout>
+</ScrollView>
