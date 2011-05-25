@@ -28,43 +28,44 @@ public final class R {
         public static final int btn_thumb_up_enabled=0x7f020006;
         public static final int haiku_border=0x7f020007;
         public static final int ic_menu_post_haiku=0x7f020008;
-        public static final int ic_menu_user_info=0x7f020009;
-        public static final int ic_tab_favorites=0x7f02000a;
-        public static final int ic_tab_favorites_selected=0x7f02000b;
-        public static final int ic_tab_favorites_unselected=0x7f02000c;
-        public static final int ic_tab_halloffame=0x7f02000d;
-        public static final int ic_tab_halloffame_selected=0x7f02000e;
-        public static final int ic_tab_halloffame_unselected=0x7f02000f;
-        public static final int ic_tab_myown=0x7f020010;
-        public static final int ic_tab_myown_selected=0x7f020011;
-        public static final int ic_tab_myown_unselected=0x7f020012;
-        public static final int ic_tab_timeline=0x7f020013;
-        public static final int ic_tab_timeline_selected=0x7f020014;
-        public static final int ic_tab_timeline_unselected=0x7f020015;
-        public static final int ic_tab_top=0x7f020016;
-        public static final int ic_tab_top_selected=0x7f020017;
-        public static final int ic_tab_top_unselected=0x7f020018;
-        public static final int icon=0x7f020019;
-        public static final int rank_1=0x7f02001a;
-        public static final int rank_1_small=0x7f02001b;
-        public static final int rank_2=0x7f02001c;
-        public static final int rank_2_small=0x7f02001d;
-        public static final int rank_3=0x7f02001e;
-        public static final int rank_3_small=0x7f02001f;
-        public static final int rank_4=0x7f020020;
-        public static final int rank_4_small=0x7f020021;
-        public static final int rank_5=0x7f020022;
-        public static final int rank_5_small=0x7f020023;
-        public static final int rank_6=0x7f020024;
-        public static final int rank_6_small=0x7f020025;
-        public static final int rank_7=0x7f020026;
-        public static final int rank_7_small=0x7f020027;
-        public static final int splashscreen=0x7f020028;
-        public static final int splashscreen_landscape=0x7f020029;
-        public static final int star=0x7f02002a;
-        public static final int toggle_favorite=0x7f02002b;
-        public static final int toggle_favorite_checked=0x7f02002c;
-        public static final int toggle_favorite_unchecked=0x7f02002d;
+        public static final int ic_menu_refresh=0x7f020009;
+        public static final int ic_menu_user_info=0x7f02000a;
+        public static final int ic_tab_favorites=0x7f02000b;
+        public static final int ic_tab_favorites_selected=0x7f02000c;
+        public static final int ic_tab_favorites_unselected=0x7f02000d;
+        public static final int ic_tab_halloffame=0x7f02000e;
+        public static final int ic_tab_halloffame_selected=0x7f02000f;
+        public static final int ic_tab_halloffame_unselected=0x7f020010;
+        public static final int ic_tab_myown=0x7f020011;
+        public static final int ic_tab_myown_selected=0x7f020012;
+        public static final int ic_tab_myown_unselected=0x7f020013;
+        public static final int ic_tab_timeline=0x7f020014;
+        public static final int ic_tab_timeline_selected=0x7f020015;
+        public static final int ic_tab_timeline_unselected=0x7f020016;
+        public static final int ic_tab_top=0x7f020017;
+        public static final int ic_tab_top_selected=0x7f020018;
+        public static final int ic_tab_top_unselected=0x7f020019;
+        public static final int icon=0x7f02001a;
+        public static final int rank_1=0x7f02001b;
+        public static final int rank_1_small=0x7f02001c;
+        public static final int rank_2=0x7f02001d;
+        public static final int rank_2_small=0x7f02001e;
+        public static final int rank_3=0x7f02001f;
+        public static final int rank_3_small=0x7f020020;
+        public static final int rank_4=0x7f020021;
+        public static final int rank_4_small=0x7f020022;
+        public static final int rank_5=0x7f020023;
+        public static final int rank_5_small=0x7f020024;
+        public static final int rank_6=0x7f020025;
+        public static final int rank_6_small=0x7f020026;
+        public static final int rank_7=0x7f020027;
+        public static final int rank_7_small=0x7f020028;
+        public static final int splashscreen=0x7f020029;
+        public static final int splashscreen_landscape=0x7f02002a;
+        public static final int star=0x7f02002b;
+        public static final int toggle_favorite=0x7f02002c;
+        public static final int toggle_favorite_checked=0x7f02002d;
+        public static final int toggle_favorite_unchecked=0x7f02002e;
     }
     public static final class id {
         public static final int haiku=0x7f090000;
@@ -78,6 +79,7 @@ public final class R {
         public static final int haiku_text=0x7f090006;
         public static final int post_haiku=0x7f090013;
         public static final int post_haiku_dialog=0x7f09000b;
+        public static final int refresh=0x7f090015;
         public static final int splashscreen=0x7f09000c;
         public static final int thumb_down=0x7f090005;
         public static final int thumb_up=0x7f090004;
@@ -152,6 +154,7 @@ public final class R {
         public static final int user_info=0x7f06000b;
     }
     public static final class style {
+        public static final int Shadow=0x7f070001;
         public static final int UserInfo=0x7f070000;
     }
 }

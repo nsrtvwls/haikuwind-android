@@ -38,7 +38,8 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     
     @Override
     protected boolean eraseOldHaikus() {
-        return false;
+        //full update only for the first load
+        return getHaikuListData().getUpdateCounter()==1;
     }
     
     @Override

@@ -14,6 +14,8 @@ public class HaikuListData {
     private Map<String, Haiku> haikuMap =  new HashMap<String, Haiku>();
     private List<Haiku> haikuList = new ArrayList<Haiku>();
     
+    private int updateCounter;
+    
     synchronized public boolean isViewObsolete(Date lastViewDate) {
         if(lastHaikuDate==null) {
             return false;
@@ -24,11 +26,10 @@ public class HaikuListData {
     
     synchronized public void updateHaikuList(List<Haiku> update, boolean erase) {
         if(erase) {
-            haikuList = new ArrayList<Haiku>(update);
+            haikuList.clear();
             haikuMap.clear();
-        } else {
-            haikuList.addAll(update);
         }
+        haikuList.addAll(update);
         
         //newer first
         Collections.sort(haikuList, new NewerFirstComparator());
@@ -42,6 +43,8 @@ public class HaikuListData {
         } else {
             lastHaikuDate = null;
         }
+        
+        updateCounter++;
      }
 
     synchronized public boolean isDataDirty() {
@@ -62,10 +65,17 @@ public class HaikuListData {
     synchronized public Date getLastHaikuDate() {
         return lastHaikuDate;
     }
+    synchronized public int getUpdateCounter() {
+        return updateCounter;
+    }
 
-    public void resetList() {
+    synchronized public void resetList() {
+        //do not clean haiku list to leave an ability to vote/favorite etc
+        
         setDataDirty(true);
-        updateHaikuList(Collections.EMPTY_LIST, true);
+        //to get whole timeline
+        lastHaikuDate = null;
+        updateCounter = 0;
     }
 
 

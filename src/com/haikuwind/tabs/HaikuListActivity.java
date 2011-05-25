@@ -28,6 +28,7 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateListener;
+import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.buttons.FavoriteController;
 import com.haikuwind.tabs.buttons.HaikuController;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
@@ -73,6 +74,12 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
 
     protected abstract HaikuListData getHaikuListData();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        UpdateNotifier.addUpdateListener(this, Update.REFRESH);
+    }
 
     @Override
     protected void onResume() {
@@ -242,8 +249,8 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         protected void handleSuccess() {
             synchronized (data) {
                 data.updateHaikuList(lastUpdateResult, eraseOldHaikus());
-                renderNewHaiku(lastUpdateResult, eraseOldHaikus());
                 data.setDataDirty(false);
+                renderNewHaiku(lastUpdateResult, eraseOldHaikus());
             }
         }
 
