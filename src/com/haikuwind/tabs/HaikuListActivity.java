@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,7 +26,6 @@ import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.notification.Update;
 import com.haikuwind.notification.UpdateListener;
 import com.haikuwind.tabs.buttons.FavoriteController;
@@ -94,11 +91,14 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     @Override
     protected void onResume() {
         super.onResume();
+        
+        //update views.
         if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
             renderNewHaiku(data.getHaikuList(), true);
         }
-        
-        if (data.isDataDirty() || data.isDataObsolete()) {
+
+        //get new data and update views
+        if (data.isDataDirty()) {
             refreshData();
         }
 
@@ -112,6 +112,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     private void refreshData() {
         progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
         progressDialog.show();
 
         progressTask = new RefreshTask(progressDialog);
@@ -167,6 +168,15 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return builder.create();
     }
 
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //to refresh all views
+        lastDisplayedDate = null;
+        //to update data
+        data.setDataDirty(true);
+    }
     
     private void renderNewHaiku(List<Haiku> haikuList, boolean erase) {
         LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
