@@ -194,8 +194,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
                 .inflate(R.layout.haiku, null);
 
         ((TextView) haikuView.findViewById(R.id.haiku_id)).setText(h.getId());
-        ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h
-                .getText());
+        ((TextView) haikuView.findViewById(R.id.haiku_text)).setText(h.getText());
         
         int points = h.getPoints();
         TextView pointsView = ((TextView) haikuView.findViewById(R.id.haiku_points));
@@ -248,9 +247,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         @Override
         protected void handleSuccess() {
             synchronized (data) {
-                data.updateHaikuList(lastUpdateResult, eraseOldHaikus());
+                boolean erase = eraseOldHaikus(); //for timeline changes after data update
+                data.updateHaikuList(lastUpdateResult, erase);
                 data.setDataDirty(false);
-                renderNewHaiku(lastUpdateResult, eraseOldHaikus());
+                renderNewHaiku(lastUpdateResult, erase);
             }
         }
 
