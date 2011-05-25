@@ -33,7 +33,7 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
     @Override
     public void processUpdate(Update update, Haiku haiku) {
         //if haiku was voted and got in hall of fame, mark the hall of fame to update.
-        if(haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
+        if(update==Update.REFRESH || haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
             super.processUpdate(update, haiku);
         }
     }
