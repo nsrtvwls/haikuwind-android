@@ -48,34 +48,35 @@ public class HttpRequest {
         // http://localhost:8080/haiku?command=refresh&user=1&from=1
         String url = String.format("%s?command=refresh&user=%s&from=%d",
                 HW_ADDR, userId, from);
-        return parseHaikuList(url);
+        return parseHaikuList(url, true);
     }
 
     public static List<Haiku> getTop(int limit) throws FeedException {
         // http://localhost:8080/haiku?command=top&user=1&limit=25
         String url = String.format("%s?command=top&user=%s&limit=%d", HW_ADDR,
                 userId, limit);
-        return parseHaikuList(url);
+        //sort by votes, not by time
+        return parseHaikuList(url, false);
     }
 
     public static List<Haiku> getHallOfFame() throws FeedException {
         // http://localhost:8080/haiku?command=hall_of_fame&user=1
         String url = String.format("%s?command=hall_of_fame&user=%s", HW_ADDR,
                 userId);
-        return parseHaikuList(url);
+        return parseHaikuList(url, true);
     }
 
     public static List<Haiku> getFavorite() throws FeedException {
         // http://localhost:8080/haiku?command=my_favorite&user=1
         String url = String.format("%s?command=my_favorite&user=%s", HW_ADDR,
                 userId);
-        return parseHaikuList(url);
+        return parseHaikuList(url, true);
     }
 
     public static List<Haiku> getMy() throws FeedException {
         // http://localhost:8080/haiku?command=my&user=1
         String url = String.format("%s?command=my&user=%s", HW_ADDR, userId);
-        return parseHaikuList(url);
+        return parseHaikuList(url, true);
     }
     
     public static void vote(String textId, boolean isGood) throws FeedException {
@@ -95,7 +96,7 @@ public class HttpRequest {
      * Side effect is: if user info received, it updates {@link UserInfoHolder}
      * @throws FeedException 
      */
-    private static List<Haiku> parseHaikuList(String url) throws FeedException {
+    private static List<Haiku> parseHaikuList(String url, boolean sort) throws FeedException {
         HaikuHandler handler = new HaikuHandler();
         parse(url, handler);
 
@@ -104,12 +105,12 @@ public class HttpRequest {
         if (user != null) {
             HaikuWindData.getInstance().setUserInfo(user);
         }
-        
         List<Haiku> result = handler.getHaikuList();
-        //newer first
-        Collections.sort(result, new NewerFirstComparator());
+        if(sort) {
+            //newer first
+            Collections.sort(result, new NewerFirstComparator());
+        }
         return result;
-
     }
 
     private static void parseResult(String url) throws FeedException {
