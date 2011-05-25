@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            style="@style/Shadow"/>
         <ImageView 
             android:id="@+id/haiku_star"
             android:src="@drawable/star"
@@ -45,7 +46,8 @@
             android:visibility="invisible"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_alignBaseline="@id/haiku_points"/>
+            android:layout_alignBaseline="@id/haiku_points"
+            />
         <Button android:id="@+id/thumb_down"
             android:layout_height="35px"
             android:layout_width="35px"
@@ -53,7 +55,8 @@
             android:visibility="invisible"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_alignBaseline="@id/haiku_points"/>
+            android:layout_alignBaseline="@id/haiku_points"
+            />
     
         <!-- center -->
         <TextView
@@ -67,7 +70,7 @@
             android:textStyle="bold"
             android:layout_below="@id/haiku_points"
             android:layout_alignWithParentIfMissing="true"
-            />
+            style="@style/Shadow"/>
     
         <!-- bottom line -->
         <ImageView 
@@ -94,7 +97,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/haiku_text"
-            android:layout_alignBaseline="@id/haiku_author_image"/>
+            android:layout_alignBaseline="@id/haiku_author_image"
+            />
 
     </RelativeLayout>
 </LinearLayout>
