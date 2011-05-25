@@ -47,5 +47,13 @@ public class HaikuWindData {
     public HaikuListData getMyOwnData() {
         return myOwnData;
     }
+    public void resetLists() {
+        for(HaikuListData data: new HaikuListData[] {
+                timelineData, favoriteData, hallOfFameData, topChartData, myOwnData
+                }) {
+            data.resetList();
+        }
+        
+    }
     
 }

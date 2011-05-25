@@ -1,5 +1,6 @@
 package com.haikuwind.tabs;
 
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -18,16 +19,8 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @SuppressWarnings("unused")
     private final static String TAG = Timeline.class.getSimpleName();
     
-    private long lastHaikuDate;
-    
-    
-    public Timeline() {
-        super(true);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        lastHaikuDate = 0;
         super.onCreate(savedInstanceState);
     }
     
@@ -44,12 +37,15 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     }
     
     @Override
+    protected boolean eraseOldHaikus() {
+        return false;
+    }
+    
+    @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        List<Haiku> response = HttpRequest.getTimeline(lastHaikuDate);
-        
-        if(response.size()>0) {
-            lastHaikuDate = response.get(0).getTime().getTime();
-        }
+        Date lastHaikuDate = getHaikuListData().getLastHaikuDate();
+        List<Haiku> response = HttpRequest.getTimeline(
+                lastHaikuDate==null ? 0: lastHaikuDate.getTime());
         
         return response;
     }

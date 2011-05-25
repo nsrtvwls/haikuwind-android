@@ -24,7 +24,7 @@ public class HaikuListData {
     
     synchronized public void updateHaikuList(List<Haiku> update, boolean erase) {
         if(erase) {
-            haikuList = update;
+            haikuList = new ArrayList<Haiku>(update);
             haikuMap.clear();
         } else {
             haikuList.addAll(update);
@@ -36,7 +36,12 @@ public class HaikuListData {
         for(Haiku h: update) {
             haikuMap.put(h.getId(), h);
         }
-
+        
+        if(haikuList.size()>0) {
+            lastHaikuDate = haikuList.get(0).getTime();
+        } else {
+            lastHaikuDate = null;
+        }
      }
 
     synchronized public boolean isDataDirty() {
@@ -54,4 +59,14 @@ public class HaikuListData {
     synchronized public List<Haiku> getHaikuList() {
         return haikuList;
     }
+    synchronized public Date getLastHaikuDate() {
+        return lastHaikuDate;
+    }
+
+    public void resetList() {
+        setDataDirty(true);
+        updateHaikuList(Collections.EMPTY_LIST, true);
+    }
+
+
 }

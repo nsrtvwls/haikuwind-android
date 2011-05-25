@@ -21,6 +21,12 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.haikuwind.R;
+import com.haikuwind.R.drawable;
+import com.haikuwind.R.id;
+import com.haikuwind.R.layout;
+import com.haikuwind.R.menu;
+import com.haikuwind.R.string;
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
@@ -156,6 +162,12 @@ public class HaikuWind extends TabActivity {
 
         setContentView(R.layout.main);
         initTabs();
+    }
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        HaikuWindData.getInstance().resetLists();
     }
     
     private void initTabs() {

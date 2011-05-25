@@ -43,12 +43,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     private static final int ERROR_TRY_AGAIN_REFRESH = 0;
 
-    /**
-     * if the tab requests from server only new data.
-     * in this case we don't need to render all haikus from scratch.
-     */
-    private final boolean updateable; 
-    
     private boolean isForeground = false;
     
     private final HaikuListData data = getHaikuListData();
@@ -68,14 +62,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
      */
     private Date lastDisplayedDate;
 
-    public HaikuListActivity() {
-        this.updateable = false;
-    }
-    
-    public HaikuListActivity(boolean updateable) {
-        this.updateable = updateable;
-    }
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,14 +78,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     protected void onResume() {
         super.onResume();
         
-        //update views.
-        if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
-            renderNewHaiku(data.getHaikuList(), true);
-        }
-
-        //get new data and update views
         if (data.isDataDirty()) {
             refreshData();
+        } else if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
+            renderNewHaiku(data.getHaikuList(), true);
         }
 
         isForeground = true;
@@ -108,15 +90,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
                 R.anim.fly_in);
         findViewById(R.id.haiku_list).setAnimation(anim);
         anim.start();
-    }
-
-    private void refreshData() {
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        progressTask = new RefreshTask(progressDialog);
-        progressTask.start();
     }
 
     @Override
@@ -168,15 +141,23 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         return builder.create();
     }
 
-    
     @Override
-    protected void onStart() {
-        super.onStart();
-        //to refresh all views
-        lastDisplayedDate = null;
-        //to update data
+    public void processUpdate(Update update, Haiku haiku) {
         data.setDataDirty(true);
+        if (isForeground()) {
+            refreshData();
+        }
     }
+
+    private void refreshData() {
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        progressTask = new RefreshTask(progressDialog);
+        progressTask.start();
+    }
+
     
     private void renderNewHaiku(List<Haiku> haikuList, boolean erase) {
         LinearLayout haikuListView = (LinearLayout) findViewById(R.id.haiku_list);
@@ -200,14 +181,6 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         }
     }
     
-    @Override
-    public void processUpdate(Update update, Haiku haiku) {
-        data.setDataDirty(true);
-        if (isForeground()) {
-            refreshData();
-        }
-    }
-
     protected ViewGroup createSingleHaikuWidget(Haiku h) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup haikuView = (ViewGroup) inflater
@@ -248,6 +221,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     abstract protected List<Haiku> fetchElements() throws FeedException;
     
+    protected boolean eraseOldHaikus() {
+        return true;
+    }
+    
 
     private class RefreshTask extends ProgressTask {
         List<Haiku> lastUpdateResult;
@@ -264,8 +241,8 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         @Override
         protected void handleSuccess() {
             synchronized (data) {
-                data.updateHaikuList(lastUpdateResult, !updateable);
-                renderNewHaiku(lastUpdateResult, !updateable);
+                data.updateHaikuList(lastUpdateResult, eraseOldHaikus());
+                renderNewHaiku(lastUpdateResult, eraseOldHaikus());
                 data.setDataDirty(false);
             }
         }
