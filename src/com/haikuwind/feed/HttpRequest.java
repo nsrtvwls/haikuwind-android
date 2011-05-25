@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -22,8 +23,8 @@ import com.haikuwind.feed.parser.XmlCorrectorStream;
 
 public class HttpRequest {
     private final static String TAG = HttpRequest.class.getSimpleName();
-//    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
-    private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
+    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
+//    private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
 
     //initialized during first newUser() call
     private static String userId;
@@ -103,7 +104,11 @@ public class HttpRequest {
         if (user != null) {
             HaikuWindData.getInstance().setUserInfo(user);
         }
-        return handler.getHaikuList();
+        
+        List<Haiku> result = handler.getHaikuList();
+        //newer first
+        Collections.sort(result, new NewerFirstComparator());
+        return result;
 
     }
 
