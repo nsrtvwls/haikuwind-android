@@ -11,8 +11,8 @@ public class HaikuListData {
     private Date lastHaikuDate;
     private boolean dataDirty = false;
     
-    private Map<String, Haiku> haikuMap =  new HashMap<String, Haiku>();
-    private List<Haiku> haikuList = new ArrayList<Haiku>();
+    private final Map<String, Haiku> haikuMap =  new HashMap<String, Haiku>();
+    private final List<Haiku> haikuList = new ArrayList<Haiku>();
     
     private int updateCounter;
     
@@ -24,16 +24,21 @@ public class HaikuListData {
         return lastHaikuDate.after(lastViewDate);
     }
     
+    /**
+     * @param update
+     *            elements to insert in the beginning of current list. Must be
+     *            already ordered by list's criteria (time/votes)
+     * @param erase
+     *            if old elements must be removed
+     */
     synchronized public void updateHaikuList(List<Haiku> update, boolean erase) {
         if(erase) {
             haikuList.clear();
             haikuMap.clear();
         }
-        haikuList.addAll(update);
+        //do not sort here for different lists have different order criteria
+        haikuList.addAll(0, update);
         
-        //newer first
-        Collections.sort(haikuList, new NewerFirstComparator());
-
         for(Haiku h: update) {
             haikuMap.put(h.getId(), h);
         }
