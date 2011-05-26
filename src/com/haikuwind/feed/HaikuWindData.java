@@ -1,7 +1,14 @@
 package com.haikuwind.feed;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class HaikuWindData {
+    /**
+     * period of full update of all lists
+     */
+    private static final int UPDATE_PERIOD = 15;
 
     private static HaikuWindData instance = new HaikuWindData();
     
@@ -11,14 +18,18 @@ public class HaikuWindData {
     
     private boolean registered = false;
 
+    /**
+     * date of the last full update of all lists
+     */
+    private Date lastUpdateTime;
 
     private UserInfo userInfo;
     
-    private HaikuListData timelineData   = new HaikuListData();
-    private HaikuListData favoriteData   = new HaikuListData();
-    private HaikuListData hallOfFameData = new HaikuListData();
-    private HaikuListData topChartData   = new HaikuListData();
-    private HaikuListData myOwnData      = new HaikuListData();
+    private final HaikuListData timelineData   = new HaikuListData();
+    private final HaikuListData favoriteData   = new HaikuListData();
+    private final HaikuListData hallOfFameData = new HaikuListData();
+    private final HaikuListData topChartData   = new HaikuListData();
+    private final HaikuListData myOwnData      = new HaikuListData();
 
     synchronized public boolean isRegistered() {
         return registered;
@@ -47,6 +58,7 @@ public class HaikuWindData {
     public HaikuListData getMyOwnData() {
         return myOwnData;
     }
+    
     public void resetLists() {
         for(HaikuListData data: new HaikuListData[] {
                 timelineData, favoriteData, hallOfFameData, topChartData, myOwnData
@@ -54,6 +66,14 @@ public class HaikuWindData {
             data.resetList();
         }
         
+        lastUpdateTime = new Date();
+    }
+    
+    public boolean isDataObsolete() {
+        Calendar firstValidTime = Calendar.getInstance();
+        firstValidTime.add(Calendar.MINUTE, -UPDATE_PERIOD);
+        
+        return lastUpdateTime==null || lastUpdateTime.before(firstValidTime.getTime());
     }
     
 }

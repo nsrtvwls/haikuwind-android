@@ -165,6 +165,10 @@ public class HaikuWind extends TabActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        
+        if(HaikuWindData.getInstance().isDataObsolete()) {
+            HaikuWindData.getInstance().resetLists();
+        }
     }
     
     private void initTabs() {
