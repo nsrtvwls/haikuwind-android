@@ -24,6 +24,9 @@
     <string name="times">times</string>
     <string name="close">Close</string>
     
+    <!-- Refresh menu item -->
+    <string name="refresh">Refresh</string>
+    
     <!-- User rank -->
     <string name="apprentice">Haiku Apprentice</string>
     <string name="journeyman">Haiku Journeyman</string>
