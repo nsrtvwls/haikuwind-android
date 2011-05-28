@@ -23,8 +23,8 @@ import com.haikuwind.feed.parser.XmlCorrectorStream;
 
 public class HttpRequest {
     private final static String TAG = HttpRequest.class.getSimpleName();
-    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
-//    private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
+//    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
+    private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
 
     //initialized during first newUser() call
     private static String userId;
