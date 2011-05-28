@@ -129,7 +129,7 @@ public class RegisterActivity extends Activity {
        new RegisterTask(progressDialog).start();
     }
     
-    private void nextScreen() {
+    private synchronized void nextScreen() {
         //may be several instances of RegisterActivity for screen orientations
         //call next activity only for foreground.
         if(isForeground) {
