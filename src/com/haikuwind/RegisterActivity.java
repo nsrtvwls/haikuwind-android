@@ -34,6 +34,7 @@ public class RegisterActivity extends Activity {
     private static final int SUGGEST_NETWORK_SETTINGS = 4;
     
     private ProgressDialog progressDialog;
+    boolean isForeground = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,16 @@ public class RegisterActivity extends Activity {
     }
     
     @Override
+    protected void onResume() {
+        super.onResume();
+        isForeground = true;
+    }
+    
+    @Override
     protected void onPause() {
         super.onPause();
+        
+        isForeground = false;
  
         if(progressDialog !=null && progressDialog.isShowing()) {
             progressDialog.dismiss();
@@ -117,8 +126,12 @@ public class RegisterActivity extends Activity {
     }
     
     private void nextScreen() {
-        Intent i = new Intent(this, HaikuWind.class);
-        startActivityForResult(i, 0);
+        //may be several instances of RegisterActivity for screen orientations
+        //call next activity only for foreground.
+        if(isForeground) {
+            Intent i = new Intent(this, HaikuWind.class);
+            startActivityForResult(i, 0);
+        }
     }
     
     @Override
@@ -144,6 +157,7 @@ public class RegisterActivity extends Activity {
         protected void handleSuccess() {
             View v = findViewById(R.id.splashscreen);
             Log.d(TAG, "user registered");
+            
             HaikuWindData.getInstance().setRegistered(true);
             nextScreen();
         }
