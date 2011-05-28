@@ -62,6 +62,10 @@ public class RegisterActivity extends Activity {
     protected void onResume() {
         super.onResume();
         isForeground = true;
+        
+        if(HaikuWindData.getInstance().isRegistered()) {
+            nextScreen();
+        }
     }
     
     @Override
