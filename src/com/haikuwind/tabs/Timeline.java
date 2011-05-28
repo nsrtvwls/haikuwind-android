@@ -1,5 +1,6 @@
 package com.haikuwind.tabs;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -46,9 +47,15 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     protected List<Haiku> fetchElements() throws FeedException {
         Date lastHaikuDate = getHaikuListData().getLastHaikuDate();
         List<Haiku> response = HttpRequest.getTimeline(
-                lastHaikuDate==null ? 0: lastHaikuDate.getTime());
+                lastHaikuDate==null ? weekBefore().getTime(): lastHaikuDate.getTime());
         
         return response;
+    }
+    
+    private Date weekBefore() {
+        Calendar weekBefore = Calendar.getInstance();
+        weekBefore.add(Calendar.DATE, -7);
+        return weekBefore.getTime();
     }
 
     @Override
