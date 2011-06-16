@@ -103,41 +103,44 @@ public final class R {
         public static final int options_menu=0x7f080000;
     }
     public static final class string {
-        public static final int accept=0x7f060017;
+        public static final int accept=0x7f060018;
         public static final int app_name=0x7f060000;
         /**  User rank 
          */
-        public static final int apprentice=0x7f06000e;
+        public static final int apprentice=0x7f06000f;
         public static final int cancel=0x7f060009;
         public static final int close=0x7f06000d;
         /**  Connection error dialogs 
          */
-        public static final int connection_failed=0x7f060015;
-        public static final int daemon=0x7f060013;
-        public static final int devil=0x7f060012;
+        public static final int connection_failed=0x7f060016;
+        public static final int daemon=0x7f060014;
+        public static final int devil=0x7f060013;
         public static final int favorites=0x7f060005;
-        public static final int god=0x7f060014;
+        public static final int god=0x7f060015;
         public static final int hall_of_fame=0x7f060003;
-        public static final int journeyman=0x7f06000f;
+        public static final int journeyman=0x7f060010;
         /**  Progress bar 
          */
         public static final int loading=0x7f060006;
-        public static final int master=0x7f060010;
+        public static final int master=0x7f060011;
         /**  Post on twitter 
          */
-        public static final int msg_title=0x7f06001b;
+        public static final int msg_title=0x7f06001c;
         public static final int my_own=0x7f060004;
         /**  Error, try again dialog 
          */
-        public static final int oops=0x7f060018;
+        public static final int oops=0x7f060019;
         /**  Post haiku dialog 
          */
         public static final int post_haiku=0x7f060007;
         public static final int post_haiku_hint=0x7f06000a;
-        public static final int post_using=0x7f06001c;
-        public static final int priest=0x7f060011;
+        public static final int post_using=0x7f06001d;
+        public static final int priest=0x7f060012;
+        /**  Refresh menu item 
+         */
+        public static final int refresh=0x7f06000e;
         public static final int send=0x7f060008;
-        public static final int suggest_network_settings=0x7f060016;
+        public static final int suggest_network_settings=0x7f060017;
         /**  Tab titles 
          */
         public static final int timeline=0x7f060001;
@@ -146,9 +149,9 @@ public final class R {
         public static final int times=0x7f06000c;
         /**  Toast message for vote/favorite error 
          */
-        public static final int toast_error_try_again=0x7f06001a;
+        public static final int toast_error_try_again=0x7f06001b;
         public static final int top_chart=0x7f060002;
-        public static final int try_again=0x7f060019;
+        public static final int try_again=0x7f06001a;
         /**  User info dialog 
          */
         public static final int user_info=0x7f06000b;

@@ -47,7 +47,8 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     protected List<Haiku> fetchElements() throws FeedException {
         Date lastHaikuDate = getHaikuListData().getLastHaikuDate();
         List<Haiku> response = HttpRequest.getTimeline(
-                lastHaikuDate==null ? weekBefore().getTime(): lastHaikuDate.getTime());
+                lastHaikuDate==null ? weekBefore().getTime(): lastHaikuDate.getTime(),
+                getUserId());
         
         return response;
     }

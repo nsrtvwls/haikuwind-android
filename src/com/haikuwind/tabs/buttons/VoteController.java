@@ -23,10 +23,12 @@ import com.haikuwind.tabs.MyOwn;
 public class VoteController extends HaikuController {
         private static final String TAG = VoteController.class.getSimpleName();
         
+        private final String userId;
         private final Context context;
         
-        public VoteController(HaikuListData haikuListData, Context context) {
+        public VoteController(HaikuListData haikuListData, String userId, Context context) {
             super(haikuListData);
+            this.userId = userId;
             this.context = context;
         }
 
@@ -39,7 +41,7 @@ public class VoteController extends HaikuController {
             
             Haiku haiku = getHaiku(v);
             try {
-                HttpRequest.vote(haiku.getId(), isGood);
+                HttpRequest.vote(haiku.getId(), isGood, userId);
                 
                 Animation anim = new Rotate3dAnimation(0, 360,
                         haikuView.getWidth()/2, haikuView.getHeight()/2, 0,

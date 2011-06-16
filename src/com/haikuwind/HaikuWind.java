@@ -9,6 +9,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +42,9 @@ public class HaikuWind extends TabActivity {
     private static final int POST_HAIKU = 2;
     private static final int USER_INFO = 3;
     
+    //a way to avoid gc for static reference in singleton
+    private final HaikuWindData data = HaikuWindData.getInstance();
+    
     @SuppressWarnings("unused")
     private static String TAG = HaikuWind.class.getSimpleName();
     
@@ -49,7 +53,7 @@ public class HaikuWind extends TabActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         //TODO: remove when user info is requested separately
-        return HaikuWindData.getInstance().getUserInfo()!=null;
+        return data.getUserInfo()!=null;
     }
     
     @Override
@@ -92,24 +96,6 @@ public class HaikuWind extends TabActivity {
 
         case USER_INFO:
             layout = inflater.inflate(R.layout.user_info_dialog, null);
-
-            UserInfo user = HaikuWindData.getInstance().getUserInfo();
-
-            ((TextView) layout.findViewById(R.id.user_rank)).setText(user
-                    .getRank().getRankStringId());
-            String value = Integer.toString(user.getRank().getPower());
-            ((TextView) layout.findViewById(R.id.user_voting_power))
-                    .setText(value);
-            value = Integer.toString(user.getScore());
-            ((TextView) layout.findViewById(R.id.user_score)).setText(value);
-            value = Integer.toString(user.getFavoritedTimes()) + " "
-                    + getString(R.string.times);
-            ((TextView) layout.findViewById(R.id.user_favorited_times))
-                    .setText(value);
-
-            ((ImageView) layout.findViewById(R.id.user_image))
-                    .setImageResource(user.getRank().getImageId());
-
             builder.setNegativeButton(R.string.close, new CancelListener())
                     .setView(layout);
             break;
@@ -120,13 +106,39 @@ public class HaikuWind extends TabActivity {
 
         return builder.create();
     }
+    
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        super.onPrepareDialog(id, dialog);
+        
+        UserInfo user = data.getUserInfo();
+
+        if(USER_INFO==id && null!=user) {
+            ((TextView) dialog.findViewById(R.id.user_rank)).setText(user
+                    .getRank().getRankStringId());
+            String value = Integer.toString(user.getRank().getPower());
+            ((TextView) dialog.findViewById(R.id.user_voting_power))
+                    .setText(value);
+            value = Integer.toString(user.getScore());
+            ((TextView) dialog.findViewById(R.id.user_score)).setText(value);
+            value = Integer.toString(user.getFavoritedTimes()) + " "
+                    + getString(R.string.times);
+            ((TextView) dialog.findViewById(R.id.user_favorited_times))
+                    .setText(value);
+    
+            ((ImageView) dialog.findViewById(R.id.user_image))
+                    .setImageResource(user.getRank().getImageId());
+        }
+    }
 
     private void doPostHaiku(DialogInterface dialog) {
         View haikuTextView = ((Dialog) dialog).findViewById(R.id.haiku_text);
         CharSequence haiku = ((TextView) haikuTextView).getText();
         
+        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String userId = tManager.getDeviceId();
         try {
-            HttpRequest.newHaiku(haiku);
+            HttpRequest.newHaiku(haiku, userId);
             ((TextView) haikuTextView).setText("");
             
             UpdateNotifier.fireUpdate(Update.NEW_HAIKU, new Haiku(haiku.toString()));
@@ -146,7 +158,7 @@ public class HaikuWind extends TabActivity {
             showDialog(USER_INFO);
             return true;
         case R.id.refresh:
-            HaikuWindData.getInstance().resetLists();
+            data.resetLists();
             UpdateNotifier.fireUpdate(Update.REFRESH, null);
             return true;
         default:
@@ -166,8 +178,8 @@ public class HaikuWind extends TabActivity {
     protected void onStart() {
         super.onStart();
         
-        if(HaikuWindData.getInstance().isDataObsolete()) {
-            HaikuWindData.getInstance().resetLists();
+        if(data.isDataObsolete()) {
+            data.resetLists();
         }
     }
     

@@ -27,7 +27,7 @@ public class MyOwn extends HaikuListActivity implements HasVoteBtn {
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        return HttpRequest.getMy();
+        return HttpRequest.getMy(getUserId());
     }
 
     @Override

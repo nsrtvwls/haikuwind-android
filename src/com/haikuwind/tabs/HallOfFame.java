@@ -27,7 +27,7 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        return HttpRequest.getHallOfFame();
+        return HttpRequest.getHallOfFame(getUserId());
     }
     
     @Override

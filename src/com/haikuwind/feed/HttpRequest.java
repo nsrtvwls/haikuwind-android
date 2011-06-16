@@ -26,32 +26,28 @@ public class HttpRequest {
 //    private final static String HW_ADDR = "http://192.168.4.134:8888/haiku";
     private final static String HW_ADDR = "http://www.haikuwind.com/haiku";
 
-    //initialized during first newUser() call
-    private static String userId;
-
     public static void newUser(String userId) throws FeedException {
         // http://localhost:8080/haiku?command=new_user&id=ABCD
         String url = String
                 .format("%s?command=new_user&id=%s", HW_ADDR, userId);
         parseResult(url);
-        HttpRequest.userId = userId;
     }
 
-    public static void newHaiku(CharSequence haiku) throws FeedException {
+    public static void newHaiku(CharSequence haiku, String userId) throws FeedException {
         // http://localhost:8080/haiku?command=new_text&user=1&haiku=.......
         String url = String.format("%s?command=new_text&user=%s&haiku=%s",
                 HW_ADDR, userId, URLEncoder.encode(haiku.toString()));
         parseResult(url);
     }
 
-    public static List<Haiku> getTimeline(long from) throws FeedException {
+    public static List<Haiku> getTimeline(long from, String userId) throws FeedException {
         // http://localhost:8080/haiku?command=refresh&user=1&from=1
         String url = String.format("%s?command=refresh&user=%s&from=%d",
                 HW_ADDR, userId, from);
         return parseHaikuList(url, true);
     }
 
-    public static List<Haiku> getTop(int limit) throws FeedException {
+    public static List<Haiku> getTop(int limit, String userId) throws FeedException {
         // http://localhost:8080/haiku?command=top&user=1&limit=25
         String url = String.format("%s?command=top&user=%s&limit=%d", HW_ADDR,
                 userId, limit);
@@ -59,34 +55,34 @@ public class HttpRequest {
         return parseHaikuList(url, false);
     }
 
-    public static List<Haiku> getHallOfFame() throws FeedException {
+    public static List<Haiku> getHallOfFame(String userId) throws FeedException {
         // http://localhost:8080/haiku?command=hall_of_fame&user=1
         String url = String.format("%s?command=hall_of_fame&user=%s", HW_ADDR,
                 userId);
         return parseHaikuList(url, true);
     }
 
-    public static List<Haiku> getFavorite() throws FeedException {
+    public static List<Haiku> getFavorite(String userId) throws FeedException {
         // http://localhost:8080/haiku?command=my_favorite&user=1
         String url = String.format("%s?command=my_favorite&user=%s", HW_ADDR,
                 userId);
         return parseHaikuList(url, true);
     }
 
-    public static List<Haiku> getMy() throws FeedException {
+    public static List<Haiku> getMy(String userId) throws FeedException {
         // http://localhost:8080/haiku?command=my&user=1
         String url = String.format("%s?command=my&user=%s", HW_ADDR, userId);
         return parseHaikuList(url, true);
     }
     
-    public static void vote(String textId, boolean isGood) throws FeedException {
+    public static void vote(String textId, boolean isGood, String userId) throws FeedException {
 //  http://localhost:8080/haiku?command=vote&user=1&text=1&vote=yes / or 'no'
         String url = String.format("%s?command=vote&user=%s&text=%s&vote=%s", 
                 HW_ADDR, userId, textId, isGood? "yes" : "no");
         parseResult(url);
     }
     
-    public static void favorite(String textId) throws FeedException {
+    public static void favorite(String textId, String userId) throws FeedException {
 //    http://localhost:8080/haiku?command=favorite&user=1&text=1
         String url = String.format("%s?command=favorite&user=%s&text=%s", HW_ADDR, userId, textId);
         parseResult(url);

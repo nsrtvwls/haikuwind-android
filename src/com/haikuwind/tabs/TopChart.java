@@ -28,7 +28,7 @@ public class TopChart extends HaikuListActivity implements HasVoteBtn, HasFavori
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        return HttpRequest.getTop(25);
+        return HttpRequest.getTop(25, getUserId());
     }
 
     @Override

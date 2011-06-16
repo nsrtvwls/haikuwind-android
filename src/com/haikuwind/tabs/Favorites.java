@@ -28,7 +28,7 @@ public class Favorites extends HaikuListActivity implements HasVoteBtn, HasFavor
 
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        return HttpRequest.getFavorite();
+        return HttpRequest.getFavorite(getUserId());
     }
 
     @Override

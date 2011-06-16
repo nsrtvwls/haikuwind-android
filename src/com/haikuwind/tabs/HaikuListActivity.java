@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +49,9 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     
     private final HaikuListData data = getHaikuListData();
     
-    private final HaikuController shareController = new ShareController(data, this);
-    private final HaikuController voteController = new VoteController(data, this);
-    private final HaikuController favoriteController = new FavoriteController(data, this);
+    private HaikuController shareController;
+    private HaikuController voteController;
+    private HaikuController favoriteController;
 
     private ProgressDialog progressDialog;
     private ProgressTask progressTask;
@@ -67,6 +68,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        shareController = new ShareController(data, this);
+        voteController = new VoteController(data, getUserId(), this);
+        favoriteController = new FavoriteController(data, getUserId(), this);
 
         setContentView(R.layout.haiku_list);
         
@@ -223,6 +228,11 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
                 .setImageResource(userImg);
 
         return haikuView;
+    }
+    
+    protected String getUserId() {
+        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        return tManager.getDeviceId();
     }
 
     abstract protected List<Haiku> fetchElements() throws FeedException;

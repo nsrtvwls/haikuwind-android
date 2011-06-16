@@ -14,11 +14,13 @@ import com.haikuwind.notification.UpdateNotifier;
 
 public class FavoriteController extends HaikuController {
     private static final String TAG = FavoriteController.class.getSimpleName();
+    private final String userId;
     
     private Context context;
 
-    public FavoriteController(HaikuListData haikuListData, Context context) {
+    public FavoriteController(HaikuListData haikuListData, String userId, Context context) {
         super(haikuListData);
+        this.userId = userId;
         this.context = context;
     }
 
@@ -28,7 +30,7 @@ public class FavoriteController extends HaikuController {
         
         if (!haiku.isFavoritedByMe()) {
             try {
-                HttpRequest.favorite(haiku.getId());
+                HttpRequest.favorite(haiku.getId(), userId);
                 haiku.setFavoritedByMe(true);
 
                 UpdateNotifier.fireUpdate(Update.ADD_FAVORITE, haiku);
