@@ -6,13 +6,11 @@ import java.util.List;
 
 import android.os.Bundle;
 
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.feed.fetch.HttpRequest;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
 import com.haikuwind.tabs.buttons.HasVoteBtn;
 
@@ -28,7 +26,7 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, Update.NEW_HAIKU);
+        UpdateNotifier.addUpdateListener(this, UpdateType.NEW_HAIKU);
     }
 
     @Override
@@ -40,12 +38,12 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @Override
     protected boolean eraseOldHaikus() {
         //full update only for the first load
-        return getHaikuListData().getUpdateCounter()==0;
+        return data.getUpdateCounter()==0;
     }
     
     @Override
     protected List<Haiku> fetchElements() throws FeedException {
-        Date lastHaikuDate = getHaikuListData().getLastHaikuDate();
+        Date lastHaikuDate = data.getLastHaikuDate();
         List<Haiku> response = HttpRequest.getTimeline(
                 lastHaikuDate==null ? weekBefore().getTime(): lastHaikuDate.getTime(),
                 getUserId());
@@ -59,8 +57,4 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
         return weekBefore.getTime();
     }
 
-    @Override
-    protected HaikuListData getHaikuListData() {
-        return HaikuWindData.getInstance().getTimelineData();
-    }
 }

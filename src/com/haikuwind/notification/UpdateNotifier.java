@@ -9,10 +9,10 @@ import com.haikuwind.feed.Haiku;
 
 public class UpdateNotifier {
     
-    private static Map<Update, List<UpdateListener>> listeners = new HashMap<Update, List<UpdateListener>>();
+    private static Map<UpdateType, List<UpdateListener>> listeners = new HashMap<UpdateType, List<UpdateListener>>();
     
-    synchronized public static void addUpdateListener(UpdateListener listener, Update... updates) {
-        for(Update update: updates) {
+    synchronized public static void addUpdateListener(UpdateListener listener, UpdateType... updates) {
+        for(UpdateType update: updates) {
             if(listeners.get(update)==null) {
                 listeners.put(update, new ArrayList<UpdateListener>());
             }
@@ -27,7 +27,7 @@ public class UpdateNotifier {
         }
     }
     
-    synchronized public static void fireUpdate(Update update, Haiku haiku) {
+    synchronized public static void fireUpdate(UpdateType update, Haiku haiku) {
         List<UpdateListener> toUpdate = listeners.get(update);
         if(toUpdate==null) {
             return;

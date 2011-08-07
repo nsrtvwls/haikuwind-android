@@ -23,12 +23,12 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.haikuwind.dialogs.CancelListener;
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
 import com.haikuwind.feed.UserInfo;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.feed.fetch.HttpRequest;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.Favorites;
 import com.haikuwind.tabs.HallOfFame;
@@ -141,7 +141,7 @@ public class HaikuWind extends TabActivity {
             HttpRequest.newHaiku(haiku, userId);
             ((TextView) haikuTextView).setText("");
             
-            UpdateNotifier.fireUpdate(Update.NEW_HAIKU, new Haiku(haiku.toString()));
+            UpdateNotifier.fireUpdate(UpdateType.NEW_HAIKU, new Haiku(haiku.toString()));
         } catch(FeedException e) {
             //TODO how to show the same dialog that is open now?
             onCreateDialog(ERROR_TRY_AGAIN_POST_HAIKU).show();
@@ -159,7 +159,7 @@ public class HaikuWind extends TabActivity {
             return true;
         case R.id.refresh:
             data.resetLists();
-            UpdateNotifier.fireUpdate(Update.REFRESH, null);
+            UpdateNotifier.fireUpdate(UpdateType.REFRESH, null);
             return true;
         default:
             return super.onOptionsItemSelected(item);

@@ -2,13 +2,11 @@ package com.haikuwind.tabs;
 
 import java.util.List;
 
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.feed.fetch.HttpRequest;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
 
 public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
@@ -16,7 +14,7 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, Update.VOTE);
+        UpdateNotifier.addUpdateListener(this, UpdateType.VOTE);
     }
 
     @Override
@@ -31,15 +29,11 @@ public class HallOfFame extends HaikuListActivity implements HasFavoriteBtn {
     }
     
     @Override
-    public void processUpdate(Update update, Haiku haiku) {
+    public void processUpdate(UpdateType update, Haiku haiku) {
         //if haiku was voted and got in hall of fame, mark the hall of fame to update.
-        if(update==Update.REFRESH || haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
+        if(update==UpdateType.REFRESH || haiku.getPoints()>=Haiku.HALL_OF_FAME_POINTS) {
             super.processUpdate(update, haiku);
         }
     }
 
-    @Override
-    protected HaikuListData getHaikuListData() {
-        return HaikuWindData.getInstance().getHallOfFameData();
-    }
 }

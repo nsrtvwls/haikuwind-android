@@ -2,22 +2,24 @@ package com.haikuwind.tabs;
 
 import java.util.List;
 
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.feed.fetch.HttpRequest;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
 import com.haikuwind.tabs.buttons.HasVoteBtn;
 
 public class TopChart extends HaikuListActivity implements HasVoteBtn, HasFavoriteBtn {
 
     @Override
+    protected void onPause() {
+        super.onPause();
+    }
+    @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, Update.VOTE);
+        UpdateNotifier.addUpdateListener(this, UpdateType.VOTE);
     }
 
     @Override
@@ -32,14 +34,9 @@ public class TopChart extends HaikuListActivity implements HasVoteBtn, HasFavori
     }
 
     @Override
-    protected HaikuListData getHaikuListData() {
-        return HaikuWindData.getInstance().getTopChartData();
-    }
-    
-    @Override
-    public void processUpdate(Update update, Haiku haiku) {
-        if(Update.VOTE==update) {
-            List<Haiku> topChartList = getHaikuListData().getHaikuList();
+    public void processUpdate(UpdateType update, Haiku haiku) {
+        if(UpdateType.VOTE==update) {
+            List<Haiku> topChartList = data.getHaikuList();
             if(topChartList.size()>0) {
                 Haiku minPointsHaiku = topChartList.get(topChartList.size()-1);
                 if(minPointsHaiku.getPoints()>haiku.getPoints()) {

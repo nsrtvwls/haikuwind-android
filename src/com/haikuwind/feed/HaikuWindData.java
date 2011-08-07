@@ -1,7 +1,17 @@
 package com.haikuwind.feed;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.haikuwind.tabs.Favorites;
+import com.haikuwind.tabs.HaikuListActivity;
+import com.haikuwind.tabs.HallOfFame;
+import com.haikuwind.tabs.MyOwn;
+import com.haikuwind.tabs.Timeline;
+import com.haikuwind.tabs.TopChart;
 
 
 public class HaikuWindData {
@@ -25,11 +35,20 @@ public class HaikuWindData {
 
     private UserInfo userInfo;
     
-    private final HaikuListData timelineData   = new HaikuListData();
-    private final HaikuListData favoriteData   = new HaikuListData();
-    private final HaikuListData hallOfFameData = new HaikuListData();
-    private final HaikuListData topChartData   = new HaikuListData();
-    private final HaikuListData myOwnData      = new HaikuListData();
+    private final Map<Class<? extends HaikuListActivity>, HaikuListData> lists;
+    
+    public HaikuWindData() {
+        Map<Class<? extends HaikuListActivity>, HaikuListData> map = 
+                new HashMap<Class<? extends HaikuListActivity>, HaikuListData>();
+        
+        map.put(Timeline.class, new HaikuListData());
+        map.put(Favorites.class, new HaikuListData());
+        map.put(HallOfFame.class, new HaikuListData());
+        map.put(TopChart.class, new HaikuListData());
+        map.put(MyOwn.class, new HaikuListData());
+        
+        lists = Collections.unmodifiableMap(map);
+    }
 
     synchronized public boolean isRegistered() {
         return registered;
@@ -37,32 +56,16 @@ public class HaikuWindData {
     synchronized public void setRegistered(boolean registered) {
         this.registered = registered;
     }
+    
     synchronized public UserInfo getUserInfo() {
         return userInfo;
     }
     synchronized public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
-    public HaikuListData getTimelineData() {
-        return timelineData;
-    }
-    public HaikuListData getFavoritesData() {
-        return favoriteData;
-    }
-    public HaikuListData getHallOfFameData() {
-        return hallOfFameData;
-    }
-    public HaikuListData getTopChartData() {
-        return topChartData;
-    }
-    public HaikuListData getMyOwnData() {
-        return myOwnData;
-    }
-    
+
     public void resetLists() {
-        for(HaikuListData data: new HaikuListData[] {
-                timelineData, favoriteData, hallOfFameData, topChartData, myOwnData
-                }) {
+        for(HaikuListData data: lists.values()) {
             data.resetList();
         }
         
@@ -74,6 +77,10 @@ public class HaikuWindData {
         firstValidTime.add(Calendar.MINUTE, -UPDATE_PERIOD);
         
         return lastUpdateTime==null || lastUpdateTime.before(firstValidTime.getTime());
+    }
+    
+    public HaikuListData getHaikuListData(Class<? extends HaikuListActivity> tab) {
+        return lists.get(tab);
     }
     
 }

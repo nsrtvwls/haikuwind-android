@@ -24,10 +24,11 @@ import android.widget.TextView;
 import com.haikuwind.R;
 import com.haikuwind.dialogs.CancelListener;
 import com.haikuwind.dialogs.ProgressTask;
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.HaikuWindData;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.notification.UpdateListener;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.buttons.FavoriteController;
@@ -38,7 +39,7 @@ import com.haikuwind.tabs.buttons.HasVoteBtn;
 import com.haikuwind.tabs.buttons.ShareController;
 import com.haikuwind.tabs.buttons.VoteController;
 
-abstract class HaikuListActivity extends Activity implements UpdateListener, HasShareBtn {
+abstract public class HaikuListActivity extends Activity implements UpdateListener, HasShareBtn {
 
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getSimpleName();
@@ -47,7 +48,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
 
     private boolean isForeground = false;
     
-    private final HaikuListData data = getHaikuListData();
+    protected final HaikuListData data = HaikuWindData.getInstance().getHaikuListData(getClass());
     
     private HaikuController shareController;
     private HaikuController voteController;
@@ -78,12 +79,10 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
         progressDialog = new ProgressDialog(this);
     }
 
-    protected abstract HaikuListData getHaikuListData();
-
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, Update.REFRESH);
+        UpdateNotifier.addUpdateListener(this, UpdateType.REFRESH);
     }
 
     @Override
@@ -154,7 +153,7 @@ abstract class HaikuListActivity extends Activity implements UpdateListener, Has
     }
 
     @Override
-    public void processUpdate(Update update, Haiku haiku) {
+    public void processUpdate(UpdateType update, Haiku haiku) {
         data.setDataDirty(true);
         if (isForeground()) {
             refreshData();

@@ -2,13 +2,11 @@ package com.haikuwind.tabs;
 
 import java.util.List;
 
-import com.haikuwind.feed.FeedException;
 import com.haikuwind.feed.Haiku;
-import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.FeedException;
+import com.haikuwind.feed.fetch.HttpRequest;
 import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.tabs.buttons.HasVoteBtn;
 
 public class MyOwn extends HaikuListActivity implements HasVoteBtn {
@@ -16,7 +14,7 @@ public class MyOwn extends HaikuListActivity implements HasVoteBtn {
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, Update.NEW_HAIKU);
+        UpdateNotifier.addUpdateListener(this, UpdateType.NEW_HAIKU);
     }
 
     @Override
@@ -30,8 +28,4 @@ public class MyOwn extends HaikuListActivity implements HasVoteBtn {
         return HttpRequest.getMy(getUserId());
     }
 
-    @Override
-    protected HaikuListData getHaikuListData() {
-        return HaikuWindData.getInstance().getMyOwnData();
-    }
 }
