@@ -16,10 +16,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 
-import com.haikuwind.R;
-import com.haikuwind.R.id;
-import com.haikuwind.R.layout;
-import com.haikuwind.R.string;
 import com.haikuwind.dialogs.FinishListener;
 import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.HaikuWindData;
