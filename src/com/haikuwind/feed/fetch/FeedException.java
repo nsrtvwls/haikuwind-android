@@ -1,4 +1,4 @@
-package com.haikuwind.feed;
+package com.haikuwind.feed.fetch;
 
 public class FeedException extends Exception {
 

@@ -1,6 +1,8 @@
-package com.haikuwind.feed;
+package com.haikuwind.feed.fetch;
 
 import java.util.Comparator;
+
+import com.haikuwind.feed.Haiku;
 
 public class NewerFirstComparator implements Comparator<Haiku> {
 

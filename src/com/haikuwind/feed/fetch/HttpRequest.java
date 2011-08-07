@@ -1,4 +1,4 @@
-package com.haikuwind.feed;
+package com.haikuwind.feed.fetch;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +17,9 @@ import org.xml.sax.XMLReader;
 
 import android.util.Log;
 
+import com.haikuwind.feed.Haiku;
+import com.haikuwind.feed.HaikuWindData;
+import com.haikuwind.feed.UserInfo;
 import com.haikuwind.feed.parser.HaikuHandler;
 import com.haikuwind.feed.parser.ResultHandler;
 import com.haikuwind.feed.parser.XmlCorrectorStream;

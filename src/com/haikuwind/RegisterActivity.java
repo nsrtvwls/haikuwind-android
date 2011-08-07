@@ -23,7 +23,7 @@ import com.haikuwind.R.string;
 import com.haikuwind.dialogs.FinishListener;
 import com.haikuwind.dialogs.ProgressTask;
 import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
+import com.haikuwind.feed.fetch.HttpRequest;
 
 public class RegisterActivity extends Activity {
 

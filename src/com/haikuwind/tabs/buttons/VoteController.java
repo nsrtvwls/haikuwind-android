@@ -15,8 +15,8 @@ import com.haikuwind.animation.Rotate3dAnimation;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.feed.HaikuWindData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.HttpRequest;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.notification.UpdateNotifier;
 import com.haikuwind.tabs.MyOwn;
 
@@ -59,7 +59,7 @@ public class VoteController extends HaikuController {
                 TextView points = (TextView) ((View) v.getParent()).findViewById(R.id.haiku_points);
                 points.setText(Integer.toString(haiku.getPoints()));
 
-                UpdateNotifier.fireUpdate(Update.VOTE, haiku);
+                UpdateNotifier.fireUpdate(UpdateType.VOTE, haiku);
                 
             } catch (Exception e) {
                 Log.e(TAG, "error in vote", e);

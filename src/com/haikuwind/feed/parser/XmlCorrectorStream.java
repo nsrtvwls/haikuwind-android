@@ -1,11 +1,7 @@
 package com.haikuwind.feed.parser;
 
-import java.io.ByteArrayInputStream;
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import android.util.Log;
 
 /**
  * HaikuWind server sends invalid XML for two cases:

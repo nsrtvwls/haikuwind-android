@@ -8,8 +8,8 @@ import android.widget.Toast;
 import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
-import com.haikuwind.feed.HttpRequest;
-import com.haikuwind.notification.Update;
+import com.haikuwind.feed.fetch.HttpRequest;
+import com.haikuwind.notification.UpdateType;
 import com.haikuwind.notification.UpdateNotifier;
 
 public class FavoriteController extends HaikuController {
@@ -33,7 +33,7 @@ public class FavoriteController extends HaikuController {
                 HttpRequest.favorite(haiku.getId(), userId);
                 haiku.setFavoritedByMe(true);
 
-                UpdateNotifier.fireUpdate(Update.ADD_FAVORITE, haiku);
+                UpdateNotifier.fireUpdate(UpdateType.ADD_FAVORITE, haiku);
             } catch (Exception e) {
                 Log.e(TAG, "error while marking favorite", e);
                 Toast.makeText(context,
