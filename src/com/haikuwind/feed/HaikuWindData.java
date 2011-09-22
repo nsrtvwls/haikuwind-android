@@ -57,6 +57,10 @@ public class HaikuWindData {
         this.registered = registered;
     }
     
+    public Map<Class<? extends HaikuListActivity>, HaikuListData> getLists() {
+        return lists;
+    }
+    
     synchronized public UserInfo getUserInfo() {
         return userInfo;
     }
@@ -66,7 +70,7 @@ public class HaikuWindData {
 
     public void resetLists() {
         for(HaikuListData data: lists.values()) {
-            data.resetList();
+            data.setDataInvalid();
         }
         
         lastUpdateTime = new Date();

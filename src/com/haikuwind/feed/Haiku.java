@@ -1,10 +1,15 @@
 package com.haikuwind.feed;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.haikuwind.feed.UserInfo.Rank;
 
-public class Haiku implements Cloneable {
+public class Haiku implements Cloneable, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public final static String TAG = Haiku.class.getSimpleName();
+    
     public final static int MIN_POINTS = -5;
     public final static int HALL_OF_FAME_POINTS = 25;
 
@@ -97,6 +102,5 @@ public class Haiku implements Cloneable {
                 + ", timesVotedByMe=" + timesVotedByMe + ", time=" + time
                 + ", id=" + id + "]";
     }
-
 
 }

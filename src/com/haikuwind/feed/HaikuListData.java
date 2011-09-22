@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.haikuwind.notification.UpdateAction;
+
 public class HaikuListData {
     private Date lastHaikuDate;
     private boolean dataDirty = false;
@@ -49,8 +51,8 @@ public class HaikuListData {
         }
         
         updateCounter++;
-     }
-
+    }
+    
     synchronized public boolean isDataDirty() {
         return dataDirty;
     }
@@ -73,7 +75,7 @@ public class HaikuListData {
         return updateCounter;
     }
 
-    synchronized public void resetList() {
+    synchronized public void setDataInvalid() {
         //do not clean haiku list to leave an ability to vote/favorite etc
         
         setDataDirty(true);

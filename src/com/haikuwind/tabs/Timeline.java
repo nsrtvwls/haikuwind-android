@@ -4,19 +4,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.fetch.FeedException;
 import com.haikuwind.feed.fetch.HttpRequest;
-import com.haikuwind.notification.UpdateNotifier;
-import com.haikuwind.notification.UpdateType;
+import com.haikuwind.notification.DataUpdater;
+import com.haikuwind.notification.UpdateAction;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
 import com.haikuwind.tabs.buttons.HasVoteBtn;
 
 public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavoriteBtn {
     @SuppressWarnings("unused")
     private final static String TAG = Timeline.class.getSimpleName();
+    private BroadcastReceiver receiver = new DataUpdater(data);
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,13 +29,16 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, UpdateType.NEW_HAIKU);
+        
+        IntentFilter filter = new IntentFilter(UpdateAction.NEW_HAIKU.toString());
+        filter.setPriority(DATA_UPDATE_PRIORITY);
+        registerReceiver(receiver , filter);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UpdateNotifier.removeUpdateListener(this);
+        unregisterReceiver(receiver);
     }
     
     @Override
@@ -45,15 +51,15 @@ public class Timeline extends HaikuListActivity implements HasVoteBtn, HasFavori
     protected List<Haiku> fetchElements() throws FeedException {
         Date lastHaikuDate = data.getLastHaikuDate();
         List<Haiku> response = HttpRequest.getTimeline(
-                lastHaikuDate==null ? weekBefore().getTime(): lastHaikuDate.getTime(),
+                lastHaikuDate==null ? monthBefore().getTime(): lastHaikuDate.getTime(),
                 getUserId());
         
         return response;
     }
     
-    private Date weekBefore() {
+    private Date monthBefore() {
         Calendar weekBefore = Calendar.getInstance();
-        weekBefore.add(Calendar.DATE, -7);
+        weekBefore.add(Calendar.DATE, -30);
         return weekBefore.getTime();
     }
 

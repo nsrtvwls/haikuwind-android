@@ -1,6 +1,8 @@
 package com.haikuwind.tabs.buttons;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -9,8 +11,8 @@ import com.haikuwind.R;
 import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.feed.fetch.HttpRequest;
-import com.haikuwind.notification.UpdateType;
-import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateAction;
+import com.haikuwind.notification.Updater;
 
 public class FavoriteController extends HaikuController {
     private static final String TAG = FavoriteController.class.getSimpleName();
@@ -33,7 +35,9 @@ public class FavoriteController extends HaikuController {
                 HttpRequest.favorite(haiku.getId(), userId);
                 haiku.setFavoritedByMe(true);
 
-                UpdateNotifier.fireUpdate(UpdateType.ADD_FAVORITE, haiku);
+                Intent intent = new Intent(UpdateAction.ADD_FAVORITE.toString());
+                intent.putExtra(Updater.HAIKU_KEY, haiku);
+                context.sendOrderedBroadcast(intent, null);
             } catch (Exception e) {
                 Log.e(TAG, "error while marking favorite", e);
                 Toast.makeText(context,

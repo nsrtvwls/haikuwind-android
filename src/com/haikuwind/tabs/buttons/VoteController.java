@@ -1,6 +1,7 @@
 package com.haikuwind.tabs.buttons;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -16,8 +17,8 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.fetch.HttpRequest;
-import com.haikuwind.notification.UpdateType;
-import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.UpdateAction;
+import com.haikuwind.notification.Updater;
 import com.haikuwind.tabs.MyOwn;
 
 public class VoteController extends HaikuController {
@@ -59,7 +60,9 @@ public class VoteController extends HaikuController {
                 TextView points = (TextView) ((View) v.getParent()).findViewById(R.id.haiku_points);
                 points.setText(Integer.toString(haiku.getPoints()));
 
-                UpdateNotifier.fireUpdate(UpdateType.VOTE, haiku);
+                Intent intent = new Intent(UpdateAction.VOTE.toString());
+                intent.putExtra(Updater.HAIKU_KEY, haiku);
+                context.sendOrderedBroadcast(intent, null);
                 
             } catch (Exception e) {
                 Log.e(TAG, "error in vote", e);

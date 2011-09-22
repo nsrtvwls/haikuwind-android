@@ -7,8 +7,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -28,9 +30,9 @@ import com.haikuwind.feed.Haiku;
 import com.haikuwind.feed.HaikuListData;
 import com.haikuwind.feed.HaikuWindData;
 import com.haikuwind.feed.fetch.FeedException;
-import com.haikuwind.notification.UpdateType;
-import com.haikuwind.notification.UpdateListener;
-import com.haikuwind.notification.UpdateNotifier;
+import com.haikuwind.notification.DataUpdater;
+import com.haikuwind.notification.TabUpdater;
+import com.haikuwind.notification.UpdateAction;
 import com.haikuwind.tabs.buttons.FavoriteController;
 import com.haikuwind.tabs.buttons.HaikuController;
 import com.haikuwind.tabs.buttons.HasFavoriteBtn;
@@ -39,15 +41,17 @@ import com.haikuwind.tabs.buttons.HasVoteBtn;
 import com.haikuwind.tabs.buttons.ShareController;
 import com.haikuwind.tabs.buttons.VoteController;
 
-abstract public class HaikuListActivity extends Activity implements UpdateListener, HasShareBtn {
+abstract public class HaikuListActivity extends Activity implements HasShareBtn {
+
+    //view must be updated after data
+    protected static final int DATA_UPDATE_PRIORITY = 1;
+    protected static final int VIEW_UPDATE_PRIORITY = 0;
 
     @SuppressWarnings("unused")
     private final static String TAG = HaikuListActivity.class.getSimpleName();
 
     private static final int ERROR_TRY_AGAIN_REFRESH = 0;
 
-    private boolean isForeground = false;
-    
     protected final HaikuListData data = HaikuWindData.getInstance().getHaikuListData(getClass());
     
     private HaikuController shareController;
@@ -56,6 +60,9 @@ abstract public class HaikuListActivity extends Activity implements UpdateListen
 
     private ProgressDialog progressDialog;
     private ProgressTask progressTask;
+    
+    protected BroadcastReceiver dataRefresher = new DataUpdater(data);
+    protected BroadcastReceiver viewRefresher = new TabUpdater(this);
     
     /**
      * date of the newest haiku.
@@ -82,20 +89,23 @@ abstract public class HaikuListActivity extends Activity implements UpdateListen
     @Override
     protected void onStart() {
         super.onStart();
-        UpdateNotifier.addUpdateListener(this, UpdateType.REFRESH);
+        IntentFilter filter = new IntentFilter(UpdateAction.REFRESH.toString());
+        filter.setPriority(DATA_UPDATE_PRIORITY);
+        registerReceiver(dataRefresher, filter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
-        if (data.isDataDirty()) {
-            refreshData();
-        } else if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
-            renderNewHaiku(data.getHaikuList(), true);
-        }
+        adjustView();
 
-        isForeground = true;
+        IntentFilter filter = new IntentFilter();
+        for(UpdateAction action: UpdateAction.values()) {
+            filter.addAction(action.toString());
+        }
+        filter.setPriority(VIEW_UPDATE_PRIORITY);
+        registerReceiver(viewRefresher, filter);
 
         Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.fly_in);
@@ -103,11 +113,18 @@ abstract public class HaikuListActivity extends Activity implements UpdateListen
         anim.start();
     }
 
+    public void adjustView() {
+        if (data.isDataDirty()) {
+            refreshData();
+        } else if(lastDisplayedDate==null || data.isViewObsolete(lastDisplayedDate)) {
+            renderNewHaiku(data.getHaikuList(), true);
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
 
-        isForeground = false;
         if(progressDialog !=null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
@@ -116,15 +133,19 @@ abstract public class HaikuListActivity extends Activity implements UpdateListen
             progressTask.interrupt();
         }
 
+        unregisterReceiver(viewRefresher);
+        
         //TODO doesn't appear
 //        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(),
 //                R.anim.fly_in);
 //        findViewById(R.id.haiku_list).setAnimation(anim);
 //        anim.start();
    }
-
-    protected boolean isForeground() {
-        return isForeground;
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(dataRefresher);
     }
 
     @Override
@@ -150,14 +171,6 @@ abstract public class HaikuListActivity extends Activity implements UpdateListen
             return super.onCreateDialog(id);
         }
         return builder.create();
-    }
-
-    @Override
-    public void processUpdate(UpdateType update, Haiku haiku) {
-        data.setDataDirty(true);
-        if (isForeground()) {
-            refreshData();
-        }
     }
 
     private void refreshData() {
